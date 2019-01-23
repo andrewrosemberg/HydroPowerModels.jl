@@ -14,13 +14,16 @@ using Ipopt, SCS
 #http://orbit.dtu.dk/files/120568114/An_Updated_Version_of_the_IEEE_RTS_24Bus_System_for_Electricty_Market_an....pdf 
 case = PowerModels.parse_file("./testcases/testcases_hydro/case3.m")
 
+case_hydro = JSON.parse(String(read("./testcases/testcases_hydro/case3hydro.json")))
+
 ########################################
 #       Parameters
 ########################################
 # Hydro Parameters
-index_hydro = 3
-max_volume = 200
-initial_volume = 200
+index_hydro = case_hydro["Hydrogenerators"][1]["index"]
+max_volume = case_hydro["Hydrogenerators"][1]["max_volume"]
+initial_volume = case_hydro["Hydrogenerators"][1]["initial_volume"]
+production_factor = case_hydro["Hydrogenerators"][1]["production_factor"]
 
 # Problem Parameters
 T = 3 # number of stages
@@ -49,21 +52,23 @@ m = SDDPModel(
     @variables(sp, begin
         thermal_generation[i=1:nGen]        
         hydro_generation   >= 0
+        hydro_turb         >= 0
         hydro_spill        >= 0
     end)
 
     if t > 1 # in future stages random inflows
         @rhsnoise(sp, inflow = [0.0, 50, 100], #inflow_hist[:,t],
-        outgoing_volume - (incoming_volume - hydro_generation - hydro_spill) == inflow)
+        outgoing_volume - (incoming_volume - hydro_turb - hydro_spill) == inflow)
 
         # setnoiseprobability!(sp, [1/6, 1/3, 0.5]) # wet climate state 
         #setnoiseprobability!(sp, [3/6, 2/6, 1/6]) # dry climate state
     
     else # in the first stage deterministic inflow
         @rhsnoise(sp, inflow = [50.0],
-        outgoing_volume - (incoming_volume - hydro_generation - hydro_spill) == inflow)
+        outgoing_volume - (incoming_volume - hydro_turb - hydro_spill) == inflow)
     end
 
+    @constraint(sp,hydro_turb*production_factor == hydro_generation)
 
     # # Powermodels compatibility
     @constraint(sp,pm.var[:nw][0][:cnd][1][:pg][index_hydro] == hydro_generation)
@@ -75,6 +80,8 @@ m = SDDPModel(
     # Stage objective
     @stageobjective(sp, sp.obj) #getobjective(sp))
 end
+
+print(m.stages[1].subproblems[1])
 
 ########################################
 #       Solve

@@ -1,0 +1,10 @@
+{
+    "Hydrogenerators":[
+        {
+            "index": 3,
+            "max_volume":150,
+            "initial_volume":50,
+            "production_factor":1
+        }
+    ]
+}
