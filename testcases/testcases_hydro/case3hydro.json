@@ -6,5 +6,6 @@
             "initial_volume":50,
             "production_factor":1
         }
-    ]
+    ],
+    "number_of_stages": 3
 }

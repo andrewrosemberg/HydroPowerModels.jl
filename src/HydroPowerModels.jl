@@ -1,39 +1,42 @@
+#module HydroPowerModels
+
 using JuMP, PowerModels, SDDP
-using Plots
-plotly()
-plot(collect(0:10),collect(0:10))
 
 using Ipopt, SCS
 
-########################################
-#       Load Case
-########################################
+"""
+data é seu dicionario com todos os dados do problem que vc carregou
+pode por exemplo incluir o dicionario do power models dentro de ele
+então antes de chamar essa funcao aqui vc tem uma outra funcao que
+processa os dados no formato json e escreve teu dicionário
 
-#link para o sistema observe que apenas as barras [1, 2, 7, 13, 15, 16, 18, 21, 22, 23] tem geradores
-# e que as barras [11, 12, 27, 21, 22, 23 24] não tem carga
-#http://orbit.dtu.dk/files/120568114/An_Updated_Version_of_the_IEEE_RTS_24Bus_System_for_Electricty_Market_an....pdf 
-case = PowerModels.parse_file("./testcases/testcases_hydro/case3.m")
-
-case_hydro = JSON.parse(String(read("./testcases/testcases_hydro/case3hydro.json")))
-
+param pode ser um conjunto de parametro de solucao....
+podem ter outros dados de entrada...
+"""
+#function hydrovalleymodel(data::Dict, params::Dict)
 ########################################
 #       Parameters
 ########################################
 # Hydro Parameters
-index_hydro = case_hydro["Hydrogenerators"][1]["index"]
-max_volume = case_hydro["Hydrogenerators"][1]["max_volume"]
-initial_volume = case_hydro["Hydrogenerators"][1]["initial_volume"]
-production_factor = case_hydro["Hydrogenerators"][1]["production_factor"]
-
+nHyd = size(data["hydro"]["Hydrogenerators"],1)
+index_hydro = Array{Int64}(nHyd)
+max_volume = Array{Float64}(nHyd)
+initial_volume = Array{Float64}(nHyd)
+production_factor = Array{Float64}(nHyd)
+for i=1:nHyd
+    index_hydro[i] = data["hydro"]["Hydrogenerators"][i]["index"]
+    max_volume[i] = data["hydro"]["Hydrogenerators"][i]["max_volume"]
+    initial_volume[i] = data["hydro"]["Hydrogenerators"][i]["initial_volume"]
+    production_factor[i] = data["hydro"]["Hydrogenerators"][i]["production_factor"]
+end
 # Problem Parameters
-T = 3 # number of stages
+T = data["hydro"]["number_of_stages"] # number of stages
 
 ########################################
 #       Init
 ########################################
-
-nGen = length(collect(keys(case["gen"]))) - 1 # number of generators
-index_gen = setdiff(map(x->parse(Int64,x),collect(keys(case["gen"]))),index_hydro)
+nGen = length(collect(keys(data["powersystem"]["gen"]))) - nHyd # number of generators
+index_gen = setdiff(map(x->parse(Int64,x),collect(keys(data["powersystem"]["gen"]))),index_hydro)
 
 ########################################
 #       Model Definition
@@ -46,14 +49,14 @@ m = SDDPModel(
         objective_bound = 0.0
                                         ) do sp,t
 
-    pm = PowerModels.build_generic_model(case, ACPPowerModel, PowerModels.post_opf,jump_model=sp)
+    pm = PowerModels.build_generic_model(data["powersystem"], ACPPowerModel, PowerModels.post_opf,jump_model=sp)
 
     @state(sp, 0 <= outgoing_volume <= max_volume, incoming_volume == initial_volume)
     @variables(sp, begin
         thermal_generation[i=1:nGen]        
-        hydro_generation   >= 0
-        hydro_turb         >= 0
-        hydro_spill        >= 0
+        hydro_generation[i=1:nHyd]   >= 0
+        hydro_turb[i=1:nHyd]         >= 0
+        hydro_spill[i=1:nHyd]        >= 0
     end)
 
     if t > 1 # in future stages random inflows
@@ -68,7 +71,7 @@ m = SDDPModel(
         outgoing_volume - (incoming_volume - hydro_turb - hydro_spill) == inflow)
     end
 
-    @constraint(sp,hydro_turb*production_factor == hydro_generation)
+    @constraint(sp, hydro_turb*production_factor == hydro_generation)
 
     # # Powermodels compatibility
     @constraint(sp,pm.var[:nw][0][:cnd][1][:pg][index_hydro] == hydro_generation)
@@ -81,67 +84,13 @@ m = SDDPModel(
     @stageobjective(sp, sp.obj) #getobjective(sp))
 end
 
-print(m.stages[1].subproblems[1])
 
 ########################################
 #       Solve
 ########################################
+
 # solve
 status = solve(m, iteration_limit = 60)
 
-# Plot value function
-SDDP.plotvaluefunction(m, 2,1, 0.0:200.0; label1="Volume")
-
-########################################
-#       Simulation
-########################################
-
-simulation_result = simulate(m,
-    100,
-    [:outgoing_volume, :thermal_generation, :hydro_generation, :hydro_spill]
-)
-
-# Plot results
-inflows = [0.0, 50.0, 100.0]
-plt = SDDP.newplot()
-thgen = [3,5,8]
-for g in thgen
-    SDDP.addplot!(plt,
-        1:100, 1:T,
-        (i, t)->simulation_result[i][:thermal_generation][t][g],
-        title  = "Thermal Generation $g",
-        ylabel = "MWh"
-    )
-end
-SDDP.addplot!(plt,
-    1:100, 1:T,
-    (i, t)->inflows[simulation_result[i][:noise][t]]+50*Int(t==1),
-    title  = "Inflows",
-    ylabel = "MWh"
-)
-SDDP.show(plt)
-
-plot(
-    SDDP.publicationplot(simulation_result, :outgoing_volume, title="Volume"),
-    #SDDP.publicationplot(simulation_result, (data) -> [data[:thermal_generation][t][1] for t=1:T], title="Thermal Generation 1", ylabel = "MWh")    ,
-    SDDP.publicationplot(simulation_result, (data) -> [data[:thermal_generation][t][2] for t=1:T], title="Thermal Generation 2", ylabel = "MWh"),
-    SDDP.publicationplot(simulation_result, :hydro_generation, title="Hydro Generation"),
-    SDDP.publicationplot(simulation_result, :hydro_spill, title="Hydro Spill"),
-    SDDP.publicationplot(simulation_result, (data) -> [inflows[data[:noise][t]]+50*Int(t==1) for t=1:T],title  = "Inflows"),
-    layout        = (5,1),
-    size          = (1500, 800),
-    titlefont     = Plots.font("times", 14),
-    guidefont     = Plots.font("times", 14),
-    tickfont      = Plots.font("times", 14),
-    bottom_margin = 9.5Plots.mm,
-    left_margin   = 5Plots.mm,
-    xlabel        = "Stage\n",
-    xticks        = collect(1:T)
-)
-
-t1 = ones(100,3)
-for i = 1:100, t = 1:T
-    t1[i,t] = simulation_result[i][:thermal_generation][t][1]
-end
-
-[[simulation_result[i][:thermal_generation][1] for t=1:T] for i = 1:100]
+#end
+#end
