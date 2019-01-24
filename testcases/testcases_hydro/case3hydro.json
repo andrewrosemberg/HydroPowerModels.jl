@@ -3,9 +3,9 @@
         {
             "index": 3,
             "max_volume":150,
+            "min_volume":0,
             "initial_volume":50,
             "production_factor":1
         }
-    ],
-    "number_of_stages": 3
+    ]
 }
