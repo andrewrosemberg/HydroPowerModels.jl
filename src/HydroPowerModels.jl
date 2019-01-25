@@ -5,6 +5,7 @@ using Ipopt, SCS
 
 include("variable.jl")
 include("constraint.jl")
+include("utilities.jl")
 
 export hydrovalleymodel
 
@@ -14,8 +15,11 @@ data is a dict with all information of the problem.
 param is a dict containing solution parameters.
 """
 function hydrovalleymodel(data::Dict, params::Dict)
-    # calculate number of generators
-    data["hydro"]["nHyd"] = size(data["hydro"]["Hydrogenerators"],1)    
+    # calculate number of hydrogenerators
+    countgenerators!(data)
+    
+    # compoute upstream_hydro
+    upstream_hydro!(data)
 
     # Model Definition
     m = SDDPModel(

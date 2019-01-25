@@ -14,7 +14,7 @@ end
 
 "creates hydro balance constraint"
 function constraint_hydro_balance(sp, data::Dict)    
-    for i in 2:data["hydro"]["nHyd"]
+    for i in 1:data["hydro"]["nHyd"]
         @constraints(sp, begin
             hydro_balance[i=1:data["hydro"]["nHyd"]], sp[:reservoir][i] == sp[:reservoir0][i] + sp[:inflow][i] - sp[:outflow][i] - sp[:spill][i] + sum(sp[:outflow][j] + sp[:spill][j] for j in data["hydro"]["Hydrogenerators"][i]["upstrem_hydros"])
         end)
