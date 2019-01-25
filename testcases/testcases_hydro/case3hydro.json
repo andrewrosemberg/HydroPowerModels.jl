@@ -1,11 +1,12 @@
 {
     "Hydrogenerators":[
         {
-            "index": 3,
+            "index_grid": 3,
             "max_volume":150,
             "min_volume":0,
             "initial_volume":50,
-            "production_factor":1
+            "production_factor":1,
+            "upstrem_hydros": []
         }
     ]
 }
