@@ -21,7 +21,7 @@ function constraint_hydro_balance(sp, data::Dict)
     end
 end
 
-"creates energy balance constraint"
+"creates energy constraints which bind the discharge with the active energy injected to the grid"
 function constraint_hydro_generation(sp, data::Dict, pm::GenericPowerModel)
     @constraints(sp, begin
         turbine_energy[i=1:data["hydro"]["nHyd"]], var(pm, 0, 1, :pg)[data["hydro"]["Hydrogenerators"][i]["index_grid"]] == sp[:outflow][i]*data["hydro"]["Hydrogenerators"][i]["production_factor"]

@@ -40,13 +40,12 @@ SDDP.plotvaluefunction(m, 2,1, 0.0:200.0; label1="Volume")
 
 simulation_result = simulate(m,
     100,
-    [:outgoing_volume, :thermal_generation, :hydro_generation, :hydro_spill]
+    [:outflow, Symbol("0_1_pg[1]"), :spill]
 )
 
 # Plot results
-inflows = [0.0, 50.0, 100.0]
 plt = SDDP.newplot()
-thgen = [3,5,8]
+thgen = [1,2,4]
 for g in thgen
     SDDP.addplot!(plt,
         1:100, 1:T,
@@ -57,7 +56,7 @@ for g in thgen
 end
 SDDP.addplot!(plt,
     1:100, 1:T,
-    (i, t)->inflows[simulation_result[i][:noise][t]]+50*Int(t==1),
+    (i, t)->data["hydro"]["Hydrogenerators"][1]["inflow"][simulation_result[i][:noise][t]]+50*Int(t==1),
     title  = "Inflows",
     ylabel = "MWh"
 )
