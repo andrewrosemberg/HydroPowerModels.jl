@@ -1,5 +1,5 @@
 using JuMP, PowerModels, SDDP
-using Ipopt, SCS
+using Ipopt, SCS, Clp
 using JSON
 include("./src/HydroPowerModels.jl")
 using HydroPowerModels
@@ -13,13 +13,25 @@ using HydroPowerModels
 data = Dict()
 data["powersystem"]= PowerModels.parse_file("./testcases/testcases_hydro/case3.m")
 data["hydro"]=JSON.parse(String(read("./testcases/testcases_hydro/case3hydro.json")))
-data["hydro"]["Hydrogenerators"][1]["inflow"]= [0.0, 50, 100]
+data["hydro"]["Hydrogenerators"][1]["inflow"]= [120 80 40;
+105 70 35;
+90 60 30;
+75 50 25;
+60 40 20;
+45 30 15;
+30 20 10;
+45 30 15;
+60 40 20;
+75 50 25;
+90 60 30;
+105 70 35;]
+data["hydro"]["inflow_probability"]=[0.3;0.4;0.3]
 
 params = Dict()
 params["stages"] = 3
-params["model_constructor_grid"] = ACPPowerModel
+params["model_constructor_grid"] = DCPPowerModel#ACPPowerModel
 params["post_method"] = PowerModels.post_opf
-params["solver"] = IpoptSolver(tol=1e-6)
+params["solver"] = ClpSolver()#IpoptSolver(tol=1e-6)
 
 ########################################
 #       Build Model
@@ -40,22 +52,38 @@ SDDP.plotvaluefunction(m, 2,1, 0.0:200.0; label1="Volume")
 
 simulation_result = simulate(m,
     100,
-    [:outflow, Symbol("0_1_pg[1]"), :spill]
+    [:outflow, :spill,:reservoir] #Symbol("0_1_pg[1]")]
 )
+getvalue(JuMP.Variable(m.stages[1].subproblems[1],11))
+
+simulation_result[100][:objective]
+simulation_result[100][:stageobjective]
 
 # Plot results
 plt = SDDP.newplot()
 thgen = [1,2,4]
 for g in thgen
     SDDP.addplot!(plt,
-        1:100, 1:T,
+        1:100, 1:params["stages"],
         (i, t)->simulation_result[i][:thermal_generation][t][g],
         title  = "Thermal Generation $g",
         ylabel = "MWh"
     )
 end
 SDDP.addplot!(plt,
-    1:100, 1:T,
+    1:100, 1:params["stages"],
+    (i, t)->simulation_result[i][:outflow][t][1],
+    title  = "Outflow",
+    ylabel = "L"
+)
+SDDP.addplot!(plt,
+    1:100, 1:params["stages"],
+    (i, t)->simulation_result[i][:reservoir][t][1],
+    title  = "reservoir",
+    ylabel = "L"
+)
+SDDP.addplot!(plt,
+    1:100, 1:params["stages"],
     (i, t)->data["hydro"]["Hydrogenerators"][1]["inflow"][simulation_result[i][:noise][t]]+50*Int(t==1),
     title  = "Inflows",
     ylabel = "MWh"

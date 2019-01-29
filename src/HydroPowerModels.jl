@@ -42,6 +42,7 @@ function hydrovalleymodel(data::Dict, params::Dict)
         # hydro balance
         variable_inflow(sp, data)
         rainfall_noises(sp, data, t)
+        setnoiseprobability!(sp, data["hydro"]["inflow_probability"])
         constraint_hydro_balance(sp, data)
 
         # hydro_generation

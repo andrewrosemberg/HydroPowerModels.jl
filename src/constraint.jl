@@ -1,14 +1,8 @@
 "rainfall noises"
 function rainfall_noises(sp, data::Dict, t::Int)
-    for i in 1:data["hydro"]["nHyd"]
-        if t > 1 # in future stages random inflows
-            @rhsnoise(sp, rainfall = data["hydro"]["Hydrogenerators"][i]["inflow"],
-            rainfall == sp[:inflow][i])
-        
-        else # in the first stage deterministic inflow
-            @rhsnoise(sp, rainfall = [data["hydro"]["Hydrogenerators"][i]["inflow"][2]],
-            rainfall == sp[:inflow][i])
-        end
+    for i in 1:data["hydro"]["nHyd"]        
+        @rhsnoise(sp, rainfall = data["hydro"]["Hydrogenerators"][i]["inflow"][t,:],
+        rainfall == sp[:inflow][i])        
     end
 end
 
