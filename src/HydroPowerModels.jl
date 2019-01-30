@@ -30,7 +30,9 @@ function hydrovalleymodel(data::Dict, params::Dict)
                                             ) do sp,t
 
         # build eletric grid model using PowerModels                                   
-        pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid"], params["post_method"], jump_model=sp)
+        pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid"], 
+            params["post_method"], jump_model=sp)
+        createvarrefs(sp,pm)
 
         # resevoir variables
         variable_volume(sp, data)

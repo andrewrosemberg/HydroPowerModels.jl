@@ -52,7 +52,7 @@ SDDP.plotvaluefunction(m, 2,1, 0.0:200.0; label1="Volume")
 
 simulation_result = simulate(m,
     100,
-    [:outflow, :spill,:reservoir] #Symbol("0_1_pg[1]")]
+    [:outflow, :spill,:reservoir, Symbol("0_1_pg")]
 )
 getvalue(JuMP.Variable(m.stages[1].subproblems[1],11))
 
