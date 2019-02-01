@@ -1,37 +1,20 @@
 using JuMP, PowerModels, SDDP
 using Ipopt, SCS, Clp
-using JSON
+
 include("./src/HydroPowerModels.jl")
 using HydroPowerModels
 
 ########################################
 #       Load Case
 ########################################
-#link para o sistema observe que apenas as barras [1, 2, 7, 13, 15, 16, 18, 21, 22, 23] tem geradores
-# e que as barras [11, 12, 27, 21, 22, 23 24] não tem carga
-#http://orbit.dtu.dk/files/120568114/An_Updated_Version_of_the_IEEE_RTS_24Bus_System_for_Electricty_Market_an....pdf 
-data = Dict()
-data["powersystem"]= PowerModels.parse_file("./testcases/testcases_hydro/case3.m")
-data["hydro"]=JSON.parse(String(read("./testcases/testcases_hydro/case3hydro.json")))
-data["hydro"]["Hydrogenerators"][1]["inflow"]= [120 80 40;
-105 70 35;
-90 60 30;
-75 50 25;
-60 40 20;
-45 30 15;
-30 20 10;
-45 30 15;
-60 40 20;
-75 50 25;
-90 60 30;
-105 70 35]
-data["hydro"]["inflow_probability"]=[0.3;0.4;0.3]
+data = HydroPowerModels.parse_folder("./testcases/testcases_hydro/case3")
 
-params = Dict()
-params["stages"] = 3
-params["model_constructor_grid"] = DCPPowerModel #ACPPowerModel #DCPPowerModel
-params["post_method"] = PowerModels.post_opf
-params["solver"] = ClpSolver() #IpoptSolver(tol=1e-6) #ClpSolver()
+# model_constructor_grid may be for example: ACPPowerModel or DCPPowerModel
+# solver may be for example: IpoptSolver(tol=1e-6) or ClpSolver()
+params = set_param( stages = 3, 
+                    model_constructor_grid = DCPPowerModel,
+                    post_method = PowerModels.post_opf,
+                    solver = ClpSolver())
 
 ########################################
 #       Build Model
@@ -41,7 +24,9 @@ m = hydrovalleymodel(data, params)
 ########################################
 #       Solve
 ########################################
-status = solve(m, iteration_limit = 300)
+status = solve(m, iteration_limit = 60)
+
+results = run_opf(data["powersystem"], DCPPowerModel, ClpSolver())
 
 # Plot value function
 SDDP.plotvaluefunction(m, 2,1, 0.0:200.0; label1="Volume")
@@ -54,6 +39,8 @@ simulation_result = simulate(m,
     100,
     [:outflow, :spill,:reservoir, Symbol("0_1_pg")]
 )
+
+results = HydroPowerModels.build_solution(m)
 
 simulation_result[100][:objective]
 simulation_result[100][:stageobjective]

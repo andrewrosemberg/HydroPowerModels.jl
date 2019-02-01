@@ -1,13 +1,13 @@
 module HydroPowerModels
 
-using JuMP, PowerModels, SDDP
-using Ipopt, SCS
+using JuMP, PowerModels, SDDP, Clp
 
 include("variable.jl")
 include("constraint.jl")
 include("utilities.jl")
+include("IO.jl")
 
-export hydrovalleymodel
+export hydrovalleymodel, parse_folder, set_param
 
 """
 data is a dict with all information of the problem. 
@@ -33,6 +33,7 @@ function hydrovalleymodel(data::Dict, params::Dict)
         pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid"], 
             params["post_method"], jump_model=sp)
         createvarrefs(sp,pm)
+        sp.ext[:pm] = pm
 
         # resevoir variables
         variable_volume(sp, data)
@@ -44,7 +45,7 @@ function hydrovalleymodel(data::Dict, params::Dict)
         # hydro balance
         variable_inflow(sp, data)
         rainfall_noises(sp, data, t)
-        setnoiseprobability!(sp, data["hydro"]["inflow_probability"])
+        setnoiseprobability!(sp, data["hydro"]["scenario_probabilities"][t,:])
         constraint_hydro_balance(sp, data)
 
         # hydro_generation
