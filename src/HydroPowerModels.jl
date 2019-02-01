@@ -51,7 +51,7 @@ function hydrovalleymodel(data::Dict, params::Dict)
         constraint_hydro_generation(sp, data, pm)
         
         # Stage objective
-        @stageobjective(sp, sp.obj)
+        @stageobjective(sp, sp.obj + sum(data["hydro"]["Hydrogenerators"][i]["spill_cost"]*sp[:spill][i] for i=1:data["hydro"]["nHyd"]))
     end
 
     return m

@@ -6,6 +6,7 @@
             "min_volume":0,
             "initial_volume":50,
             "production_factor":1,
+            "spill_cost":0,
             "dowstream_turn": [],
             "dowstream_spill": []
         }
