@@ -1,3 +1,5 @@
 using HydroPowerModels, Base.Test
+using JuMP, PowerModels, SDDP
 
-@test 1==1
+include("hydrovalleymodel.jl")
+include("IO.jl")
