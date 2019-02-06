@@ -1,0 +1,1 @@
+Pkg.clone(Pkg.PackageSpec(name="SDDP", url="https://github.com/odow/SDDP.jl", rev="master"))
