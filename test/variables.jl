@@ -5,13 +5,13 @@ using Clp
         sp = Model()
         data = Dict("hydro" => Dict("nHyd" => 4))     
         # inflow            
-        variable_inflow(sp, data)
+        HydroPowerModels.variable_inflow(sp, data)
         @test size(sp[:inflow],1) == 4
         # spillage
-        variable_spillage(sp, data)
+        HydroPowerModels.variable_spillage(sp, data)
         @test size(sp[:spill],1) == 4
         # outflow
-        variable_outflow(sp, data)
+        HydroPowerModels.variable_outflow(sp, data)
         @test size(sp[:outflow],1) == 4
     end
 
@@ -26,7 +26,7 @@ using Clp
             solver = ClpSolver(),
             objective_bound = 0.0
                                     ) do sp,t
-            variable_volume(sp, data)
+            HydroPowerModels.variable_volume(sp, data)
         end
         # state variable volume
         @test JuMP.getlowerbound(m.stages[1].subproblems[1][:reservoir][1]) == 0.0
