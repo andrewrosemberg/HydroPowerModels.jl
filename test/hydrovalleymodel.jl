@@ -1,4 +1,4 @@
-using Ipopt, SCS, Clp
+using Clp
 
 @testset "hydrovalleymodel" begin
     @testset "Test kwargs" begin
