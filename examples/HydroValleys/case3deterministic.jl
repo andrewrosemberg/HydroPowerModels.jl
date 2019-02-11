@@ -1,13 +1,11 @@
 using JuMP, PowerModels, SDDP
-using Ipopt, SCS, Clp
-
-include("./src/HydroPowerModels.jl")
+using Clp
 using HydroPowerModels
 
 ########################################
 #       Load Case
 ########################################
-data = HydroPowerModels.parse_folder("./testcases/testcases_hydro/case3")
+data = HydroPowerModels.parse_folder("./testcases/testcases_hydro/case3deterministic")
 
 # model_constructor_grid may be for example: ACPPowerModel or DCPPowerModel
 # solver may be for example: IpoptSolver(tol=1e-6) or ClpSolver()
@@ -30,4 +28,18 @@ status = solve(m, iteration_limit = 60)
 #       Simulation
 ########################################
 
-results = simulate_model(m, 100)
+results = simulate_model(m, 1)
+
+########################################
+#       Test
+########################################
+
+
+# objective
+@test isapprox(results["simulations"][1]["objective"],1504.17, atol=1e-2)
+
+# solution
+@test results["simulations"][1]["solution"][1][1]["gen"]["4"]["pg"] == 0
+@test isapprox(results["simulations"][1]["solution"][1][1]["gen"]["2"]["pg"],0, atol=1e-2)
+@test isapprox(results["simulations"][1]["solution"][1][1]["gen"]["3"]["pg"],0.74, atol=1e-2)
+@test isapprox(results["simulations"][1]["solution"][1][1]["gen"]["1"]["pg"],0.25, atol=1e-2)

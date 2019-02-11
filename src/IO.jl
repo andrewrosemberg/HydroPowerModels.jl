@@ -19,9 +19,9 @@ end
 
 "Read hydro case folder"
 function parse_folder(folder::String)
-    foldername = split(folder,r"/|//|\\")[end]
+    foldername = "" #split(folder,r"/|//|\\")[end]
     data = Dict()
-    data["powersystem"] = PowerModels.parse_file(folder*"/"*foldername*".m")
+    data["powersystem"] = PowerModels.parse_file(folder*"/"*foldername*"PowerModels.m")
     data["hydro"] = parse_file_hydro(folder*"/"*foldername*"hydro.json")
     vector_inflows = read_inflow(folder*"/"*foldername*"inflows.csv",length(data["hydro"]["Hydrogenerators"]))
     for i = 1:length(data["hydro"]["Hydrogenerators"])
