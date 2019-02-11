@@ -6,7 +6,7 @@ using HydroPowerModels
 #       Load Case
 ########################################
 const testcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
-data = HydroPowerModels.parse_folder(joinpath(testcases_dir,"case3deterministic"))
+data = HydroPowerModels.parse_folder(joinpath(testcases_dir,"case3deterministic_overwater"))
 
 ########################################
 #       Set Parameters
@@ -42,8 +42,11 @@ results = simulate_model(m, 1)
 # objective
 @test isapprox(results["simulations"][1]["objective"],1504.17, atol=1e-2)
 
-# solution
+# solution grid
 @test results["simulations"][1]["solution"][1][1]["gen"]["4"]["pg"] == 0
 @test isapprox(results["simulations"][1]["solution"][1][1]["gen"]["2"]["pg"],0, atol=1e-2)
 @test isapprox(results["simulations"][1]["solution"][1][1]["gen"]["3"]["pg"],0.74, atol=1e-2)
 @test isapprox(results["simulations"][1]["solution"][1][1]["gen"]["1"]["pg"],0.25, atol=1e-2)
+
+# solution reservoirs
+@test isapprox(results["simulations"][1]["solution"][1][1]["reservoirs"]["1"]["spill"],325.07, atol=1e-2)
