@@ -8,6 +8,9 @@ using HydroPowerModels
 const textcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
 data = HydroPowerModels.parse_folder(joinpath(textcases_dir,"case3deterministic"))
 
+########################################
+#       Set Parameters
+########################################
 # model_constructor_grid may be for example: ACPPowerModel or DCPPowerModel
 # solver may be for example: IpoptSolver(tol=1e-6) or ClpSolver()
 params = set_param( stages = 3, 

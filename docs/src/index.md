@@ -11,14 +11,17 @@ Problem Specifications and Network Formulations are handled by [PowerModels.jl](
 
 Solution method is handled by [SDDP.jl](https://github.com/odow/SDDP.jl).
 
-## Getting started
+## Installation
 
-This package is unregistered so you will need to `Pkg.clone` it as follows:
+Dependencies to this package include the packages PowerModels and SDDP. Therefore you should first install as follows:
+
+```julia
+Pkg.add("PowerModels")
+Pkg.clone("https://github.com/odow/SDDP.jl.git")
+```
+
+The current package is unregistered so you will need to `Pkg.clone` it as follows:
 
 ```julia
 Pkg.clone("https://github.com/andrewrosemberg/HydroPowerModels.jl.git")
 ```
-
-If you want to use the parallel features of SDDP.jl, you should start Julia with
-some worker processes (`julia -p N`), or add by running `julia> addprocs(N)` in
-a running Julia session.
