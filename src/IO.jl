@@ -60,9 +60,9 @@ function build_solution_single_simulation(m::SDDPModel;solution = Dict())
             solution["solution"][s][i]["reservoirs"] = Dict()
             for r =1:m.ext[:data]["hydro"]["nHyd"]
                 solution["solution"][s][i]["reservoirs"]["$r"] = Dict()
-                solution["solution"][s][i]["reservoirs"]["$r"][:spill] = getvalue(m.stages[s].subproblems[i][:spill])[r]
-                solution["solution"][s][i]["reservoirs"]["$r"][:outflow] = getvalue(m.stages[s].subproblems[i][:outflow])[r]
-                solution["solution"][s][i]["reservoirs"]["$r"][:volume] = getvalue(m.stages[s].subproblems[i][:reservoir])[r]
+                solution["solution"][s][i]["reservoirs"]["$r"]["spill"] = getvalue(m.stages[s].subproblems[i][:spill])[r]
+                solution["solution"][s][i]["reservoirs"]["$r"]["outflow"] = getvalue(m.stages[s].subproblems[i][:outflow])[r]
+                solution["solution"][s][i]["reservoirs"]["$r"]["volume"] = getvalue(m.stages[s].subproblems[i][:reservoir])[r]
             end
         end
     end
