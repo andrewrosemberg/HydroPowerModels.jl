@@ -5,7 +5,7 @@ using HydroPowerModels
 ########################################
 #       Load Case
 ########################################
-const textcases_dir = joinpath(dirname(dirname(@__FILE__)), "testcases")
+const textcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
 data = HydroPowerModels.parse_folder(joinpath(textcases_dir,"case3deterministic"))
 
 # model_constructor_grid may be for example: ACPPowerModel or DCPPowerModel
