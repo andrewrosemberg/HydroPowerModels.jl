@@ -1,2 +1,3 @@
 Pkg.clone("https://github.com/odow/SDDP.jl")
-Pkg.pin("SDDP", "v0.0.2")
+#Pkg.checkout("SDDP","master")
+#Pkg.checkout("SDDP", "v0.0.2")
