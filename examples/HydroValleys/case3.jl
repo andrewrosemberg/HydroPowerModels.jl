@@ -1,4 +1,4 @@
-using Clp, Plots
+using Clp
 using HydroPowerModels
 
 ########################################
