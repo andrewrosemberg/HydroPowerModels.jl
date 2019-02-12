@@ -33,8 +33,8 @@ using Clp
         @test JuMP.getupperbound(m.stages[1].subproblems[1][:reservoir][1]) == 200
 
         # initial value of state variable volume
-        solve(m.stages[1].subproblems[1])
-        @test getvalue(m.stages[1].subproblems[1][:reservoir0][1]) == 100
+        JuMP.solve(m.stages[1].subproblems[1])
+        @test JuMP.getvalue(m.stages[1].subproblems[1][:reservoir0][1]) == 100
     end
 
 end
