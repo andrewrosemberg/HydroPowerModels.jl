@@ -9,7 +9,7 @@ include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
 
-export hydrothermaloperation, parse_folder, set_param, simulate_model, getvalue
+export hydrothermaloperation, parse_folder, set_param, simulate_model, get_multiperiod_value
 @reexport using PowerModels, SDDP
 
 """
