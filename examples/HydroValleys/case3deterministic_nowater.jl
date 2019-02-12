@@ -1,4 +1,3 @@
-using JuMP, PowerModels, SDDP
 using Clp
 using HydroPowerModels
 
@@ -21,7 +20,7 @@ params = set_param( stages = 3,
 ########################################
 #       Build Model
 ########################################
-m = hydrovalleymodel(data, params)
+m = hydrothermaloperation(data, params)
 
 ########################################
 #       Solve
@@ -31,19 +30,16 @@ status = solve(m, iteration_limit = 60)
 ########################################
 #       Simulation
 ########################################
-
 results = simulate_model(m, 1)
 
 ########################################
 #       Test
 ########################################
-
-
 # objective
 @test isapprox(results["simulations"][1]["objective"],7504.37, atol=1e-2)
 
 # solution
-@test results["simulations"][1]["solution"][1][1]["gen"]["4"]["pg"] == 0
-@test isapprox(results["simulations"][1]["solution"][1][1]["gen"]["2"]["pg"],0.18, atol=1e-2)
-@test isapprox(results["simulations"][1]["solution"][1][1]["gen"]["3"]["pg"],0, atol=1e-2)
-@test isapprox(results["simulations"][1]["solution"][1][1]["gen"]["1"]["pg"],0.81, atol=1e-2)
+@test results["simulations"][1]["solution"][1]["gen"]["4"]["pg"] == 0
+@test isapprox(results["simulations"][1]["solution"][1]["gen"]["2"]["pg"],0.18, atol=1e-2)
+@test isapprox(results["simulations"][1]["solution"][1]["gen"]["3"]["pg"],0, atol=1e-2)
+@test isapprox(results["simulations"][1]["solution"][1]["gen"]["1"]["pg"],0.81, atol=1e-2)

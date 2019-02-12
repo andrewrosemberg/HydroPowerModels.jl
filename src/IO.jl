@@ -34,7 +34,7 @@ end
 "Organize Parameters"
 function set_param(;stages::Int = 1,model_constructor_grid = DCPPowerModel, post_method = PowerModels.post_opf,solver = ClpSolver())
     params = Dict()
-    params["stages"] = 3
+    params["stages"] = stages
     params["model_constructor_grid"] = model_constructor_grid
     params["post_method"] = post_method
     params["solver"] = solver
@@ -47,24 +47,47 @@ function build_solution_single_simulation(m::SDDPModel;solution = Dict())
     stages = size(m.stages,1) # count number of stages
 
     solution["solution"]= Dict()
-    solution["solution"]=Vector{Array}(stages)
+    solution["solution"]=Array{Dict}(stages)
     for s = 1:stages
-        markovstates = size(m.stages[s].subproblems,1)
-        solution["solution"][s] = Array{Dict}(markovstates)
-        for i = 1:markovstates
-            built_sol = PowerModels.build_solution(m.stages[s].subproblems[i].ext[:pm],:Optimal,0.0,
-            solution_builder = PowerModels.get_solution)
-            solution["solution"][s][i] = built_sol["solution"]
-            solution["solution"][s][i]["objective"] = built_sol["objective"]
-            solution["solution"][s][i]["objective_lb"] = built_sol["objective_lb"]
-            solution["solution"][s][i]["reservoirs"] = Dict()
-            for r =1:m.ext[:data]["hydro"]["nHyd"]
-                solution["solution"][s][i]["reservoirs"]["$r"] = Dict()
-                solution["solution"][s][i]["reservoirs"]["$r"]["spill"] = getvalue(m.stages[s].subproblems[i][:spill])[r]
-                solution["solution"][s][i]["reservoirs"]["$r"]["outflow"] = getvalue(m.stages[s].subproblems[i][:outflow])[r]
-                solution["solution"][s][i]["reservoirs"]["$r"]["volume"] = getvalue(m.stages[s].subproblems[i][:reservoir])[r]
-            end
-        end
+        i = solution["markov"][s]       
+        built_sol = PowerModels.build_solution(m.stages[s].subproblems[i].ext[:pm],:Optimal,0.0,
+        solution_builder = PowerModels.get_solution)
+        solution["solution"][s] = built_sol["solution"]
+        solution["solution"][s]["objective"] = built_sol["objective"]
+        solution["solution"][s]["objective_lb"] = built_sol["objective_lb"]
+        solution["solution"][s]["reservoirs"] = Dict()
+        for r =1:m.ext[:data]["hydro"]["nHyd"]
+            solution["solution"][s]["reservoirs"]["$r"] = Dict()
+            solution["solution"][s]["reservoirs"]["$r"]["spill"] = getvalue(m.stages[s].subproblems[i][:spill])[r]
+            solution["solution"][s]["reservoirs"]["$r"]["outflow"] = getvalue(m.stages[s].subproblems[i][:outflow])[r]
+            solution["solution"][s]["reservoirs"]["$r"]["volume"] = getvalue(m.stages[s].subproblems[i][:reservoir])[r]
+        end        
     end
     return solution
+end
+
+"Create matrix from dict"
+function getvalue(results::Dict, path=[]::Array{Any,1}, matidx=Int[]::Array{Int,1})
+    codestr = Array{String}(size(path,1)+1)
+    codestr[1] = "results"
+    codestr[2:end] .= ["[path[$i]]" for i = 1:size(path,1)]
+    if size(matidx,1)>0
+        sizemat = Array{Int,1}(size(matidx,1))
+        for idx = 1:size(matidx,1)
+            sizemat[idx] = size(eval.(parse(*(codestr[1:matidx[idx]]...))))[1]
+        end
+
+        for idx = 1:size(matidx,1)
+            codestr[matidx[idx]+1] = "[i$idx]"
+        end
+
+        codestr = *(codestr...)
+
+        codestr = *(codestr,*("for ",["i$idx =1:$(sizemat[idx])," for idx = 1:size(matidx,1)]...)[1:end-1])
+        codestr = "["*codestr*"]"
+    else
+        codestr = *(codestr...)
+    end
+    codestr = eval(parse(codestr))
+    return codestr
 end

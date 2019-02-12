@@ -27,9 +27,10 @@ function randomsimulation(m::SDDPModel)
     store = SDDP.newsolutionstore(Symbol[])
     obj = SDDP.forwardpass!(m, SDDP.Settings(),store)
     store[:objective] = obj
-    solution = build_solution_single_simulation(m)
+    solution = Dict()
     for (key,value) in  store
         solution[string(key)] = value
     end
+    solution = build_solution_single_simulation(m,solution = solution)
     return solution
 end

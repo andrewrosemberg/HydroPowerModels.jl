@@ -1,6 +1,7 @@
 module HydroPowerModels
 
-using JuMP, PowerModels, SDDP, Clp
+using JuMP, Clp, PowerModels, SDDP
+using Reexport
 
 include("variable.jl")
 include("constraint.jl")
@@ -8,14 +9,15 @@ include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
 
-export hydrovalleymodel, parse_folder, set_param, simulate_model
+export hydrothermaloperation, parse_folder, set_param, simulate_model, getvalue
+@reexport using PowerModels, SDDP
 
 """
 data is a dict with all information of the problem. 
 
 param is a dict containing solution parameters.
 """
-function hydrovalleymodel(data::Dict, params::Dict)
+function hydrothermaloperation(data::Dict, params::Dict)
     # calculate number of hydrogenerators
     countgenerators!(data)
     
