@@ -32,12 +32,13 @@ function parse_folder(folder::String)
 end
 
 "Organize Parameters"
-function set_param(;stages::Int = 1,model_constructor_grid = DCPPowerModel, post_method = PowerModels.post_opf,solver = ClpSolver())
+function set_param(;stages::Int = 1,model_constructor_grid = DCPPowerModel, post_method = PowerModels.post_opf,solver = ClpSolver(),setting = Dict("output" => Dict("branch_flows" => true)))
     params = Dict()
     params["stages"] = stages
     params["model_constructor_grid"] = model_constructor_grid
     params["post_method"] = post_method
     params["solver"] = solver
+    params["setting"] = setting
     return params
 end
 

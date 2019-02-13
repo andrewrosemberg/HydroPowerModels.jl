@@ -34,7 +34,7 @@ function hydrothermaloperation(data::Dict, params::Dict)
         
         # build eletric grid model using PowerModels                                   
         pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid"], 
-            params["post_method"], jump_model=sp)
+            params["post_method"], jump_model=sp, setting = params["setting"])
         
         # create reference to variables
         createvarrefs(sp,pm)

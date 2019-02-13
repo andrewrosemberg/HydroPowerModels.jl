@@ -23,3 +23,4 @@ after_success:
     # push coverage results to Codecov
     - echo $TRAVIS_JULIA_VERSION
     - julia -e 'cd(Pkg.dir("HydroPowerModels")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+    - julia -e 'cd(Pkg.dir("HydroPowerModels")); Pkg.add("Documenter"); include(joinpath("docs", "make.jl"))'
