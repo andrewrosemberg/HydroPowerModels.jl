@@ -13,8 +13,7 @@ sudo: false
 install:
   - pip --version
   - pip install --user --upgrade pip
-  - pip --version
-  
+
 addons:
     apt_packages:
         - gfortran
