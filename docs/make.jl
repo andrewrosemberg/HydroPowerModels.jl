@@ -15,10 +15,11 @@ makedocs(
 )
 
 deploydocs(
-    repo   = "github.com/andrewrosemberg/HydroPowerModels.jl.git",
-    target = "build",
-    osname = "linux",
-    julia  = "0.6",
-    deps   = nothing,
-    make   = nothing,
+    repo   = "github.com/andrewrosemberg/HydroPowerModels.jl.git" #,
 )
+#     target = "build",
+#     osname = "linux",
+#     julia  = "0.6",
+#     deps   = nothing,
+#     make   = nothing,
+# )
