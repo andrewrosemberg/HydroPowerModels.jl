@@ -17,7 +17,7 @@ makedocs(
 deploydocs(
     deps   = Deps.pip("Tornado>=4.0.0,<5.0.0","python-markdown-math", "pygments", "pymdown-extensions"),
     repo   = "github.com/andrewrosemberg/HydroPowerModels.jl.git",
-    julia = "0.6"
+    julia = "0.6.4"
 )
 #     target = "build",
 #     osname = "linux",
