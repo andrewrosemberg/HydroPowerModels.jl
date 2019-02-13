@@ -9,6 +9,7 @@ matrix:
 notifications:
     email: false
 sudo: false
+dist: trusty
 
 install:
   - pip --version
