@@ -15,7 +15,8 @@ makedocs(
 )
 
 deploydocs(
-    repo   = "github.com/andrewrosemberg/HydroPowerModels.jl.git" #,
+    repo   = "github.com/andrewrosemberg/HydroPowerModels.jl.git",
+    julia = "0.6"
 )
 #     target = "build",
 #     osname = "linux",
