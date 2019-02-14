@@ -76,18 +76,6 @@ results["simulations"][1]["solution"][2][1]["reservoirs"]["1"]["outflow"]
 
 In order to plot the results returned by the simulate_model function, you may choose from a variety of methods.
 
-The getvalue function helps to organize values of a variable for all simulations and stages into a matrix:
-
-```julia
-get_multiperiod_value(results::Dict, path=[]::Array{Any,1}, matidx=Int[]::Array{Int,1})
-```
-Where path is the vector of keys in our results data structure to arrive at the variable of interest; matidx are the indexes in the path vector which correspond to the dimensions of the output matrix.
-
-For example, the generation matrix from the 1st generator may be accessed with:
-
-```julia
-get_multiperiod_value(results,["simulations",1,"solution",1,"gen","1","pg"],[4,2])
-```
 
 For those familiar with the plot functions from SDDP.jl, they may also be used here. For example, to plot the active generation from the 3rd generator and the volume of the 1st reservoir for all stages and simulations:
 

@@ -1,0 +1,59 @@
+# Example: Case 3
+
+This an example of the HydroPowerModels package for solving a simple stochastic case with the following specifications:
+- 3 Buses
+- 3 Lines
+- 2 Generators
+- 1 Reservoir and Hydrogenerator
+- 3 Scenarios
+- 12 Stages
+
+## Importing package and solver
+
+```julia
+using Clp
+using HydroPowerModels
+```
+
+## Load Case Specifications
+
+```julia
+const testcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
+data = HydroPowerModels.parse_folder(joinpath(testcases_dir,"case3"))
+
+params = set_param( stages = 12, 
+                    model_constructor_grid  = DCPPowerModel,
+                    post_method             = PowerModels.post_opf,
+                    solver                  = ClpSolver())
+```
+
+## Build Model
+```julia
+m = hydrothermaloperation(data, params);
+```
+
+## Solve
+```julia
+status = solve(m, iteration_limit = 60)
+```
+
+## Simulation
+```julia
+srand(1111)
+results = simulate_model(m, 100)
+```
+
+## Plotting Results
+```julia
+using Plots
+gr()
+
+gen_1 = [results["simulations"][i]["solution"][j]["gen"]["1"]["pg"] for i=1:100, j=1:12]'
+baseMVA =  [results["simulations"][i]["solution"][j]["baseMVA"] for i=1:100, j=1:12]'
+scenarious = gen_1.*baseMVA
+mean_scenarious = mean(scenarious,2)
+plot(mean_scenarious, title  = "Termo Generation",
+            ylabel = "MWh",
+            ribbon=(map(i->quantile(scenarious[i,:],0.05), 1:12),map(i->quantile(scenarious[i,:],0.95), 1:12))     
+)
+```

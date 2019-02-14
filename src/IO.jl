@@ -66,29 +66,3 @@ function build_solution_single_simulation(m::SDDPModel;solution = Dict())
     end
     return solution
 end
-
-"Create matrix from dict"
-function get_multiperiod_value(results::Dict, path=[]::Array{Any,1}, matidx=Int[]::Array{Int,1})
-    codestr = Array{String}(size(path,1)+1)
-    codestr[1] = "results"
-    codestr[2:end] .= ["[path[$i]]" for i = 1:size(path,1)]
-    if size(matidx,1)>0
-        sizemat = Array{Int,1}(size(matidx,1))
-        for idx = 1:size(matidx,1)
-            sizemat[idx] = size(eval.(parse(*(codestr[1:matidx[idx]]...))))[1]
-        end
-
-        for idx = 1:size(matidx,1)
-            codestr[matidx[idx]+1] = "[i$idx]"
-        end
-
-        codestr = *(codestr...)
-
-        codestr = *(codestr,*("for ",["i$idx =1:$(sizemat[idx])," for idx = 1:size(matidx,1)]...)[1:end-1])
-        codestr = "["*codestr*"]"
-    else
-        codestr = *(codestr...)
-    end
-    codestr = eval(parse(codestr))
-    return codestr
-end
