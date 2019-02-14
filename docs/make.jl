@@ -1,7 +1,7 @@
 
 using Documenter, HydroPowerModels
 
-push!(LOAD_PATH,"../src/")
+#push!(LOAD_PATH,"../src/")
 
 makedocs(
     modules = [HydroPowerModels],
@@ -21,7 +21,8 @@ deploydocs(
     repo   = "github.com/andrewrosemberg/HydroPowerModels.jl.git",
     julia = "0.6.4" ,
     target = "build",
-    osname = "linux"
+    osname = "linux",
+    make   = nothing
 )
 #     target = "build",
 #     osname = "linux",
