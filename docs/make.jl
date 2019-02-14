@@ -1,6 +1,8 @@
 
 using Documenter, HydroPowerModels
 
+push!(LOAD_PATH,"../src/")
+
 makedocs(
     modules = [HydroPowerModels],
     doctest  = false,

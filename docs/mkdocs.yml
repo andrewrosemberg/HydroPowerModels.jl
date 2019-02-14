@@ -1,6 +1,6 @@
 site_name:        HydroPowerModels.jl
 repo_url:         https://github.com/andrewrosemberg/HydroPowerModels.jl
-site_description: Documentation
+site_description: "Documentation"
 site_author:      Andrew Rosemberg
 
 theme: readthedocs
