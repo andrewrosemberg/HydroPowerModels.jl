@@ -1,8 +1,6 @@
 
 using Documenter, HydroPowerModels
 
-#push!(LOAD_PATH,"../src/")
-
 makedocs(
     modules = [HydroPowerModels],
     doctest  = false,
@@ -11,22 +9,15 @@ makedocs(
     sitename = "HydroPowerModels.jl",
     authors = "Andrew Rosemberg",
     pages = [
-        "Home" => "index.md",
-        "getstarted.md"
+        "Home"      => "index.md",
+        "Manual"    => "getstarted.md"
     ]
 )
 
 deploydocs(
-    #deps   = Deps.pip("Tornado>=4.0.0,<5.0.0","mkdocs","python-markdown-math", "pygments", "pymdown-extensions"),
     repo   = "github.com/andrewrosemberg/HydroPowerModels.jl.git",
     julia = "0.6.4" ,
     target = "build",
     osname = "linux",
     make   = nothing
 )
-#     target = "build",
-#     osname = "linux",
-#     julia  = "0.6",
-#     deps   = nothing,
-#     make   = nothing,
-# )
