@@ -10,7 +10,8 @@ makedocs(
     authors = "Andrew Rosemberg",
     pages = [
         "Home"      => "index.md",
-        "Manual"    => "getstarted.md"
+        "Manual"    => "getstarted.md",
+        "Examples"  => "examples/case3.md"
     ]
 )
 
