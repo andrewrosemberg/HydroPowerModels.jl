@@ -12,7 +12,15 @@ result[&quot;data&quot;]</code></pre><p>Simulation results are found in the simu
 result[&quot;simulation&quot;][10][&quot;objective&quot;]
 result[&quot;simulation&quot;][10][&quot;noise&quot;]</code></pre><p>The &quot;solution&quot; field contains detailed information about the grid solution returned by the PowerModels package, like generation and bus informations, as well as reservoirs menagement information, like outflow and spillage. For example, the active generation of the 2th generator and the outflow of the 1st reservoir on the second stage and first markov state can be inspect by:</p><pre><code class="language-julia">results[&quot;simulations&quot;][1][&quot;solution&quot;][2][1][&quot;gen&quot;][&quot;2&quot;][&quot;pg&quot;]
 
-results[&quot;simulations&quot;][1][&quot;solution&quot;][2][1][&quot;reservoirs&quot;][&quot;1&quot;][&quot;outflow&quot;]</code></pre><h2><a class="nav-anchor" id="Plotting-Results-1" href="#Plotting-Results-1">Plotting Results</a></h2><p>In order to plot the results returned by the simulate_model function, you may choose from a variety of methods.</p><p>For those familiar with the plot functions from SDDP.jl, they may also be used here. For example, to plot the active generation from the 3rd generator and the volume of the 1st reservoir for all stages and simulations:</p><pre><code class="language-julia">plt = SDDP.newplot()
+results[&quot;simulations&quot;][1][&quot;solution&quot;][2][1][&quot;reservoirs&quot;][&quot;1&quot;][&quot;outflow&quot;]</code></pre><h2><a class="nav-anchor" id="Plotting-Results-1" href="#Plotting-Results-1">Plotting Results</a></h2><p>In order to plot the results returned by the simulate_model function, you may choose from a variety of methods.</p><p>It helps to organize values of a variable for all simulations and stages into a matrix. For example, to plot the values of the active generation from the 1st to the 3rd generator:</p><pre><code class="language-julia">baseMVA =  [results[&quot;simulations&quot;][i][&quot;solution&quot;][j][&quot;baseMVA&quot;] for i=1:100, j=1:12]&#39;
+
+scen_gen = [[results[&quot;simulations&quot;][i][&quot;solution&quot;][j][&quot;gen&quot;][&quot;$gen&quot;][&quot;pg&quot;] for i=1:100, j=1:12]&#39;.*baseMVA for gen =1:3]</code></pre><p>Then just choose a plot function:</p><pre><code class="language-julia">plt =   [plot(median(scen_gen[gen],2), title  = &quot;Termo Generation $gen&quot;,
+            ylabel = &quot;MWh&quot;,
+            ribbon=(median(scen_gen[gen],2)-map(i-&gt;quantile(scen_gen[gen][i,:],0.05), 1:12),map(i-&gt;quantile(scen_gen[gen][i,:],0.95), 1:12)-median(scen_gen[gen],2))     
+            )
+        for gen =1:3
+]
+plot(plt...,legend=false)</code></pre><p>For those familiar with the plot functions from SDDP.jl, they may also be used here. For example, to plot the active generation from the 3rd generator and the volume of the 1st reservoir for all stages and simulations:</p><pre><code class="language-julia">plt = SDDP.newplot()
 
 SDDP.addplot!(plt,
     1:100, 1:params[&quot;stages&quot;],
