@@ -1,3 +1,4 @@
 using Weave
 
-weave("../examples/HydroValleys/case3.jl", out_path = "build/examples", doctype = "md2html")
+examples_dir = joinpath(dirname(dirname(@__FILE__)), "examples")
+weave(joinpath(examples_dir,"case3.jl"), out_path = "build/examples", doctype = "md2html")
