@@ -61,7 +61,6 @@ end
 
 if plot_bool == true
     using Plots
-    gr()
 
     baseMVA =  [results["simulations"][i]["solution"][j]["baseMVA"] for i=1:100, j=1:12]'
 

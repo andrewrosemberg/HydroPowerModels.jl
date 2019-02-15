@@ -1,8 +1,6 @@
 
 using Documenter, HydroPowerModels
 
-include("make_examples.jl")
-
 makedocs(
     modules = [HydroPowerModels],
     doctest  = false,
@@ -15,6 +13,8 @@ makedocs(
         "Manual"    => "getstarted.md"
     ]
 )
+
+include("make_examples.jl")
 
 deploydocs(
     repo   = "github.com/andrewrosemberg/HydroPowerModels.jl.git",
