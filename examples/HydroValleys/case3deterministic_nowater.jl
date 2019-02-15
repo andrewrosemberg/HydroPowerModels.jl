@@ -4,7 +4,7 @@ using HydroPowerModels
 ########################################
 #       Load Case
 ########################################
-const testcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
+testcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
 data = HydroPowerModels.parse_folder(joinpath(testcases_dir,"case3deterministic_nowater"))
 
 ########################################

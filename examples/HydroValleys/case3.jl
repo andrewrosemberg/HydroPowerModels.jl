@@ -23,7 +23,7 @@ using Clp
 using HydroPowerModels
 
 #' ## Load Case Specifications
-const testcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
+testcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
 data = HydroPowerModels.parse_folder(joinpath(testcases_dir,"case3"))
 
 params = set_param( stages = 12, 
@@ -56,6 +56,11 @@ using Base.Test
 
 #' Termo Generation
 
+if !isdefined(:plot_bool)
+    plot_bool = true
+end
+
+if plot_bool == true
 using Plots
 gr()
 
@@ -98,3 +103,4 @@ plt =   [plot(median(scen_gen[3],2), title  = "Hydro Generation",
         
 ]
 plot(plt...,legend=false)
+end
