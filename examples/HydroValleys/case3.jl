@@ -23,8 +23,7 @@ using Clp
 using HydroPowerModels
 
 #' ## Load Case Specifications
-testcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
-data = HydroPowerModels.parse_folder(joinpath(testcases_dir,"case3"))
+data = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"))
 
 params = set_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
