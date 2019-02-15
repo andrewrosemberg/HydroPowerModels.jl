@@ -18,6 +18,7 @@ install:
 addons:
     apt_packages:
         - gfortran
+        - qt5-default
 script:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
     - julia -e 'Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
