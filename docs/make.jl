@@ -14,6 +14,8 @@ makedocs(
     ]
 )
 
+include("make_examples.jl")
+
 deploydocs(
     repo   = "github.com/andrewrosemberg/HydroPowerModels.jl.git",
     julia = "0.6.4" ,
