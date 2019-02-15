@@ -66,8 +66,8 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "examples/case3.html#",
-    "page": "Examples",
-    "title": "Examples",
+    "page": "-",
+    "title": "-",
     "category": "page",
     "text": ""
 },
