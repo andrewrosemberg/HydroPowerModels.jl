@@ -24,6 +24,9 @@ function hydrothermaloperation(data::Dict, params::Dict)
     # compoute upstream_hydro
     upstream_hydro!(data)
 
+    # count available inflow data
+    countavailableinflow!(data)
+
     # Model Definition
     m = SDDPModel(
                     sense   = :Min,
@@ -51,8 +54,8 @@ function hydrothermaloperation(data::Dict, params::Dict)
 
         # hydro balance
         variable_inflow(sp, data)
-        rainfall_noises(sp, data, t)
-        setnoiseprobability!(sp, data["hydro"]["scenario_probabilities"][t,:])
+        rainfall_noises(sp, data, cidx(t,data["hydro"]["size_inflow"][1]))
+        setnoiseprobability!(sp, data["hydro"]["scenario_probabilities"][cidx(t,data["hydro"]["size_inflow"][1]),:])
         constraint_hydro_balance(sp, data)
 
         # hydro_generation

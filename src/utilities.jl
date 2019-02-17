@@ -38,3 +38,13 @@ function createvarrefs(sp::JuMP.Model,pm::GenericPowerModel)
         end
     end
 end
+
+"count available inflow data"
+function countavailableinflow!(data::Dict)
+    data["hydro"]["size_inflow"] = size(data["hydro"]["Hydrogenerators"][1]["inflow"])
+end
+
+"circular index"
+function cidx(i::Int,n::Int)
+    mod(i,n)==0 ? n:mod(i,n)
+end
