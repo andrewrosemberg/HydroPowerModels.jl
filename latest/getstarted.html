@@ -5,7 +5,7 @@ using Ipopt, Clp</code></pre><p>Load Case by passing the respective folder:</p><
     stages = 3, 
     model_constructor_grid  = DCPPowerModel,
     post_method             = PowerModels.post_opf,
-    solver                  = ClpSolver())</code></pre><p>Build and Model and execute the SDDP method:</p><pre><code class="language-julia">m = hydrovalleymodel(data, params)
+    solver                  = ClpSolver())</code></pre><p>Build the Model and execute the SDDP method:</p><pre><code class="language-julia">m = hydrovalleymodel(data, params)
 
 status = solve(m, iteration_limit = 60)</code></pre><p>Simulate 100 Instances of the problem:</p><pre><code class="language-julia">results = simulate_model(m, 100)</code></pre><h2><a class="nav-anchor" id="Getting-Results-1" href="#Getting-Results-1">Getting Results</a></h2><p>The simulate_model command in HydroPowerModels returns a detailed execution data in the form of a dictionary.</p><p>For example, the algorithm&#39;s runtime and original case data can be accessed with:</p><pre><code class="language-julia">result[&quot;solve_time&quot;]
 result[&quot;data&quot;]</code></pre><p>Simulation results are found in the simulations array inside the dictionary. For example, information about the 10th simulation, as objective value and sampled noise, may be accessed with:</p><pre><code class="language-julia">result[&quot;simulation&quot;][10]
