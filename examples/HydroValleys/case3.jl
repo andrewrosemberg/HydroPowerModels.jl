@@ -61,6 +61,7 @@ end
 
 if plot_bool == true
     using Plots
+    using Plots.PlotMeasures
 
     baseMVA =  [results["simulations"][i]["solution"][j]["baseMVA"] for i=1:100, j=1:params["stages"]]'
 
@@ -70,7 +71,9 @@ if plot_bool == true
                 ylabel = "MWh",
                 xlabel = "Stages",
                 ribbon=(median(scen_gen[gen],2)-map(i->quantile(scen_gen[gen][i,:],0.05), 1:params["stages"]),map(i->quantile(scen_gen[gen][i,:],0.95), 1:params["stages"])-median(scen_gen[gen],2)),     
-                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])])
+                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])]),
+                bottom_margin = 10mm,
+                right_margin = 10mm
                 )
             for gen =1:2
     ]
@@ -86,9 +89,29 @@ if plot_bool == true
                 ylabel = "MWh",
                 xlabel = "Stages",
                 ribbon=(median(scen_branch[brc],2)-map(i->quantile(scen_branch[brc][i,:],0.05), 1:params["stages"]),map(i->quantile(scen_branch[brc][i,:],0.95), 1:params["stages"])-median(scen_branch[brc],2)) ,     
-                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])])
+                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])]),
+                bottom_margin = 10mm,
+                right_margin = 10mm
                 )
             for brc =1:3
+    ]
+    plot(plt...,legend=false)
+end
+
+#' Voltage angle
+
+if plot_bool == true
+    scen_va = [[results["simulations"][i]["solution"][j]["bus"]["$bus"]["va"] for i=1:100, j=1:params["stages"]]' for bus =1:3]
+
+    plt =   [plot(median(scen_va[bus],2), title  = "Voltage angle $bus",
+                ylabel = "Radians",
+                xlabel = "Stages",
+                ribbon=(median(scen_va[bus],2)-map(i->quantile(scen_va[bus][i,:],0.05), 1:params["stages"]),map(i->quantile(scen_va[bus][i,:],0.95), 1:params["stages"])-median(scen_va[bus],2)) ,     
+                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])]),
+                bottom_margin = 10mm,
+                right_margin = 10mm
+                )
+            for bus =1:3
     ]
     plot(plt...,legend=false)
 end
@@ -103,13 +126,17 @@ if plot_bool == true
                 ylabel = "MWh",
                 xlabel = "Stages",
                 ribbon=(median(scen_gen[3],2)-map(i->quantile(scen_gen[3][i,:],0.05), 1:params["stages"]),map(i->quantile(scen_gen[3][i,:],0.95), 1:params["stages"])-median(scen_gen[3],2)),     
-                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])])
+                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])]),
+                bottom_margin = 10mm,
+                right_margin = 10mm
                 );
             plot(mean(scen_voume,2), title  = "Volume Reservoir",
                 ylabel = "m³",
                 xlabel = "Stages",
                 ribbon=(median(scen_voume,2)-map(i->quantile(scen_voume[i,:],0.05), 1:params["stages"]),map(i->quantile(scen_voume[i,:],0.95), 1:params["stages"])-median(scen_voume,2)),     
-                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])])
+                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])]),
+                bottom_margin = 10mm,
+                right_margin = 10mm
                 )    
             
     ]

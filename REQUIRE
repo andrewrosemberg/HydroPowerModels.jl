@@ -1,7 +1,10 @@
 julia 0.6 0.7
 
 JuMP 0.16 0.19-
+
 Clp
+Ipopt
+
 Reexport
 
 PowerModels 0.9.3

@@ -31,7 +31,7 @@ params = set_param(
     solver                  = ClpSolver())
 ```
 
-Build and Model and execute the SDDP method:
+Build the Model and execute the SDDP method:
 
 ```julia
 m = hydrovalleymodel(data, params)
