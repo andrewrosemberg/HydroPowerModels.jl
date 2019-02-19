@@ -1,7 +1,7 @@
 using JSON
 
 "Read hydro description json file"
-function parse_file_hydro(file::String)
+function parse_file_json(file::String)
     return JSON.parse(String(read(file)))
 end
 
@@ -21,8 +21,13 @@ end
 function parse_folder(folder::String)
     foldername = "" #split(folder,r"/|//|\\")[end]
     data = Dict()
-    data["powersystem"] = PowerModels.parse_file(folder*"/"*foldername*"PowerModels.m")
-    data["hydro"] = parse_file_hydro(folder*"/"*foldername*"hydro.json")
+    try
+        data["powersystem"] = parse_file_json(folder*"/"*foldername*"PowerModels.json")
+        data["powersystem"]["source_version"] = VersionNumber(data["powersystem"]["source_version"]["major"],data["powersystem"]["source_version"]["minor"],data["powersystem"]["source_version"]["patch"],Tuple{}(data["powersystem"]["source_version"]["prerelease"]),Tuple{}(data["powersystem"]["source_version"]["build"]))
+    catch
+        data["powersystem"] = PowerModels.parse_file(folder*"/"*foldername*"PowerModels.m")
+    end
+    data["hydro"] = parse_file_json(folder*"/"*foldername*"hydro.json")
     vector_inflows = read_inflow(folder*"/"*foldername*"inflows.csv",length(data["hydro"]["Hydrogenerators"]))
     for i = 1:length(data["hydro"]["Hydrogenerators"])
         data["hydro"]["Hydrogenerators"][i]["inflow"]= vector_inflows[i]
