@@ -1,8 +1,8 @@
 
 #' ---
-#' title : Example Case 3 - 5 Years Planning
+#' title : Example Case 3 - Year Planning
 #' author : Andrew Rosemberg
-#' date : 17th Feb 2019
+#' date : 20th Feb 2019
 #' ---
 
 #' # Introduction
@@ -13,22 +13,23 @@
 #'    - 2 Generators
 #'    - 1 Reservoir and Hydrogenerator
 #'    - 3 Scenarios
-#'    - 60 Stages
+#'    - 12 Stages
+#'    - SOC Formulation
 
 #' # Case
 
 #' ## Importing package and solver
 
-using Clp
+using Ipopt
 using HydroPowerModels
 
 #' ## Load Case Specifications
 data = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"))
 
-params = set_param( stages = 12*5, 
-                    model_constructor_grid  = DCPPowerModel,
+params = set_param( stages = 12, 
+                    model_constructor_grid  = SOCWRPowerModel,
                     post_method             = PowerModels.post_opf,
-                    solver                  = ClpSolver())
+                    solver                  = IpoptSolver(tol=1e-6))
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
@@ -37,19 +38,8 @@ m = hydrothermaloperation(data, params);
 status = solve(m, iteration_limit = 60);
 
 #' ## Simulation
-srand(1111);
+srand(1111)
 results = simulate_model(m, 100);
-
-#' ## Testing Results
-#' Objective
-using Base.Test
-@test isapprox(results["simulations"][1]["objective"], 59800.0, atol=1e-2)
-
-#' Solution
-@test results["simulations"][1]["solution"][50]["gen"]["4"]["pg"] == 0
-@test isapprox(results["simulations"][1]["solution"][50]["gen"]["2"]["pg"],0.0, atol=1e-2)
-@test isapprox(results["simulations"][1]["solution"][50]["gen"]["3"]["pg"],0.74, atol=1e-2)
-@test isapprox(results["simulations"][1]["solution"][50]["gen"]["1"]["pg"],0.25, atol=1e-2)
 
 #' ## Plotting Results
 

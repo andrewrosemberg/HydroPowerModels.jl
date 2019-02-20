@@ -11,7 +11,7 @@ function simulate_model(m::SDDPModel, N::Int; asynchronous::Bool = true)
         solution["simulations"] .= map(i -> randomsimulation(m), 1:N)
     end
     solution["solve_time"] = toc()
-    solution["solver"] = string(typeof(m.stages[1].subproblems[1].solver))
+    solution["params"] = m.ext[:params]
     solution["machine"] = Dict(
         "cpu" => Sys.cpu_info()[1].model,
         "memory" => string(Sys.total_memory()/2^30, " Gb")

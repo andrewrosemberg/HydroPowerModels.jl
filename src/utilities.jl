@@ -48,3 +48,8 @@ end
 function cidx(i::Int,n::Int)
     mod(i,n)==0 ? n:mod(i,n)
 end
+
+"hydrogenerators indexes"
+function idx_hydro(data::Dict)
+    [hydro["index_grid"] for hydro in data["hydro"]["Hydrogenerators"]]
+end

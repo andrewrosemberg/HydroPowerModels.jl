@@ -9,7 +9,8 @@ include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
 
-export hydrothermaloperation, parse_folder, set_param, simulate_model
+export  hydrothermaloperation, parse_folder, set_param, simulate_model,
+        plotresults, plotscenarios
 @reexport using PowerModels, SDDP
 
 """
@@ -67,6 +68,7 @@ function hydrothermaloperation(data::Dict, params::Dict)
 
     # save data
     m.ext[:data] = data
+    m.ext[:params] = params
 
     return m
 end

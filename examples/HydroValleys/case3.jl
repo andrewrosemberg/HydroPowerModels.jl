@@ -31,14 +31,14 @@ params = set_param( stages = 12,
                     solver                  = ClpSolver())
 
 #' ## Build Model
-m = hydrothermaloperation(data, params)
+m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = solve(m, iteration_limit = 60)
+status = solve(m, iteration_limit = 60);
 
 #' ## Simulation
 srand(1111)
-results = simulate_model(m, 100)
+results = simulate_model(m, 100);
 
 #' ## Testing Results
 #' Objective
@@ -60,85 +60,5 @@ if !isdefined(:plot_bool)
 end
 
 if plot_bool == true
-    using Plots
-    using Plots.PlotMeasures
-
-    baseMVA =  [results["simulations"][i]["solution"][j]["baseMVA"] for i=1:100, j=1:params["stages"]]'
-
-    scen_gen = [[results["simulations"][i]["solution"][j]["gen"]["$gen"]["pg"] for i=1:100, j=1:params["stages"]]'.*baseMVA for gen =1:3]
-
-    plt =   [plot(median(scen_gen[gen],2), title  = "Termo Generation $gen",
-                ylabel = "MWh",
-                xlabel = "Stages",
-                ribbon=(median(scen_gen[gen],2)-map(i->quantile(scen_gen[gen][i,:],0.05), 1:params["stages"]),map(i->quantile(scen_gen[gen][i,:],0.95), 1:params["stages"])-median(scen_gen[gen],2)),     
-                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])]),
-                bottom_margin = 10mm,
-                right_margin = 10mm
-                )
-            for gen =1:2
-    ]
-    plot(plt...,legend=false)
-end
-
-#' Branch flow
-
-if plot_bool == true
-    scen_branch = [[results["simulations"][i]["solution"][j]["branch"]["$brc"]["pf"] for i=1:100, j=1:params["stages"]]'.*baseMVA for brc =1:3]
-
-    plt =   [plot(median(scen_branch[brc],2), title  = "Branch Flow $brc",
-                ylabel = "MWh",
-                xlabel = "Stages",
-                ribbon=(median(scen_branch[brc],2)-map(i->quantile(scen_branch[brc][i,:],0.05), 1:params["stages"]),map(i->quantile(scen_branch[brc][i,:],0.95), 1:params["stages"])-median(scen_branch[brc],2)) ,     
-                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])]),
-                bottom_margin = 10mm,
-                right_margin = 10mm
-                )
-            for brc =1:3
-    ]
-    plot(plt...,legend=false)
-end
-
-#' Voltage angle
-
-if plot_bool == true
-    scen_va = [[results["simulations"][i]["solution"][j]["bus"]["$bus"]["va"] for i=1:100, j=1:params["stages"]]' for bus =1:3]
-
-    plt =   [plot(median(scen_va[bus],2), title  = "Voltage angle $bus",
-                ylabel = "Radians",
-                xlabel = "Stages",
-                ribbon=(median(scen_va[bus],2)-map(i->quantile(scen_va[bus][i,:],0.05), 1:params["stages"]),map(i->quantile(scen_va[bus][i,:],0.95), 1:params["stages"])-median(scen_va[bus],2)) ,     
-                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])]),
-                bottom_margin = 10mm,
-                right_margin = 10mm
-                )
-            for bus =1:3
-    ]
-    plot(plt...,legend=false)
-end
-
-#' Hydro Generation and Reservoir Volume
-
-if plot_bool == true
-
-    scen_voume = [results["simulations"][i]["solution"][j]["reservoirs"]["1"]["volume"] for i=1:100, j=1:params["stages"]]'
-
-    plt =   [plot(median(scen_gen[3],2), title  = "Hydro Generation",
-                ylabel = "MWh",
-                xlabel = "Stages",
-                ribbon=(median(scen_gen[3],2)-map(i->quantile(scen_gen[3][i,:],0.05), 1:params["stages"]),map(i->quantile(scen_gen[3][i,:],0.95), 1:params["stages"])-median(scen_gen[3],2)),     
-                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])]),
-                bottom_margin = 10mm,
-                right_margin = 10mm
-                );
-            plot(mean(scen_voume,2), title  = "Volume Reservoir",
-                ylabel = "m³",
-                xlabel = "Stages",
-                ribbon=(median(scen_voume,2)-map(i->quantile(scen_voume[i,:],0.05), 1:params["stages"]),map(i->quantile(scen_voume[i,:],0.95), 1:params["stages"])-median(scen_voume,2)),     
-                xticks = (collect(1:Int(floor(params["stages"]/4)):params["stages"]), [string(i) for  i in collect(1:Int(floor(params["stages"]/4)):params["stages"])]),
-                bottom_margin = 10mm,
-                right_margin = 10mm
-                )    
-            
-    ]
-    plot(plt...,legend=false)
+    plotresults(results)
 end
