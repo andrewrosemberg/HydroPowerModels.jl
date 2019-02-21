@@ -1,3 +1,13 @@
+
+# This file includes modified source code from https://github.com/odow/SDDP.jl
+# as at d90faae19c90f1fa03636ebe1cee92b083c355c2
+
+#  Copyright 2017, Oscar Dowson and contributors
+#  This Source Code Form is subject to the terms of the Mozilla Public
+#  License, v. 2.0. If a copy of the MPL was not distributed with this
+#  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#############################################################################
+
 function simulate_model(m::SDDPModel, N::Int; asynchronous::Bool = true)
     solution = Dict()
     solution["simulations"] = Array{Dict}(N)
