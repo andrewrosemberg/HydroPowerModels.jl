@@ -20,22 +20,32 @@ function read_inflow(file::String, nHyd::Int)
 end
 
 "Read hydro case folder"
-function parse_folder(folder::String)
-    foldername = "" #split(folder,r"/|//|\\")[end]
+function parse_folder(folder::String; stages::Int = 1)        
     data = Dict()
     try
-        data["powersystem"] = parse_file_json(folder*"/"*foldername*"PowerModels.json")
+        data["powersystem"] = parse_file_json(folder*"/"*"PowerModels.json")
         data["powersystem"]["source_version"] = VersionNumber(data["powersystem"]["source_version"]["major"],data["powersystem"]["source_version"]["minor"],data["powersystem"]["source_version"]["patch"],Tuple{}(data["powersystem"]["source_version"]["prerelease"]),Tuple{}(data["powersystem"]["source_version"]["build"]))
     catch
-        data["powersystem"] = PowerModels.parse_file(folder*"/"*foldername*"PowerModels.m")
+        data["powersystem"] = PowerModels.parse_file(folder*"/"*"PowerModels.m")
     end
-    data["hydro"] = parse_file_json(folder*"/"*foldername*"hydro.json")
-    vector_inflows = read_inflow(folder*"/"*foldername*"inflows.csv",length(data["hydro"]["Hydrogenerators"]))
+    data["hydro"] = parse_file_json(folder*"/"*"hydro.json")
+    vector_inflows = read_inflow(folder*"/"*"inflows.csv",length(data["hydro"]["Hydrogenerators"]))
     for i = 1:length(data["hydro"]["Hydrogenerators"])
         data["hydro"]["Hydrogenerators"][i]["inflow"]= vector_inflows[i]
     end
-    data["hydro"]["scenario_probabilities"] = readcsv(folder*"/"*foldername*"scenarioprobability.csv")
-    return data
+    data["hydro"]["scenario_probabilities"] = readcsv(folder*"/"*"scenarioprobability.csv")
+    return [data for i=1:stages]
+end
+
+"set active demand"
+function set_active_demand(alldata::Array{Dict{Any,Any}}, demand::Array{Float64,2})
+    for t = 1:size(alldata,1)
+        data = alldata[t]
+        for load = 1:length(data["powersystem"]["load"])
+            bus = data["powersystem"]["load"]["$load"]["load_bus"]
+            data["powersystem"]["load"]["$load"]["pd"] = demand[t,bus]
+        end
+    end
 end
 
 "Organize Parameters"
@@ -64,7 +74,7 @@ function build_solution_single_simulation(m::SDDPModel;solution = Dict())
         solution["solution"][s]["objective"] = built_sol["objective"]
         solution["solution"][s]["objective_lb"] = built_sol["objective_lb"]
         solution["solution"][s]["reservoirs"] = Dict()
-        for r =1:m.ext[:data]["hydro"]["nHyd"]
+        for r =1:m.ext[:alldata][1]["hydro"]["nHyd"]
             solution["solution"][s]["reservoirs"]["$r"] = Dict()
             solution["solution"][s]["reservoirs"]["$r"]["spill"] = getvalue(m.stages[s].subproblems[i][:spill])[r]
             solution["solution"][s]["reservoirs"]["$r"]["outflow"] = getvalue(m.stages[s].subproblems[i][:outflow])[r]
@@ -115,8 +125,8 @@ function plotresults(results::Dict;nplts::Int = 3)
 
     # Termo Generation first 3 gen
 
-    idxhyd = idx_hydro(results["data"])
-    idxgen = setdiff(collect(1:min(length(results["data"]["powersystem"]["gen"]),nplts)),idxhyd)
+    idxhyd = idx_hydro(results["data"][1])
+    idxgen = setdiff(collect(1:min(length(results["data"][1]["powersystem"]["gen"]),nplts)),idxhyd)
     baseMVA =  [results["simulations"][i]["solution"][j]["baseMVA"] for i=1:nsim, j=1:nstages]'
     scen_gen = [[results["simulations"][i]["solution"][j]["gen"]["$gen"]["pg"] for i=1:nsim, j=1:nstages]'.*baseMVA for gen =1:3]
 
@@ -134,7 +144,7 @@ function plotresults(results::Dict;nplts::Int = 3)
 
     # Branch flow first 3 brc
 
-    idxbrc = collect(1:min(length(results["data"]["powersystem"]["branch"]),nplts))
+    idxbrc = collect(1:min(length(results["data"][1]["powersystem"]["branch"]),nplts))
     scen_branch = [[results["simulations"][i]["solution"][j]["branch"]["$brc"]["pf"] for i=1:nsim, j=1:nstages]'.*baseMVA for brc =1:3]
 
     plt =   [plotscenarios(scen_branch[brc], title  = "Branch Flow $brc",
@@ -152,7 +162,7 @@ function plotresults(results::Dict;nplts::Int = 3)
     # Voltage angle first 3 bus
     
     if results["params"]["model_constructor_grid"] != PowerModels.GenericPowerModel{PowerModels.SOCWRForm}
-        idxbus = collect(1:min(length(results["data"]["powersystem"]["bus"]),nplts))
+        idxbus = collect(1:min(length(results["data"][1]["powersystem"]["bus"]),nplts))
         scen_va = [[results["simulations"][i]["solution"][j]["bus"]["$bus"]["va"] for i=1:nsim, j=1:nstages]' for bus =1:3]
 
         plt =   [plotscenarios(scen_va[bus], title  = "Voltage angle $bus",
@@ -170,7 +180,7 @@ function plotresults(results::Dict;nplts::Int = 3)
     end
     # Hydro Generation and Reservoir Volume first 3 Hydro
 
-    scen_voume = [[results["simulations"][i]["solution"][j]["reservoirs"]["$res"]["volume"] for i=1:nsim, j=1:nstages]' for res = 1:min(results["data"]["hydro"]["nHyd"],3)]
+    scen_voume = [[results["simulations"][i]["solution"][j]["reservoirs"]["$res"]["volume"] for i=1:nsim, j=1:nstages]' for res = 1:min(results["data"][1]["hydro"]["nHyd"],3)]
 
     plt =   [   [plotscenarios(scen_gen[gen], title  = "Hydro Generation $gen",
                     ylabel = "MWh",
@@ -179,7 +189,7 @@ function plotresults(results::Dict;nplts::Int = 3)
                     right_margin = 10mm,
                     left_margin = 10mm               
                     )
-                for gen in idxhyd[1:min(results["data"]["hydro"]["nHyd"],nplts)]]
+                for gen in idxhyd[1:min(results["data"][1]["hydro"]["nHyd"],nplts)]]
                 ;
                 [plotscenarios(scen_voume[res], title  = "Volume Reservoir $res",
                     ylabel = "m³",
@@ -188,7 +198,7 @@ function plotresults(results::Dict;nplts::Int = 3)
                     right_margin = 10mm,
                     left_margin = 10mm               
                     )  
-                for res = 1:min(results["data"]["hydro"]["nHyd"],nplts)]
+                for res = 1:min(results["data"][1]["hydro"]["nHyd"],nplts)]
     ]
     plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
     nplots += 1

@@ -10,7 +10,7 @@ include("IO.jl")
 include("simulate.jl")
 
 export  hydrothermaloperation, parse_folder, set_param, simulate_model,
-        plotresults, plotscenarios
+        plotresults, plotscenarios, set_active_demand
 @reexport using PowerModels, SDDP
 
 """
@@ -18,15 +18,7 @@ data is a dict with all information of the problem.
 
 param is a dict containing solution parameters.
 """
-function hydrothermaloperation(data::Dict, params::Dict)
-    # calculate number of hydrogenerators
-    countgenerators!(data)
-    
-    # compoute upstream_hydro
-    upstream_hydro!(data)
-
-    # count available inflow data
-    countavailableinflow!(data)
+function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
 
     # Model Definition
     m = SDDPModel(
@@ -36,6 +28,17 @@ function hydrothermaloperation(data::Dict, params::Dict)
             objective_bound = 0.0
                                             ) do sp,t
         
+        # Extract current data
+        data = alldata[min(t,size(alldata,1))]
+        # calculate number of hydrogenerators
+        countgenerators!(data)
+        
+        # compoute upstream_hydro
+        upstream_hydro!(data)
+
+        # count available inflow data
+        countavailableinflow!(data)
+
         # build eletric grid model using PowerModels                                   
         pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid"], 
             params["post_method"], jump_model=sp, setting = params["setting"])
@@ -43,8 +46,9 @@ function hydrothermaloperation(data::Dict, params::Dict)
         # create reference to variables
         createvarrefs(sp,pm)
 
-        # save GenericPowerModel
+        # save GenericPowerModel and Data
         sp.ext[:pm] = pm
+        sp.ext[:data] = data
 
         # resevoir variables
         variable_volume(sp, data)
@@ -67,7 +71,7 @@ function hydrothermaloperation(data::Dict, params::Dict)
     end
 
     # save data
-    m.ext[:data] = data
+    m.ext[:alldata] = alldata
     m.ext[:params] = params
 
     return m

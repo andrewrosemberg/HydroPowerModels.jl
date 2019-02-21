@@ -18,7 +18,7 @@ function simulate_model(m::SDDPModel, N::Int; asynchronous::Bool = true)
     )
 
     # add original data dict
-    solution["data"] = m.ext[:data]
+    solution["data"] = m.ext[:alldata]
     
     return solution
 end
