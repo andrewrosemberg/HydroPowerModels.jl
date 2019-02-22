@@ -14,6 +14,8 @@ A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Opti
 [docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg
 [docs-latest-url]: https://andrewrosemberg.github.io/HydroPowerModels.jl/latest/
 
+[![DOI](https://zenodo.org/badge/166077703.svg)](https://zenodo.org/badge/latestdoi/166077703)
+
 **If you are struggling to figure out how to use something, raise a Github issue!**
 
 **Network Data Formats**
