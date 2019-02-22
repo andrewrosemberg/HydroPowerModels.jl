@@ -302,7 +302,7 @@ function flat_dict(mlt_dict::Dict{Any,Any})
 
     recursion_ret = [flat_dict(i) for i in values(mlt_dict)]
     for i = 1:size(recursion_ret,1)
-        item = recursion_ret[1]
+        item = recursion_ret[i]
         for (ikw,val) in item
             one_dict[kws[i]*"_"*ikw] = val
         end

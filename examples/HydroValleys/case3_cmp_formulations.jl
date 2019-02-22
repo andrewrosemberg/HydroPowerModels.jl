@@ -1,20 +1,21 @@
 
 intro_str = """
 
-title : Example Case 3 Comparing Formulations - Year Planning
-author : Andrew Rosemberg
-date : 21th Feb 2019
+# Example Case 3 Comparing Formulations - Year Planning
 
-# Introduction
+author : Andrew Rosemberg \n
+date : 21th Feb 2019 \n
 
-This an example of the HydroPowerModels package for solving a simple stochastic case with the following specifications:
-    - 3 Buses
-    - 3 Lines
-    - 2 Generators
-    - 1 Reservoir and Hydrogenerator
-    - 3 Scenarios
-    - 12 Stages
-    - DC,SOC and AC Formulations
+## Introduction
+
+This an example of the HydroPowerModels package for solving a simple stochastic case with the following specifications: \n
+    - 3 Buses \n
+    - 3 Lines \n
+    - 2 Generators \n
+    - 1 Reservoir and Hydrogenerator \n
+    - 3 Scenarios \n
+    - 12 Stages \n
+    - DC,SOC and AC Formulations \n
 
 """
 #' # Init Case
@@ -108,12 +109,12 @@ str_dc = html(latexify(DataFrame(signif_dict(dcp_stats["DC"],2)),env=:mdtable,la
 
 results_str="""
 
-# Results 
+## Results 
 
 """
 
-final_str = results_str*"## Table AC \n\n\n"*str_ac*" \n ## Table SOC \n\n\n"*str_soc*"\n ## Table DC \n\n\n"*str_dc;
+final_str = intro_str*results_str*"### Table AC \n\n```@raw html\n\n"*str_ac*" \n\n```\n\n### Table DC \n\n```@raw html\n\n"*str_dc*" \n\n```\n\n### Table SOC \n\n```@raw html\n\n"*str_soc*" \n\n```";
 
 # write to file
-docs_scr_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "docs/scr/examples")
+docs_scr_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "docs/src/examples")
 write(joinpath(docs_scr_dir,"case3_cmp_formulations.md"), final_str)
