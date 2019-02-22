@@ -89,6 +89,20 @@ function quantile_scen(scen::Array{Float64,2},quant::Float64)
     return [quantile(scen[i, :], quant) for i = 1:size(scen, 1)]
 end
 
+"""Quantile Scenarios"""
+function quantile_scen(scen::Array{Float64,2},quants::Array{Float64};output_dict::Bool=false)
+    if output_dict
+        output = Dict()
+        for quant in quants 
+            output["$(quant*100)%"] = [quantile(scen[i, :], quant) for i = 1:size(scen, 1)]
+        end
+        return output
+    else
+        return [quantile(scen[i, :], quant) for i = 1:size(scen, 1),quant in quants]
+    end
+    
+end
+
 """Plots a set o scenarios"""
 function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
         save::Bool = false, fileformat::String = "png", kwargs...)
@@ -204,4 +218,104 @@ function plotresults(results::Dict;nplts::Int = 3)
     nplots += 1
 
     return plot(plt_total[1:nplots]...,layout=(nplots,1),size = (nplts*400, 500*nplots),legend=false)
+end
+
+"""Common descriptive statistics"""
+function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Array{Float64}=[0.25;0.5;0.75])
+
+    dcp_stats = Dict()
+    
+    nsim = length(results["simulations"])
+    nstages = length(results["simulations"][1]["solution"])
+
+    # Termo Generation first nitem gen
+
+    dcp_stats["pg"] = Dict()
+
+    idxhyd = idx_hydro(results["data"][1])
+    idxgen = setdiff(collect(1:min(length(results["data"][1]["powersystem"]["gen"]),nitem)),idxhyd)
+    baseMVA =  [results["simulations"][i]["solution"][j]["baseMVA"] for i=1:nsim, j=1:nstages]'
+    scen_gen = [[results["simulations"][i]["solution"][j]["gen"]["$gen"]["pg"] for i=1:nsim, j=1:nstages]'.*baseMVA for gen =1:3]
+    
+    for i = 1:size(idxgen,1)
+        gen = idxgen[i]
+        dcp_stats["pg"]["$i"] = quantile_scen(scen_gen[gen], quants, output_dict=true)
+    end
+
+    # Branch flow first nitem brc
+
+    dcp_stats["pf"] = Dict()
+
+    idxbrc = collect(1:min(length(results["data"][1]["powersystem"]["branch"]),nitem))
+    scen_branch = [[results["simulations"][i]["solution"][j]["branch"]["$brc"]["pf"] for i=1:nsim, j=1:nstages]'.*baseMVA for brc =1:3]
+
+    for i = 1:size(idxbrc,1)
+        brc = idxbrc[i]
+        dcp_stats["pf"]["$i"] = quantile_scen(scen_branch[brc], quants, output_dict=true)
+    end
+
+    # Voltage angle first nitem bus
+    
+    if results["params"]["model_constructor_grid"] != PowerModels.GenericPowerModel{PowerModels.SOCWRForm}
+
+        dcp_stats["va"] = Dict()
+
+        idxbus = collect(1:min(length(results["data"][1]["powersystem"]["bus"]),nitem))
+        scen_va = [[results["simulations"][i]["solution"][j]["bus"]["$bus"]["va"] for i=1:nsim, j=1:nstages]' for bus =1:3]
+
+        for i = 1:size(idxbus,1)
+            bus = idxbus[i]
+            dcp_stats["va"]["$i"] = quantile_scen(scen_va[bus], quants, output_dict=true)
+        end
+    
+    end
+    # Hydro Generation first nitem Hydro
+
+    dcp_stats["hpg"] = Dict()
+
+    for i = 1:size(idxhyd[1:min(results["data"][1]["hydro"]["nHyd"],nitem)],1)
+        gen = idxhyd[1:min(results["data"][1]["hydro"]["nHyd"],nitem)][i]
+        dcp_stats["hpg"]["$i"] = quantile_scen(scen_gen[gen], quants, output_dict=true)
+    end
+
+    # Reservoir Volume first nitem Hydro
+
+    dcp_stats["volume"] = Dict()
+
+    scen_voume = [[results["simulations"][i]["solution"][j]["reservoirs"]["$res"]["volume"] for i=1:nsim, j=1:nstages]' for res = 1:min(results["data"][1]["hydro"]["nHyd"],3)]
+
+    for res = 1:min(results["data"][1]["hydro"]["nHyd"],nitem)
+        dcp_stats["volume"]["$res"] = quantile_scen(scen_voume[res], quants, output_dict=true)
+    end
+
+    return dcp_stats
+end
+
+"""Multilayer Dict to Onelayer Dict"""
+function flat_dict(mlt_dict::Dict{Any,Any})
+    if typeof(collect(values(mlt_dict))[1]) != Dict{Any,Any}
+        return mlt_dict
+    end
+    
+    one_dict = Dict()
+    kws = collect(keys(mlt_dict))
+
+    recursion_ret = [flat_dict(i) for i in values(mlt_dict)]
+    for i = 1:size(recursion_ret,1)
+        item = recursion_ret[1]
+        for (ikw,val) in item
+            one_dict[kws[i]*"_"*ikw] = val
+        end
+    end
+
+    return one_dict
+
+end
+
+"""truncate values dict"""
+function signif_dict(one_dict::Dict, digits::Integer)
+    for kw in keys(one_dict)
+        one_dict[kw] = signif.(one_dict[kw],digits)
+    end
+    return one_dict
 end

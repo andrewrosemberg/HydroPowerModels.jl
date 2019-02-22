@@ -12,7 +12,8 @@ makedocs(
         "Home"      => "index.md",
         "Manual"    => "getstarted.md",
         "Examples"  => Any[ "Case 3"=>"examples/case3.md",
-                            "Case 3 - 5 Years"=>"examples/case3_5years.md"
+                            "Case 3 - 5 Years"=>"examples/case3_5years.md",
+                            "Case 3 - Comparing Formulations"=>"examples/case3_cmp_formulations.md",
         ]
     ]
 )

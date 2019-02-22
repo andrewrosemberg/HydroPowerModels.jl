@@ -53,8 +53,6 @@ using Base.Test
 
 #' ## Plotting Results
 
-#' Termo Generation
-
 if !isdefined(:plot_bool)
     plot_bool = true
 end
