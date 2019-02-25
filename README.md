@@ -19,6 +19,7 @@ A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Opti
 **Network Data Formats**
 * Matpower ".m" files
 * PTI ".raw" files (PSS(R)E v33 specfication)
+* PowerModels ".json" files
 
 **Resevoir Data Formats**
 * JSON ".json" files

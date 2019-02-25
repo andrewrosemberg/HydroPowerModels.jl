@@ -9,13 +9,20 @@ date : 21th Feb 2019 \n
 ## Introduction
 
 This an example of the HydroPowerModels package for solving a simple stochastic case with the following specifications: \n
-    - 3 Buses \n
-    - 3 Lines \n
-    - 2 Generators \n
-    - 1 Reservoir and Hydrogenerator \n
-    - 3 Scenarios \n
-    - 12 Stages \n
+    - 3 Buses - 3 Lines - 2 Generators - 1 Reservoir and Hydrogenerator \n
+    - 3 Scenarios - 12 Stages \n
     - DC,SOC and AC Formulations \n
+
+Simulation's results will be shown in tables to facilitate comparison. Each formulation will have its own table where the columns will
+be named according to the variables of the problem: \n
+    - "[variable type]_[index]_[quantile]". \n
+Variable types in this example:\n
+    * "hpg": Hydro active power generation.\n
+    * "pg": Termo active power generation.\n
+    * "pf": Active power flow.\n
+    * "va": Voltage angle.\n
+    * "pg": Termo active power generation.\n
+    * "volume": Reservoir volume.\n
 
 """
 #' # Init Case
