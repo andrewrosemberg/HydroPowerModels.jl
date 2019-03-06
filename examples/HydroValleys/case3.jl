@@ -25,7 +25,8 @@ using HydroPowerModels
 #' ## Load Case Specifications
 
 #' data
-data = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"))
+data = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"));
+data
 
 #' parameters
 params = set_param( stages = 12, 
