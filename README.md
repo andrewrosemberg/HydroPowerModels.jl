@@ -1,7 +1,7 @@
 # HydroPowerModels.jl
 A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Optimization solved by Stochastic Dual Dynamic Programming (SDDP).
 
-| **DOI** | **Build Status** | **Coverage** | **Documentation** |
+| **DOI** |**Documentation** | **Build Status** | **Coverage** |
 |:-----------------:|:-----------------:|:-----------------:|:-----------------:|
 |[![DOI](https://zenodo.org/badge/166077703.svg)](https://zenodo.org/badge/latestdoi/166077703)|[![][docs-latest-img]][docs-latest-url] | [![Build Status][build-img]][build-url] | [![Codecov branch][codecov-img]][codecov-url] |
 
