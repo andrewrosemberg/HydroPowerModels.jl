@@ -1,6 +1,7 @@
 module HydroPowerModels
 
-using JuMP, Clp, PowerModels, SDDP
+using Pkg
+using JuMP, Clp, PowerModels, Kokako
 using Reexport
 
 include("variable.jl")
