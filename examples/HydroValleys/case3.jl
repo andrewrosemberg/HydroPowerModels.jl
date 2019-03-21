@@ -17,7 +17,7 @@
 
 #' # Case
 
-#' ## Importing package and solver
+#' ## Importing package and optimizer
 
 using Clp
 using HydroPowerModels
@@ -32,14 +32,14 @@ data[1]
 params = set_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
                     post_method             = PowerModels.post_opf,
-                    solver                  = ClpSolver());
+                    optimizer                  = Clp.Optimizer);
 params
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = solve(m, iteration_limit = 60);
+status = SDDP.train(m;iteration_limit = 60);
 status
 
 #' ## Simulation

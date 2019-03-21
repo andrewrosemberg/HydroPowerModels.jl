@@ -1,8 +1,7 @@
 module HydroPowerModels
 
-using Pkg
-using JuMP, Clp, PowerModels, Kokako
-using Reexport
+using JuMP, Clp, PowerModels, SDDP
+import Reexport
 
 include("variable.jl")
 include("constraint.jl")
@@ -14,7 +13,7 @@ export  hydrothermaloperation, parse_folder, set_param, simulate_model,
         plotresults, plotscenarios, set_active_demand, flat_dict,
         descriptivestatistics_results, signif_dict
 
-@reexport using PowerModels, SDDP
+Reexport.@reexport using PowerModels, SDDP
 
 """
 data is a dict with all information of the problem. 
@@ -24,11 +23,11 @@ param is a dict containing solution parameters.
 function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
 
     # Model Definition
-    m = SDDPModel(
+    m = SDDP.LinearPolicyGraph(
                     sense   = :Min,
                     stages  = params["stages"],
-                    solver  = params["solver"],
-            objective_bound = 0.0
+                    optimizer  = with_optimizer(params["optimizer"]),
+                    lower_bound = 0.0
                                             ) do sp,t
         
         # Extract current data
@@ -63,7 +62,6 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         # hydro balance
         variable_inflow(sp, data)
         rainfall_noises(sp, data, cidx(t,data["hydro"]["size_inflow"][1]))
-        setnoiseprobability!(sp, data["hydro"]["scenario_probabilities"][cidx(t,data["hydro"]["size_inflow"][1]),:])
         constraint_hydro_balance(sp, data)
 
         # hydro_generation

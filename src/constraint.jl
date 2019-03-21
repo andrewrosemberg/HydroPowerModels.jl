@@ -1,8 +1,9 @@
 "rainfall noises"
 function rainfall_noises(sp, data::Dict, t::Int)
-    for i in 1:data["hydro"]["nHyd"]        
-        @rhsnoise(sp, rainfall = data["hydro"]["Hydrogenerators"][i]["inflow"][t,:],
-        rainfall == sp[:inflow][i])        
+    for i in 1:data["hydro"]["nHyd"]
+        SDDP.parameterize(sp, data["hydro"]["Hydrogenerators"][i]["inflow"][t,:], data["hydro"]["scenario_probabilities"][cidx(t,data["hydro"]["size_inflow"][1]),:]) do ω
+            JuMP.fix(inflow, ω)
+        end        
     end
 end
 
@@ -10,7 +11,7 @@ end
 function constraint_hydro_balance(sp, data::Dict)    
     for i in 1:data["hydro"]["nHyd"]
         @constraints(sp, begin
-            hydro_balance[i=1:data["hydro"]["nHyd"]], sp[:reservoir][i] == sp[:reservoir0][i] + sp[:inflow][i] - sp[:outflow][i] - sp[:spill][i] + sum(sp[:outflow][j] + sp[:spill][j] for j in data["hydro"]["Hydrogenerators"][i]["upstrem_hydros"])
+            hydro_balance[i=1:data["hydro"]["nHyd"]], sp[:reservoir].out[i] == sp[:reservoir].in[i] + sp[:inflow][i] - sp[:outflow][i] - sp[:spill][i] + sum(sp[:outflow][j] + sp[:spill][j] for j in data["hydro"]["Hydrogenerators"][i]["upstrem_hydros"])
         end)
     end
 end

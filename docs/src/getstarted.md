@@ -27,7 +27,7 @@ params = set_param(
     stages = 3, 
     model_constructor_grid  = DCPPowerModel,
     post_method             = PowerModels.post_opf,
-    solver                  = ClpSolver())
+    optimizer                  = Clp.Optimizer)
 ```
 
 Build the Model and execute the SDDP method:

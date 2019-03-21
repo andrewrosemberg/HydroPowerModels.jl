@@ -27,7 +27,7 @@ Variable types in this example:\n
 """
 #' # Init Case
 
-#' ## Importing package and solver
+#' ## Importing package and optimizer
 
 using Ipopt,Clp
 using HydroPowerModels
@@ -46,13 +46,13 @@ dcp_stats = Dict()
 params = set_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
                     post_method             = PowerModels.post_opf,
-                    solver                  = ClpSolver())
+                    optimizer                  = Clp.Optimizer)
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = solve(m, iteration_limit = 60);
+status = SDDP.train(m;iteration_limit = 60);
 
 #' ## Simulation
 srand(1111)
@@ -68,13 +68,13 @@ dcp_stats["DC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(resul
 params = set_param( stages = 12, 
                     model_constructor_grid  = SOCWRPowerModel,
                     post_method             = PowerModels.post_opf,
-                    solver                  = IpoptSolver(tol=1e-6))
+                    optimizer                  = IpoptSolver(tol=1e-6))
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = solve(m, iteration_limit = 60);
+status = SDDP.train(m;iteration_limit = 60);
 
 #' ## Simulation
 srand(1111)
@@ -90,13 +90,13 @@ dcp_stats["SOC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(resu
 params = set_param( stages = 12, 
                     model_constructor_grid  = ACPPowerModel,
                     post_method             = PowerModels.post_opf,
-                    solver                  = IpoptSolver(tol=1e-6))
+                    optimizer                  = IpoptSolver(tol=1e-6))
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = solve(m, iteration_limit = 60);
+status = SDDP.train(m;iteration_limit = 60);
 
 #' ## Simulation
 srand(1111)

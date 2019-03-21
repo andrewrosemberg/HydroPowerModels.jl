@@ -18,7 +18,7 @@
 
 #' # Case
 
-#' ## Importing package and solver
+#' ## Importing package and optimizer
 
 using Ipopt
 using HydroPowerModels
@@ -29,13 +29,13 @@ data = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"
 params = set_param( stages = 12, 
                     model_constructor_grid  = SOCWRPowerModel,
                     post_method             = PowerModels.post_opf,
-                    solver                  = IpoptSolver(tol=1e-6))
+                    optimizer                  = IpoptSolver(tol=1e-6))
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = solve(m, iteration_limit = 60);
+status = SDDP.train(m;iteration_limit = 60);
 
 #' ## Simulation
 srand(1111)

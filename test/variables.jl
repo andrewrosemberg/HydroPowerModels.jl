@@ -23,18 +23,18 @@ using Clp
         m = SDDPModel(
             sense   = :Min,
             stages  = 1,
-            solver = ClpSolver(),
+            optimizer = Clp.Optimizer,
             objective_bound = 0.0
                                     ) do sp,t
             HydroPowerModels.variable_volume(sp, data)
         end
         # state variable volume
-        @test JuMP.getlowerbound(m.stages[1].subproblems[1][:reservoir][1]) == 0.0
-        @test JuMP.getupperbound(m.stages[1].subproblems[1][:reservoir][1]) == 200
+        @test JuMP.getlowerbound(m.stages[1].subproblems[1][:reservoir].out[1]) == 0.0
+        @test JuMP.getupperbound(m.stages[1].subproblems[1][:reservoir].out[1]) == 200
 
         # initial value of state variable volume
         JuMP.solve(m.stages[1].subproblems[1])
-        @test JuMP.getvalue(m.stages[1].subproblems[1][:reservoir0][1]) == 100
+        @test JuMP.getvalue(m.stages[1].subproblems[1][:reservoir].in[1]) == 100
     end
 
 end
