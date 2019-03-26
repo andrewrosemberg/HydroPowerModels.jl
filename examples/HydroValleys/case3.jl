@@ -32,7 +32,7 @@ data[1]
 params = set_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
                     post_method             = PowerModels.post_opf,
-                    optimizer                  = Clp.Optimizer);
+                    optimizer               = Clp.Optimizer);
 params
 
 #' ## Build Model

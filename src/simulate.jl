@@ -10,7 +10,7 @@
 
 function simulate_model(m::SDDP.PolicyGraph{T}, N::Int; asynchronous::Bool = true) where {T}
     solution = Dict()
-    solution["simulations"] = Array{Dict}(N)
+    solution["simulations"] = Array{Dict}(undef,N)
     tic()
     if asynchronous
         wp = CachingPool(workers())

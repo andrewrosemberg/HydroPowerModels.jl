@@ -1,6 +1,7 @@
 using JSON
 using Plots
 using Plots.PlotMeasures
+using CSV
 
 "Read hydro description json file"
 function parse_file_json(file::String)
@@ -9,10 +10,10 @@ end
 
 "Read Hydrogenerators inflow csv file"
 function read_inflow(file::String, nHyd::Int)
-    allinflows = readcsv(file)
+    allinflows = CSV.read(file)
     nlin, ncol = size(allinflows)
     nCen = Int(floor(ncol/nHyd))
-    vector_inflows = Array{Array{Float64,2}}(nHyd)
+    vector_inflows = Array{Array{Float64,2}}(undef,nHyd)
     for i = 1:nHyd
         vector_inflows[i] = allinflows[1:nlin,(i-1)*nCen+1:i*nCen]
     end
@@ -33,7 +34,7 @@ function parse_folder(folder::String; stages::Int = 1)
     for i = 1:length(data["hydro"]["Hydrogenerators"])
         data["hydro"]["Hydrogenerators"][i]["inflow"]= vector_inflows[i]
     end
-    data["hydro"]["scenario_probabilities"] = readcsv(folder*"/"*"scenarioprobability.csv")
+    data["hydro"]["scenario_probabilities"] = CSV.read(folder*"/"*"scenarioprobability.csv")
     return [data for i=1:stages]
 end
 
@@ -65,7 +66,7 @@ function build_solution_single_simulation(m::SDDP.PolicyGraph{T};solution = Dict
     stages = size(m.stages,1) # count number of stages
 
     solution["solution"]= Dict()
-    solution["solution"]=Array{Dict}(stages)
+    solution["solution"]=Array{Dict}(undef,stages)
     for s = 1:stages
         i = solution["markov"][s]       
         built_sol = PowerModels.build_solution(m.stages[s].subproblems[i].ext[:pm],:Optimal,0.0,
@@ -132,7 +133,7 @@ end
 """Common Plots"""
 function plotresults(results::Dict;nplts::Int = 3)
 
-    plt_total = Array{Plots.Plot}(10)
+    plt_total = Array{Plots.Plot}(undef,10)
     nplots = 0
     nsim = length(results["simulations"])
     nstages = length(results["simulations"][1]["solution"])
