@@ -60,7 +60,7 @@ function set_param(;stages::Int = 1,model_constructor_grid = DCPPowerModel, post
 end
 
 "Build Solution single simulation"
-function build_solution_single_simulation(m::SDDPModel;solution = Dict())
+function build_solution_single_simulation(m::SDDP.PolicyGraph{T};solution = Dict()) where {T}
     # add results    
     stages = size(m.stages,1) # count number of stages
 

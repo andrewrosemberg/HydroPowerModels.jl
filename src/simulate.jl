@@ -8,7 +8,7 @@
 #  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #############################################################################
 
-function simulate_model(m::SDDPModel, N::Int; asynchronous::Bool = true)
+function simulate_model(m::SDDP.PolicyGraph{T}, N::Int; asynchronous::Bool = true) where {T}
     solution = Dict()
     solution["simulations"] = Array{Dict}(N)
     tic()
@@ -33,7 +33,7 @@ function simulate_model(m::SDDPModel, N::Int; asynchronous::Bool = true)
     return solution
 end
 
-function randomsimulation(m::SDDPModel)
+function randomsimulation(m::SDDP.PolicyGraph{T}) where {T}
     store = SDDP.newsolutionstore(Symbol[])
     obj = SDDP.forwardpass!(m, SDDP.Settings(),store)
     store[:objective] = obj

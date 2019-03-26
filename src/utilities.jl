@@ -46,7 +46,7 @@ end
 
 "circular index"
 function cidx(i::Int,n::Int)
-    mod(i,n)==0 ? n:mod(i,n)
+    mod(i,n)==0 ? n : mod(i,n)
 end
 
 "hydrogenerators indexes"
