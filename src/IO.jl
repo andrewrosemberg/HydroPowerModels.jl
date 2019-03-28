@@ -10,7 +10,7 @@ end
 
 "Read Hydrogenerators inflow csv file"
 function read_inflow(file::String, nHyd::Int)
-    allinflows = CSV.read(file)
+    allinflows = CSV.read(file,header=false)
     nlin, ncol = size(allinflows)
     nCen = Int(floor(ncol/nHyd))
     vector_inflows = Array{Array{Float64,2}}(undef,nHyd)
@@ -34,7 +34,7 @@ function parse_folder(folder::String; stages::Int = 1)
     for i = 1:length(data["hydro"]["Hydrogenerators"])
         data["hydro"]["Hydrogenerators"][i]["inflow"]= vector_inflows[i]
     end
-    data["hydro"]["scenario_probabilities"] = CSV.read(folder*"/"*"scenarioprobability.csv")
+    data["hydro"]["scenario_probabilities"] = convert(Matrix{Float64},CSV.read(folder*"/"*"scenarioprobability.csv",header=false))
     return [data for i=1:stages]
 end
 

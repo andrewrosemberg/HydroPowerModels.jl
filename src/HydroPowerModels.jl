@@ -27,7 +27,8 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
                     sense   = :Min,
                     stages  = params["stages"],
                     optimizer  = with_optimizer(params["optimizer"]),
-                    lower_bound = 0.0
+                    lower_bound = 0.0,
+                    direct_mode=false
                                             ) do sp,t
         
         # Extract current data
@@ -68,7 +69,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         constraint_hydro_generation(sp, data, pm)
         
         # Stage objective
-        @stageobjective(sp, sp.obj + sum(data["hydro"]["Hydrogenerators"][i]["spill_cost"]*sp[:spill][i] for i=1:data["hydro"]["nHyd"]))
+        @stageobjective(sp, objective_function(sp) + sum(data["hydro"]["Hydrogenerators"][i]["spill_cost"]*sp[:spill][i] for i=1:data["hydro"]["nHyd"]))
     end
 
     # save data

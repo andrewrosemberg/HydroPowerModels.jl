@@ -21,5 +21,5 @@ end
 
 "creates volume variables specified in data"
 function variable_volume(sp, data::Dict)
-    @variable(sp, data["hydro"]["Hydrogenerators"][r]["min_volume"] <= reservoir[r=1:data["hydro"]["nHyd"]] <= data["hydro"]["Hydrogenerators"][r]["max_volume"], SDDP.State, initial_value == data["hydro"]["Hydrogenerators"][r]["initial_volume"])
+    @variable(sp, data["hydro"]["Hydrogenerators"][r]["min_volume"] <= reservoir[r = 1:data["hydro"]["nHyd"]] <= data["hydro"]["Hydrogenerators"][r]["max_volume"], SDDP.State, initial_value = data["hydro"]["Hydrogenerators"][r]["initial_volume"])
 end
