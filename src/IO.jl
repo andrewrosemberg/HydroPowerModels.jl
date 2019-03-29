@@ -61,7 +61,9 @@ function set_param(;stages::Int = 1,model_constructor_grid = DCPPowerModel, post
 end
 
 "Build Solution single simulation"
-function build_solution_single_simulation(m::SDDP.PolicyGraph{T};solution = Dict()) where {T}
+function build_solution_single_simulation(hydromodel::HydroPowerModel;solution = Dict())
+    m = hydromodel.policygraph
+
     # add results    
     stages = size(m.stages,1) # count number of stages
 
@@ -75,7 +77,7 @@ function build_solution_single_simulation(m::SDDP.PolicyGraph{T};solution = Dict
         solution["solution"][s]["objective"] = built_sol["objective"]
         solution["solution"][s]["objective_lb"] = built_sol["objective_lb"]
         solution["solution"][s]["reservoirs"] = Dict()
-        for r =1:m.ext[:alldata][1]["hydro"]["nHyd"]
+        for r =1:hydromodel.alldata[1]["hydro"]["nHyd"]
             solution["solution"][s]["reservoirs"]["$r"] = Dict()
             solution["solution"][s]["reservoirs"]["$r"]["spill"] = getvalue(m.stages[s].subproblems[i][:spill])[r]
             solution["solution"][s]["reservoirs"]["$r"]["outflow"] = getvalue(m.stages[s].subproblems[i][:outflow])[r]

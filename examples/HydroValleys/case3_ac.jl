@@ -39,7 +39,7 @@ srand(1111)
 status = solve(m, iteration_limit = 60,time_limit=30);
 status
 #' ## Simulation
-results = simulate_model(m, 100);
+results = simulate_model(m.policygraph, 100);
 results
 #' ## Results
 #' Objective

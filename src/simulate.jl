@@ -8,7 +8,8 @@
 #  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #############################################################################
 
-function simulate_model(m::SDDP.PolicyGraph{T}, N::Int; asynchronous::Bool = true) where {T}
+function simulate_model(hydromodel::HydroPowerModel, N::Int; asynchronous::Bool = true)
+    m = hydromodel.policygraph
     solution = Dict()
     solution["simulations"] = Array{Dict}(undef,N)
     tic()
@@ -21,19 +22,20 @@ function simulate_model(m::SDDP.PolicyGraph{T}, N::Int; asynchronous::Bool = tru
         solution["simulations"] .= map(i -> randomsimulation(m), 1:N)
     end
     solution["solve_time"] = toc()
-    solution["params"] = m.ext[:params]
+    solution["params"] = hydromodel.params
     solution["machine"] = Dict(
         "cpu" => Sys.cpu_info()[1].model,
         "memory" => string(Sys.total_memory()/2^30, " Gb")
     )
 
     # add original data dict
-    solution["data"] = m.ext[:alldata]
+    solution["data"] = hydromodel.alldata
     
     return solution
 end
 
-function randomsimulation(m::SDDP.PolicyGraph{T}) where {T}
+function randomsimulation(hydromodel::HydroPowerModel)
+    m = hydromodel.policygraph
     store = SDDP.newsolutionstore(Symbol[])
     obj = SDDP.forwardpass!(m, SDDP.Settings(),store)
     store[:objective] = obj
@@ -43,4 +45,29 @@ function randomsimulation(m::SDDP.PolicyGraph{T}) where {T}
     end
     solution = build_solution_single_simulation(m,solution = solution)
     return solution
+end
+
+function simulate(hydromodel::HydroPowerModel,number_replications::Int = 1;kwargs...)
+    solution = Dict{Symbol, Any}()
+    tic()
+    solution[:simulations] = SDDP.simulate( hydromodel.policygraph, 
+                                            number_replications,
+                                            [:volume, :outflow, :spill])
+    solution[:solve_time] = toc()
+
+    # PowerModels solution build
+    built_sol = PowerModels.build_solution(m.policygraph[1].subproblem.ext[:pm],:Optimal,0.0,
+        solution_builder = PowerModels.get_solution)
+
+    solution[:params] = hydromodel.params
+    solution[:machine] = Dict(
+        :cpu => Sys.cpu_info()[1].model,
+        :memory => string(Sys.total_memory()/2^30, " Gb")
+    )
+
+    # add original data dict
+    solution[:data] = hydromodel.alldata
+
+    return solution
+
 end

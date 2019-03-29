@@ -35,11 +35,11 @@ params = set_param( stages = 12,
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = SDDP.train(m;iteration_limit = 60);
+status = SDDP.train(m.policygraph;iteration_limit = 60);
 
 #' ## Simulation
 srand(1111)
-results = simulate_model(m, 100);
+results = simulate_model(m.policygraph, 100);
 
 #' ## Plotting Results
 

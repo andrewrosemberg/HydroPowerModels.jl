@@ -2,7 +2,7 @@
 function rainfall_noises(sp, data::Dict, t::Int)
     for i in 1:data["hydro"]["nHyd"]
         SDDP.parameterize(sp, data["hydro"]["Hydrogenerators"][i]["inflow"][t,:], data["hydro"]["scenario_probabilities"][cidx(t,data["hydro"]["size_inflow"][1]),:]) do ω
-            JuMP.fix(inflow[i], ω)
+            JuMP.fix(sp[:inflow][i], ω; force=true)
         end        
     end
 end

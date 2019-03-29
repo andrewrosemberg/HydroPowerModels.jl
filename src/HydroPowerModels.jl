@@ -3,6 +3,12 @@ module HydroPowerModels
 using JuMP, Clp, PowerModels, SDDP
 import Reexport
 
+mutable struct HydroPowerModel
+    policygraph::SDDP.PolicyGraph
+    alldata::Array{Dict{Any,Any}}
+    params::Dict
+end
+
 include("variable.jl")
 include("constraint.jl")
 include("utilities.jl")
@@ -23,7 +29,7 @@ param is a dict containing solution parameters.
 function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
 
     # Model Definition
-    m = SDDP.LinearPolicyGraph(
+    policygraph = SDDP.LinearPolicyGraph(
                     sense   = :Min,
                     stages  = params["stages"],
                     optimizer  = with_optimizer(params["optimizer"]),
@@ -73,8 +79,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
     end
 
     # save data
-    m.ext[:alldata] = alldata
-    m.ext[:params] = params
+    m = HydroPowerModel(policygraph,alldata,params)
 
     return m
 end
