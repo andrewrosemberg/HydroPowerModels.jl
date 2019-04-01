@@ -20,21 +20,24 @@ using Clp
         data = Dict("hydro" => Dict("nHyd" => 1,
         "Hydrogenerators" => [Dict("min_volume" => 0, "max_volume" => 200, "initial_volume" => 100)]))
          
-        m = SDDPModel(
+        m = SDDP.LinearPolicyGraph(
             sense   = :Min,
             stages  = 1,
-            optimizer = Clp.Optimizer,
-            objective_bound = 0.0
-                                    ) do sp,t
+            optimizer  = with_optimizer(Clp.Optimizer),
+            lower_bound = 0.0,
+                    direct_mode=false
+                                            ) do sp,t
             HydroPowerModels.variable_volume(sp, data)
+            @stageobjective(sp,0)
         end
+        status = SDDP.train(m;iteration_limit = 60);
         # state variable volume
-        @test JuMP.getlowerbound(m.stages[1].subproblems[1][:reservoir].out[1]) == 0.0
-        @test JuMP.getupperbound(m.stages[1].subproblems[1][:reservoir].out[1]) == 200
+        @test JuMP.lower_bound(m[1].subproblem[:reservoir][1].out) == 0.0
+        @test JuMP.upper_bound(m[1].subproblem[:reservoir][1].out) == 200
 
         # initial value of state variable volume
-        JuMP.solve(m.stages[1].subproblems[1])
-        @test JuMP.getvalue(m.stages[1].subproblems[1][:reservoir].in[1]) == 100
+        JuMP.optimize!(m[1].subproblem)
+        @test JuMP.value(m[1].subproblem[:reservoir][1].in) == 100
     end
 
 end

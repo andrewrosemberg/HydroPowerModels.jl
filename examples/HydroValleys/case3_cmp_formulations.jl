@@ -55,8 +55,9 @@ m = hydrothermaloperation(data, params);
 status = SDDP.train(m.policygraph;iteration_limit = 60);
 
 #' ## Simulation
-srand(1111)
-results = simulate_model(m.policygraph, 100);
+import Random
+Random.seed!(1111)
+results = HydroPowerModels.simulate(m, 100);
 
 #' ## Results
 dcp_stats["DC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(results))
@@ -77,8 +78,9 @@ m = hydrothermaloperation(data, params);
 status = SDDP.train(m.policygraph;iteration_limit = 60);
 
 #' ## Simulation
-srand(1111)
-results = simulate_model(m.policygraph, 100);
+import Random
+Random.seed!(1111)
+results = HydroPowerModels.simulate(m, 100);
 
 #' ## Results
 dcp_stats["SOC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(results))
@@ -99,8 +101,9 @@ m = hydrothermaloperation(data, params);
 status = SDDP.train(m.policygraph;iteration_limit = 60);
 
 #' ## Simulation
-srand(1111)
-results = simulate_model(m.policygraph, 100);
+import Random
+Random.seed!(1111)
+results = HydroPowerModels.simulate(m, 100);
 
 #' ## Results
 dcp_stats["AC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(results))

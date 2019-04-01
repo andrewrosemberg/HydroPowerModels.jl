@@ -60,33 +60,6 @@ function set_param(;stages::Int = 1,model_constructor_grid = DCPPowerModel, post
     return params
 end
 
-"Build Solution single simulation"
-function build_solution_single_simulation(hydromodel::HydroPowerModel;solution = Dict())
-    m = hydromodel.policygraph
-
-    # add results    
-    stages = size(m.stages,1) # count number of stages
-
-    solution["solution"]= Dict()
-    solution["solution"]=Array{Dict}(undef,stages)
-    for s = 1:stages
-        i = solution["markov"][s]       
-        built_sol = PowerModels.build_solution(m.stages[s].subproblems[i].ext[:pm],:Optimal,0.0,
-        solution_builder = PowerModels.get_solution)
-        solution["solution"][s] = built_sol["solution"]
-        solution["solution"][s]["objective"] = built_sol["objective"]
-        solution["solution"][s]["objective_lb"] = built_sol["objective_lb"]
-        solution["solution"][s]["reservoirs"] = Dict()
-        for r =1:hydromodel.alldata[1]["hydro"]["nHyd"]
-            solution["solution"][s]["reservoirs"]["$r"] = Dict()
-            solution["solution"][s]["reservoirs"]["$r"]["spill"] = getvalue(m.stages[s].subproblems[i][:spill])[r]
-            solution["solution"][s]["reservoirs"]["$r"]["outflow"] = getvalue(m.stages[s].subproblems[i][:outflow])[r]
-            solution["solution"][s]["reservoirs"]["$r"]["volume"] = getvalue(m.stages[s].subproblems[i][:reservoir])[r]
-        end        
-    end
-    return solution
-end
-
 """Quantile Scenarios"""
 function quantile_scen(scen::Array{Float64,2},quant::Float64)
     return [quantile(scen[i, :], quant) for i = 1:size(scen, 1)]

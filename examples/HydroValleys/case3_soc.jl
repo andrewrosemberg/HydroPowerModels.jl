@@ -38,12 +38,13 @@ m = hydrothermaloperation(data, params);
 status = SDDP.train(m.policygraph;iteration_limit = 60);
 
 #' ## Simulation
-srand(1111)
-results = simulate_model(m.policygraph, 100);
+import Random
+Random.seed!(1111)
+results = HydroPowerModels.simulate(m, 100);
 
 #' ## Plotting Results
 
-if !isdefined(:plot_bool)
+if !@isdefined plot_bool
     plot_bool = true
 end
 

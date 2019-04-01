@@ -8,56 +8,18 @@
 #  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #############################################################################
 
-function simulate_model(hydromodel::HydroPowerModel, N::Int; asynchronous::Bool = true)
-    m = hydromodel.policygraph
-    solution = Dict()
-    solution["simulations"] = Array{Dict}(undef,N)
-    tic()
-    if asynchronous
-        wp = CachingPool(workers())
-        let m = m
-            solution["simulations"] .= pmap(wp, (i) -> randomsimulation(m), 1:N)
-        end
-    else
-        solution["simulations"] .= map(i -> randomsimulation(m), 1:N)
-    end
-    solution["solve_time"] = toc()
-    solution["params"] = hydromodel.params
-    solution["machine"] = Dict(
-        "cpu" => Sys.cpu_info()[1].model,
-        "memory" => string(Sys.total_memory()/2^30, " Gb")
-    )
-
-    # add original data dict
-    solution["data"] = hydromodel.alldata
-    
-    return solution
-end
-
-function randomsimulation(hydromodel::HydroPowerModel)
-    m = hydromodel.policygraph
-    store = SDDP.newsolutionstore(Symbol[])
-    obj = SDDP.forwardpass!(m, SDDP.Settings(),store)
-    store[:objective] = obj
-    solution = Dict()
-    for (key,value) in  store
-        solution[string(key)] = value
-    end
-    solution = build_solution_single_simulation(m,solution = solution)
-    return solution
-end
-
 function simulate(hydromodel::HydroPowerModel,number_replications::Int = 1;kwargs...)
     solution = Dict{Symbol, Any}()
-    tic()
+    
+    start_time = time()
     solution[:simulations] = SDDP.simulate( hydromodel.policygraph, 
                                             number_replications,
-                                            [:volume, :outflow, :spill])
-    solution[:solve_time] = toc()
-
-    # PowerModels solution build
-    built_sol = PowerModels.build_solution(m.policygraph[1].subproblem.ext[:pm],:Optimal,0.0,
-        solution_builder = PowerModels.get_solution)
+                                            custom_recorders = Dict{Symbol, Function}(
+                                                :powersystem => build_sol_powermodels,
+                                                :reservoirs => build_sol_reservoirs,
+                                                :objective => objective_value
+                                            ))
+    solution[:solve_time] = end_time = time() - start_time
 
     solution[:params] = hydromodel.params
     solution[:machine] = Dict(
@@ -70,4 +32,22 @@ function simulate(hydromodel::HydroPowerModel,number_replications::Int = 1;kwarg
 
     return solution
 
+end
+
+"PowerModels solution build "
+function build_sol_powermodels(sp::JuMP.Model)
+    solve_time = MOI.get(sp, MOI.SolveTime())
+    status = JuMP.termination_status(sp)
+    built_sol = PowerModels.build_solution(sp.ext[:pm],status,solve_time,
+        solution_builder = PowerModels.get_solution)
+end
+
+"Reservoir solution build "
+function build_sol_reservoirs(sp::JuMP.Model)
+    store = Dict{Symbol, Any}(
+            :reservoir => JuMP.value.(sp[:reservoir]),
+            :outflow => JuMP.value.(sp[:outflow]),
+            :spill => JuMP.value.(sp[:spill])
+        )
+    return store
 end

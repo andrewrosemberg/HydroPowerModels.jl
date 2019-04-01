@@ -35,12 +35,12 @@ params = set_param( stages = 12,
 m = hydrothermaloperation(data, params)
 
 #' ## Solve
-srand(1111)
+import Random
+Random.seed!(1111)
 status = solve(m, iteration_limit = 60,time_limit=30);
 status
 #' ## Simulation
-results = simulate_model(m.policygraph, 100);
-results
+results = HydroPowerModels.simulate(m, 100);
 #' ## Results
 #' Objective
 results["simulations"][1]["stageobjective"]
@@ -49,7 +49,7 @@ results["simulations"][1]["stageobjective"]
 
 #' Active
 
-if !isdefined(:plot_bool)
+if !@isdefined plot_bool
     plot_bool = true
 end
 

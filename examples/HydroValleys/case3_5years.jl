@@ -37,13 +37,14 @@ m = hydrothermaloperation(data, params);
 status = SDDP.train(m.policygraph;iteration_limit = 60);
 
 #' ## Simulation
-srand(1111);
-results = simulate_model(m.policygraph, 100);
+import Random
+Random.seed!(1111);
+results = HydroPowerModels.simulate(m, 100);
 
 #' ## Testing Results
 #' Objective
-using Base.Test
-@test isapprox(results["simulations"][1]["objective"], 59800.0, atol=1e-2)
+using Test
+@test isapprox(results[:simulations][1][1][:objective], 59800.0, atol=1e-2)
 
 #' Solution
 @test results["simulations"][1]["solution"][50]["gen"]["4"]["pg"] == 0
@@ -53,7 +54,7 @@ using Base.Test
 
 #' ## Plotting Results
 
-if !isdefined(:plot_bool)
+if !@isdefined plot_bool
     plot_bool = true
 end
 
