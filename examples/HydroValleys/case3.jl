@@ -40,12 +40,12 @@ m = hydrothermaloperation(data, params);
 
 #' ## Solve
 status = SDDP.train(m.policygraph;iteration_limit = 100);
-status
 
 #' ## Simulation
 import Random
 Random.seed!(1111)
 results = HydroPowerModels.simulate(m, 100);
+results
 
 #' ## Testing Results
 #' Objective

@@ -34,7 +34,7 @@ params = set_param( stages = 12*5,
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = SDDP.train(m.policygraph;iteration_limit = 60);
+status = SDDP.train(m.policygraph;iteration_limit = 100);
 
 #' ## Simulation
 import Random
@@ -44,13 +44,13 @@ results = HydroPowerModels.simulate(m, 100);
 #' ## Testing Results
 #' Objective
 using Test
-@test isapprox(results[:simulations][1][1][:objective], 59800.0, atol=1e-2)
+@test isapprox(results[:simulations][1][1][:objective], 58528.47, atol=1)
 
 #' Solution
-@test results["simulations"][1]["solution"][50]["gen"]["4"]["pg"] == 0
-@test isapprox(results["simulations"][1]["solution"][50]["gen"]["2"]["pg"],0.0, atol=1e-2)
-@test isapprox(results["simulations"][1]["solution"][50]["gen"]["3"]["pg"],0.74, atol=1e-2)
-@test isapprox(results["simulations"][1]["solution"][50]["gen"]["1"]["pg"],0.25, atol=1e-2)
+@test results[:simulations][1][50][:powersystem]["solution"]["gen"]["4"]["pg"] == 0
+@test isapprox(results[:simulations][1][50][:powersystem]["solution"]["gen"]["2"]["pg"],0.0, atol=1e-2)
+@test isapprox(results[:simulations][1][50][:powersystem]["solution"]["gen"]["3"]["pg"],0.74, atol=1e-2)
+@test isapprox(results[:simulations][1][50][:powersystem]["solution"]["gen"]["1"]["pg"],0.25, atol=1e-2)
 
 #' ## Plotting Results
 

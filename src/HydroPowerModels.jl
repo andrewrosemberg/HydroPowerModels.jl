@@ -15,7 +15,7 @@ include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
 
-export  hydrothermaloperation, parse_folder, set_param, simulate_model,
+export  hydrothermaloperation, parse_folder, set_param,
         plotresults, plotscenarios, set_active_demand, flat_dict,
         descriptivestatistics_results, signif_dict
 

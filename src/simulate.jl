@@ -36,7 +36,12 @@ end
 
 "PowerModels solution build "
 function build_sol_powermodels(sp::JuMP.Model)
-    solve_time = MOI.get(sp, MOI.SolveTime())
+    solve_time = 0.0
+    try 
+        solve_time = MOI.get(sp, MOI.SolveTime())
+    catch
+        solve_time = 0.0
+    end
     status = JuMP.termination_status(sp)
     built_sol = PowerModels.build_solution(sp.ext[:pm],status,solve_time,
         solution_builder = PowerModels.get_solution)
