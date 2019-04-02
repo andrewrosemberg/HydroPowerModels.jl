@@ -21,7 +21,7 @@ addons:
         - qt5-default
 script:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-    - julia -e 'Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
+    - julia -e 'import Pkg; Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
     - julia -e 'Pkg.test("HydroPowerModels"; coverage=true)'
 after_success:
     # push coverage results to Codecov
