@@ -27,6 +27,10 @@ data is a dict with all information of the problem.
 param is a dict containing solution parameters.
 """
 function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
+    # verbose
+    if !params["verbose"]
+        PowerModels.silence()
+    end
 
     # Model Definition
     policygraph = SDDP.LinearPolicyGraph(
@@ -38,7 +42,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
                                             ) do sp,t
         
         # if set silence a solver
-        if params["silence_solver"]
+        if !params["verbose"]
             try
                 MOI.set(JuMP.backend(sp), MOI.Silent(), true)
             catch

@@ -55,13 +55,13 @@ function set_param(;stages::Int = 1,
                     model_constructor_grid = DCPPowerModel, 
                     post_method = PowerModels.post_opf,optimizer = Clp.Optimizer,
                     setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)),
-                    silence_solver = true)
+                    verbose = false)
     params = Dict()
     params["stages"] = stages
     params["model_constructor_grid"] = model_constructor_grid
     params["post_method"] = post_method
     params["optimizer"] = optimizer
-    params["silence_solver"] = silence_solver
+    params["verbose"] = verbose
     params["setting"] = setting
     return params
 end
