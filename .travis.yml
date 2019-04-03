@@ -21,9 +21,9 @@ addons:
         - qt5-default
 script:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-    - julia -e 'import Pkg; Pkg.add("https://github.com/odow/MathOptFormat.jl")'
-    - julia -e 'import Pkg; Pkg.add("https://github.com/odow/SDDP.jl")'
-    - julia -e 'Pkg.test("HydroPowerModels"; coverage=true)'
+#    - julia -e 'import Pkg; Pkg.add(PackageSpec(url = "https://github.com/odow/MathOptFormat.jl"))'
+#    - julia -e 'import Pkg; Pkg.add(PackageSpec(url = "https://github.com/odow/SDDP.jl"))'
+    - julia -e 'if VERSION >= v"0.7.0-" using Pkg; end; Pkg.clone(pwd()); Pkg.build("HydroPowerModels"); Pkg.test("HydroPowerModels"; coverage=true)'
 after_success:
     # push coverage results to Codecov
     - echo $TRAVIS_JULIA_VERSION
