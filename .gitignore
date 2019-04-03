@@ -1,5 +1,5 @@
 .vscode/
 docs/build/
 Debug/
-Manifest.toml
+#Manifest.toml
 *.log
