@@ -51,12 +51,17 @@ function set_active_demand(alldata::Array{Dict{Any,Any}}, demand::Array{Float64,
 end
 
 "Organize Parameters"
-function set_param(;stages::Int = 1,model_constructor_grid = DCPPowerModel, post_method = PowerModels.post_opf,optimizer = Clp.Optimizer,setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)))
+function set_param(;stages::Int = 1,
+                    model_constructor_grid = DCPPowerModel, 
+                    post_method = PowerModels.post_opf,optimizer = Clp.Optimizer,
+                    setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)),
+                    silence_solver = true)
     params = Dict()
     params["stages"] = stages
     params["model_constructor_grid"] = model_constructor_grid
     params["post_method"] = post_method
     params["optimizer"] = optimizer
+    params["silence_solver"] = silence_solver
     params["setting"] = setting
     return params
 end

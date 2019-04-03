@@ -37,6 +37,14 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
                     direct_mode=false
                                             ) do sp,t
         
+        # if set silence a solver
+        if params["silence_solver"]
+            try
+                MOI.set(JuMP.backend(sp), MOI.Silent(), true)
+            catch
+
+            end
+        end
         # Extract current data
         data = alldata[min(t,size(alldata,1))]
         # calculate number of hydrogenerators

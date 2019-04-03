@@ -11,9 +11,9 @@ notifications:
 sudo: false
 dist: trusty
 
-install:
-  - pip --version
-  - pip install --user --upgrade pip
+# install:
+#   - pip --version
+#   - pip install --user --upgrade pip
 
 addons:
     apt_packages:
