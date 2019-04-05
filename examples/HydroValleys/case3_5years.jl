@@ -44,7 +44,7 @@ results = HydroPowerModels.simulate(m, 100);
 #' ## Testing Results
 #' Objective
 using Test
-@test isapprox(results[:simulations][1][1][:objective], 58528.47, atol=1)
+@test isapprox(sum(s[:stage_objective] for s in results[:simulations][1]), 54601.39, atol=1)
 
 #' Solution
 @test results[:simulations][1][50][:powersystem]["solution"]["gen"]["4"]["pg"] == 0
