@@ -46,7 +46,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
             try
                 MOI.set(JuMP.backend(sp), MOI.Silent(), true)
             catch
-
+                info("Silent() attribute not implemented by the optimizer.")
             end
         end
         # Extract current data

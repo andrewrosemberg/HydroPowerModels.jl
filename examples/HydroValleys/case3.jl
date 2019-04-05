@@ -50,7 +50,7 @@ results
 #' ## Testing Results
 #' Objective
 using Test
-@test isapprox(results[:simulations][1][1][:objective], 10496.09, atol=1)
+@test isapprox(sum(s[:stage_objective] for s in results[:simulations][1]), 9400.0, atol=1)
 
 #' Solution
 @test results[:simulations][1][1][:powersystem]["solution"]["gen"]["4"]["pg"] == 0

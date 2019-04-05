@@ -90,7 +90,7 @@ baseMVA =  [results[:simulations][i][j][:powersystem]["solution"]["baseMVA"] for
 
 scen_gen = [results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["pg"] for i=1:100, j=1:12]'.*baseMVA
 
-plotscenarios(scen_gen, title  = "Termo Generation 1",
+plotscenarios(scen_gen, title  = "Thermal Generation 1",
                 ylabel = "MWh",
                 xlabel = "Stages",
                 bottom_margin = 10mm,

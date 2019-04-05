@@ -119,14 +119,14 @@ function plotresults(results::Dict;nplts::Int = 3)
     nsim = length(results[:simulations])
     nstages = length(results[:simulations][1])
 
-    # Termo Generation first 3 gen
+    # Thermal Generation first 3 gen
 
     idxhyd = idx_hydro(results[:data][1])
     idxgen = setdiff(collect(1:min(length(results[:data][1]["powersystem"]["gen"]),nplts)),idxhyd)
     baseMVA =  [results[:simulations][i][j][:powersystem]["solution"]["baseMVA"] for i=1:nsim, j=1:nstages]'
     scen_gen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["pg"] for i=1:nsim, j=1:nstages]'.*baseMVA for gen =1:3]
 
-    plt =   [plotscenarios(scen_gen[gen], title  = "Termo Generation $gen",
+    plt =   [plotscenarios(scen_gen[gen], title  = "Thermal Generation $gen",
                 ylabel = "MWh",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
@@ -138,12 +138,12 @@ function plotresults(results::Dict;nplts::Int = 3)
     plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
     nplots += 1
 
-    # Termo Reactive Generation
+    # Thermal Reactive Generation
 
     if results[:params]["model_constructor_grid"] == PowerModels.ACPPowerModel
         scen_qgen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["qg"] for i=1:100, j=1:results[:params]["stages"]]'.*baseMVA for gen =1:3]
 
-        plt =   [plotscenarios(scen_qgen[gen], title  = "Termo Reactive Generation $gen",
+        plt =   [plotscenarios(scen_qgen[gen], title  = "Thermal Reactive Generation $gen",
                 ylabel = "MWh",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
@@ -246,7 +246,7 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
     nsim = length(results[:simulations])
     nstages = length(results[:simulations][1][1][:powersystem]["solution"])
 
-    # Termo Generation first nitem gen
+    # Thermal Generation first nitem gen
 
     dcp_stats["pg"] = Dict()
 
