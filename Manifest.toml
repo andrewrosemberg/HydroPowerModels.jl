@@ -135,9 +135,9 @@ version = "0.7.0"
 
 [[Documenter]]
 deps = ["Base64", "DocStringExtensions", "InteractiveUtils", "JSON", "LibGit2", "Logging", "Markdown", "Pkg", "REPL", "Random", "Test", "Unicode"]
-git-tree-sha1 = "04d40966cddd2ea5d227e7130484b57ac4718596"
+git-tree-sha1 = "11ba1460e7429eddc2a71f912cd5b9a66fbd8cf5"
 uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-version = "0.22.1"
+version = "0.22.2"
 
 [[EzXML]]
 deps = ["BinaryProvider", "Libdl", "Pkg", "Printf", "Test"]
@@ -267,6 +267,12 @@ version = "0.6.0"
 deps = ["Libdl"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
+[[Literate]]
+deps = ["Base64", "JSON", "REPL", "Test"]
+git-tree-sha1 = "021e2e3106713e22a7f3769ebf9f2f4469670444"
+uuid = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
+version = "1.1.0"
+
 [[Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
@@ -310,9 +316,9 @@ version = "0.3.0"
 
 [[Memento]]
 deps = ["Dates", "Distributed", "JSON", "Serialization", "Sockets", "Syslogs", "Test", "TimeZones", "UUIDs"]
-git-tree-sha1 = "b8184186bd4d308642d4ac06f6d50a9679d2ee17"
+git-tree-sha1 = "090463b13da88689e5eae6468a6f531a21392175"
 uuid = "f28f55f0-a522-5efc-85c2-fe41dfb9b2d9"
-version = "0.12.0"
+version = "0.12.1"
 
 [[Missings]]
 deps = ["Dates", "InteractiveUtils", "SparseArrays", "Test"]
@@ -434,10 +440,10 @@ uuid = "c946c3f1-0d1f-5ce8-9dea-7daa1f7e2d13"
 version = "0.5.1"
 
 [[SDDP]]
-deps = ["Documenter", "GLPK", "JSON", "JuMP", "MathOptFormat", "Printf", "Random", "RecipesBase", "Reexport", "Statistics", "TimerOutputs"]
-git-tree-sha1 = "d802e7f6038f47cc7307d2ecc6ab063d37d18348"
+deps = ["Documenter", "GLPK", "JSON", "JuMP", "Literate", "MathOptFormat", "Printf", "Random", "RecipesBase", "Reexport", "Statistics", "TimerOutputs"]
+git-tree-sha1 = "3e42687e72d2b5e051674201227fb40adee5bb70"
 repo-rev = "master"
-repo-url = "https://github.com/odow/SDDP.jl"
+repo-url = "https://github.com/odow/SDDP.jl/"
 uuid = "f4570300-c277-11e8-125c-4912f86ce65d"
 version = "0.0.0"
 
