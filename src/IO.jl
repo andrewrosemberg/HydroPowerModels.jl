@@ -36,11 +36,11 @@ function parse_folder(folder::String; stages::Int = 1)
         data["hydro"]["Hydrogenerators"][i]["inflow"]= vector_inflows[i]
     end
     data["hydro"]["scenario_probabilities"] = convert(Matrix{Float64},CSV.read(folder*"/"*"scenarioprobability.csv",header=false))
-    return [data for i=1:stages]
+    return [deepcopy(data) for i=1:stages]
 end
 
 "set active demand"
-function set_active_demand(alldata::Array{Dict{Any,Any}}, demand::Array{Float64,2})
+function set_active_demand!(alldata::Array{Dict{Any,Any}}, demand::Array{Float64,2})
     for t = 1:size(alldata,1)
         data = alldata[t]
         for load = 1:length(data["powersystem"]["load"])
@@ -79,9 +79,9 @@ function quantile_scen(scen::Array{Float64,2},quants::Array{Float64};output_dict
             output["$(quant*100)%"] = [Statistics.quantile(scen[i, :], quant) for i = 1:size(scen, 1)]
         end
         return output
-    else
-        return [Statistics.quantile(scen[i, :], quant) for i = 1:size(scen, 1),quant in quants]
     end
+    return [Statistics.quantile(scen[i, :], quant) for i = 1:size(scen, 1),quant in quants]
+    
     
 end
 
@@ -106,9 +106,9 @@ function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
     if save
         savefig(p1, savepath*"$fileformat")
         return nothing
-    else
-        return p1
     end
+
+    return p1    
 end
 
 """Common Plots"""
