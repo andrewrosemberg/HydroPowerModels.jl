@@ -48,10 +48,11 @@ function set_active_demand!(alldata::Array{Dict{Any,Any}}, demand::Array{Float64
             data["powersystem"]["load"]["$load"]["pd"] = demand[t,bus]
         end
     end
+    return nothing
 end
 
-"Organize Parameters"
-function set_param(;stages::Int = 1,
+"Create Parameters Dictionary"
+function create_param(;stages::Int = 1,
                     model_constructor_grid = DCPPowerModel, 
                     post_method = PowerModels.post_opf,optimizer = Clp.Optimizer,
                     setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)),
@@ -68,21 +69,21 @@ end
 
 """Quantile Scenarios"""
 function quantile_scen(scen::Array{Float64,2},quant::Float64)
-    return [Statistics.quantile(scen[i, :], quant) for i = 1:size(scen, 1)]
+    return quantile_scen(scen,[quant])[:,1]
 end
 
 """Quantile Scenarios"""
 function quantile_scen(scen::Array{Float64,2},quants::Array{Float64};output_dict::Bool=false)
+    quantiles = [Statistics.quantile(scen[i, :], quant) for i = 1:size(scen, 1),quant in quants]
     if output_dict
         output = Dict()
-        for quant in quants 
-            output["$(quant*100)%"] = [Statistics.quantile(scen[i, :], quant) for i = 1:size(scen, 1)]
+        for col = 1:length(quants)
+            output["$(quant*100)%"] = quantiles[:,col]
         end
         return output
     end
-    return [Statistics.quantile(scen[i, :], quant) for i = 1:size(scen, 1),quant in quants]
-    
-    
+
+    return quantiles
 end
 
 """Plots a set o scenarios"""

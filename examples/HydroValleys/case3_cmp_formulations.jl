@@ -43,7 +43,7 @@ dcp_stats = Dict()
 
 #' ## Parameters
 
-params = set_param( stages = 12, 
+params = create_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
                     post_method             = PowerModels.post_opf,
                     optimizer                  = Clp.Optimizer)
@@ -66,7 +66,7 @@ dcp_stats["DC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(resul
 
 #' ## Parameters
 
-params = set_param( stages = 12, 
+params = create_param( stages = 12, 
                     model_constructor_grid  = SOCWRPowerModel,
                     post_method             = PowerModels.post_opf,
                     optimizer                  = IpoptSolver(tol=1e-6))
@@ -89,7 +89,7 @@ dcp_stats["SOC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(resu
 
 #' ## Parameters
 
-params = set_param( stages = 12, 
+params = create_param( stages = 12, 
                     model_constructor_grid  = ACPPowerModel,
                     post_method             = PowerModels.post_opf,
                     optimizer                  = IpoptSolver(tol=1e-6))

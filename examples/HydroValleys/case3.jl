@@ -29,7 +29,7 @@ data = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"
 data[1]
 
 #' parameters
-params = set_param( stages = 12, 
+params = create_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
                     post_method             = PowerModels.post_opf,
                     optimizer               = Clp.Optimizer);

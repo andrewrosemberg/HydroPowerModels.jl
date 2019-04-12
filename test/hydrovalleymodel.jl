@@ -2,7 +2,7 @@ using Clp
 
 @testset "hydrovalleymodel" begin
     @testset "Test kwargs" begin
-        params = set_param( stages                  = 3, 
+        params = create_param( stages                  = 3, 
                             model_constructor_grid  = DCPPowerModel,
                             post_method             = PowerModels.post_opf,
                             optimizer                  = Clp.Optimizer)

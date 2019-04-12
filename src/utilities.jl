@@ -25,7 +25,7 @@ function upstream_hydro!(data::Dict)
 end
 
 "create ref for anonimous variables on model"
-function createvarrefs(sp::JuMP.Model,pm::GenericPowerModel)
+function createvarrefs!(sp::JuMP.Model,pm::GenericPowerModel)
     for listvarref in values(var(pm,pm.cnw,pm.ccnd))
         for variableref in values(listvarref)
             if typeof(variableref) == JuMP.VariableRef

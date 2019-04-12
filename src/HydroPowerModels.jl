@@ -15,8 +15,8 @@ include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
 
-export  hydrothermaloperation, parse_folder, set_param,
-        plotresults, plotscenarios, set_active_demand, flat_dict,
+export  hydrothermaloperation, parse_folder, create_param,
+        plotresults, plotscenarios, set_active_demand!, flat_dict,
         descriptivestatistics_results, signif_dict
 
 Reexport.@reexport using PowerModels, SDDP
@@ -65,7 +65,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
             params["post_method"], jump_model=sp, setting = params["setting"])
         
         # create reference to variables
-        createvarrefs(sp,pm)
+        createvarrefs!(sp,pm)
 
         # save GenericPowerModel and Data
         sp.ext[:pm] = pm
