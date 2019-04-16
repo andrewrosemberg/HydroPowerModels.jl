@@ -1,6 +1,7 @@
 {
     "Hydrogenerators":[
-        {
+        {   
+            "index": 1,
             "index_grid": 3,
             "max_volume":150,
             "min_volume":0,

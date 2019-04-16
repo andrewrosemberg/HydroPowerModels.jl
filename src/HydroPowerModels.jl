@@ -53,14 +53,9 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         end
         # Extract current data
         data = alldata[min(t,size(alldata,1))]
-        # calculate number of hydrogenerators
-        countgenerators!(data)
         
-        # compoute upstream_hydro
-        upstream_hydro!(data)
-
-        # count available inflow data
-        countavailableinflow!(data)
+        # gather useful information from data
+        gatherusefulinfo!(data)
 
         # build eletric grid model using PowerModels                                   
         pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid"], 

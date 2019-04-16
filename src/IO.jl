@@ -18,7 +18,7 @@ function read_inflow(file::String, nHyd::Int)
     for i = 1:nHyd
         vector_inflows[i] = allinflows[1:nlin,(i-1)*nCen+1:i*nCen]
     end
-    return vector_inflows
+    return vector_inflows, nCen
 end
 
 """Read hydro case folder"""
@@ -35,11 +35,15 @@ function parse_folder(folder::String; stages::Int = 1)
         data["powersystem"] = PowerModels.parse_file(joinpath(folder,"PowerModels.m"))
     end
     data["hydro"] = parse_file_json(joinpath(folder,"hydro.json"))
-    vector_inflows = read_inflow(joinpath(folder,"inflows.csv"),length(data["hydro"]["Hydrogenerators"]))
+    vector_inflows, nCen = read_inflow(joinpath(folder,"inflows.csv"),length(data["hydro"]["Hydrogenerators"]))
     for i = 1:length(data["hydro"]["Hydrogenerators"])
         data["hydro"]["Hydrogenerators"][i]["inflow"]= vector_inflows[i]
     end
-    data["hydro"]["scenario_probabilities"] = convert(Matrix{Float64},CSV.read(joinpath(folder,"scenarioprobability.csv"),header=false))
+    try
+        data["hydro"]["scenario_probabilities"] = convert(Matrix{Float64},CSV.read(joinpath(folder,"scenarioprobability.csv"),header=false))
+    catch
+        data["hydro"]["scenario_probabilities"] = ones(size(vector_inflows[1],1),nCen)./nCen
+    end
     return [deepcopy(data) for i=1:stages]
 end
 

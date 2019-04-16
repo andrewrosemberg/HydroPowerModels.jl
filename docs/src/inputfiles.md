@@ -107,7 +107,8 @@ This is an example of a Hydro Description file:
 ```
 {
     "Hydrogenerators":[
-        {
+        {   
+            "index": 1, # Index of Hydrogenerators.
             "index_grid": 3, # Index of generator in network.
             "max_volume":10, # (Hm3) Maximun Volume of Reservoir.
             "min_volume":0, # (Hm3) Minimun Volume of Reservoir.
