@@ -30,7 +30,7 @@ Build the Model and execute the SDDP method:
 ```julia
 m = hydrothermaloperation(data, params)
 
-status = SDDP.train(m.policygraph;iteration_limit = 60);
+HydroPowerModels.train(m;iteration_limit = 60);
 ```
 
 Simulate 100 Instances of the problem:

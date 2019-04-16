@@ -1,9 +1,9 @@
-"calculate number of hydrogenerators"
+"""calculate number of hydrogenerators"""
 function countgenerators!(data::Dict)
     data["hydro"]["nHyd"] = size(data["hydro"]["Hydrogenerators"],1)
 end
 
-"compoute upstream_hydro"
+"""compoute upstream_hydro"""
 function upstream_hydro!(data::Dict)
     for i in 1:data["hydro"]["nHyd"]
         data["hydro"]["Hydrogenerators"][i]["upstrem_hydros"] = []
@@ -24,7 +24,7 @@ function upstream_hydro!(data::Dict)
     end
 end
 
-"create ref for anonimous variables on model"
+"""create ref for anonimous variables on model"""
 function createvarrefs!(sp::JuMP.Model,pm::GenericPowerModel)
     for listvarref in values(var(pm,pm.cnw,pm.ccnd))
         for variableref in values(listvarref)
@@ -35,17 +35,17 @@ function createvarrefs!(sp::JuMP.Model,pm::GenericPowerModel)
     end
 end
 
-"count available inflow data"
+"""count available inflow data"""
 function countavailableinflow!(data::Dict)
     data["hydro"]["size_inflow"] = size(data["hydro"]["Hydrogenerators"][1]["inflow"])
 end
 
-"circular index"
+"""circular index"""
 function cidx(i::Int,n::Int)
     mod(i,n)==0 ? n : mod(i,n)
 end
 
-"hydrogenerators indexes"
+"""hydrogenerators indexes"""
 function idx_hydro(data::Dict)
     [hydro["index_grid"] for hydro in data["hydro"]["Hydrogenerators"]]
 end

@@ -25,7 +25,7 @@ m = hydrothermaloperation(data, params)
 ########################################
 #       Solve
 ########################################
-status = SDDP.train(m.policygraph;iteration_limit = 60);
+HydroPowerModels.train(m;iteration_limit = 60);
 
 ########################################
 #       Simulation

@@ -14,6 +14,7 @@ include("constraint.jl")
 include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
+include("train.jl")
 
 export  hydrothermaloperation, parse_folder, create_param,
         plotresults, plotscenarios, set_active_demand!, flat_dict,
@@ -41,7 +42,8 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
                     direct_mode=false
                                             ) do sp,t
         
-        # if set silence a solver
+        # if set silence the solver
+        # related to https://github.com/JuliaOpt/JuMP.jl/pull/1921
         if !params["verbose"]
             try
                 MOI.set(JuMP.backend(sp), MOI.Silent(), true)

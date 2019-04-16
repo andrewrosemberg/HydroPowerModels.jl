@@ -35,7 +35,7 @@ params = create_param( stages = 12,
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = SDDP.train(m.policygraph;iteration_limit = 60);
+HydroPowerModels.train(m;iteration_limit = 60);
 
 #' ## Simulation
 import Random

@@ -30,7 +30,7 @@ using Clp
             HydroPowerModels.variable_volume(sp, data)
             @stageobjective(sp,0)
         end
-        status = SDDP.train(m;iteration_limit = 60);
+        SDDP.train(m;iteration_limit = 60);
         # state variable volume
         @test JuMP.lower_bound(m[1].subproblem[:reservoir][1].out) == 0.0
         @test JuMP.upper_bound(m[1].subproblem[:reservoir][1].out) == 200

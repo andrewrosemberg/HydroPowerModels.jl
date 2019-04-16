@@ -39,7 +39,7 @@ params
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = SDDP.train(m.policygraph; iteration_limit = 100, cut_deletion_minimum=1000000);
+HydroPowerModels.train(m; iteration_limit = 100, cut_deletion_minimum=1000000);
 
 #' ## Simulation
 import Random

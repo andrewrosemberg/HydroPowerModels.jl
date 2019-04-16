@@ -4,12 +4,12 @@ using Plots.PlotMeasures
 using CSV
 import Statistics
 
-"Read hydro description json file"
+"""Read hydro description json file"""
 function parse_file_json(file::String)
     return JSON.parse(String(read(file)))
 end
 
-"Read Hydrogenerators inflow csv file"
+"""Read Hydrogenerators inflow csv file"""
 function read_inflow(file::String, nHyd::Int)
     allinflows = CSV.read(file,header=false)
     nlin, ncol = size(allinflows)
@@ -21,25 +21,29 @@ function read_inflow(file::String, nHyd::Int)
     return vector_inflows
 end
 
-"Read hydro case folder"
+"""Read hydro case folder"""
 function parse_folder(folder::String; stages::Int = 1)        
     data = Dict()
     try
-        data["powersystem"] = parse_file_json(folder*"/"*"PowerModels.json")
-        data["powersystem"]["source_version"] = VersionNumber(data["powersystem"]["source_version"]["major"],data["powersystem"]["source_version"]["minor"],data["powersystem"]["source_version"]["patch"],Tuple{}(data["powersystem"]["source_version"]["prerelease"]),Tuple{}(data["powersystem"]["source_version"]["build"]))
+        data["powersystem"] = parse_file_json(joinpath(folder,"PowerModels.json"))
+        data["powersystem"]["source_version"] = VersionNumber(data["powersystem"]["source_version"]["major"],
+                                                              data["powersystem"]["source_version"]["minor"],
+                                                              data["powersystem"]["source_version"]["patch"],
+                                                              Tuple{}(data["powersystem"]["source_version"]["prerelease"]),
+                                                              Tuple{}(data["powersystem"]["source_version"]["build"]))
     catch
-        data["powersystem"] = PowerModels.parse_file(folder*"/"*"PowerModels.m")
+        data["powersystem"] = PowerModels.parse_file(joinpath(folder,"PowerModels.m"))
     end
-    data["hydro"] = parse_file_json(folder*"/"*"hydro.json")
-    vector_inflows = read_inflow(folder*"/"*"inflows.csv",length(data["hydro"]["Hydrogenerators"]))
+    data["hydro"] = parse_file_json(joinpath(folder,"hydro.json"))
+    vector_inflows = read_inflow(joinpath(folder,"inflows.csv"),length(data["hydro"]["Hydrogenerators"]))
     for i = 1:length(data["hydro"]["Hydrogenerators"])
         data["hydro"]["Hydrogenerators"][i]["inflow"]= vector_inflows[i]
     end
-    data["hydro"]["scenario_probabilities"] = convert(Matrix{Float64},CSV.read(folder*"/"*"scenarioprobability.csv",header=false))
+    data["hydro"]["scenario_probabilities"] = convert(Matrix{Float64},CSV.read(joinpath(folder,"scenarioprobability.csv"),header=false))
     return [deepcopy(data) for i=1:stages]
 end
 
-"set active demand"
+"""set active demand"""
 function set_active_demand!(alldata::Array{Dict{Any,Any}}, demand::Array{Float64,2})
     for t = 1:size(alldata,1)
         data = alldata[t]
@@ -51,7 +55,7 @@ function set_active_demand!(alldata::Array{Dict{Any,Any}}, demand::Array{Float64
     return nothing
 end
 
-"Create Parameters Dictionary"
+"""Create Parameters Dictionary"""
 function create_param(;stages::Int = 1,
                     model_constructor_grid = DCPPowerModel, 
                     post_method = PowerModels.post_opf,optimizer = Clp.Optimizer,
@@ -100,7 +104,8 @@ function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
                 label = "Median";
                 kwargs...)
     for q=0.05:0.1:0.25
-        plot!(p1, med_scen, ribbon=(med_scen-quantile_scen(scen,q),quantile_scen(scen,1-q)-med_scen), color = "gray", label = "")
+        plot!(p1, med_scen, ribbon=(med_scen-quantile_scen(scen,q),quantile_scen(scen,1-q)-med_scen), 
+                            color = "gray", label = "")
     end
     plot!(p1, maximum(scen; dims=2), label = "Max and Min", color = "Steel Blue")
     plot!(p1, minimum(scen; dims=2), label = "", color = "Steel Blue")

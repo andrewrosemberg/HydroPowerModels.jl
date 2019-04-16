@@ -8,6 +8,7 @@
 #  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #############################################################################
 
+"""simulate function"""
 function simulate(hydromodel::HydroPowerModel,number_replications::Int = 1;kwargs...)
     solution = Dict{Symbol, Any}()
     
@@ -34,7 +35,7 @@ function simulate(hydromodel::HydroPowerModel,number_replications::Int = 1;kwarg
 
 end
 
-"PowerModels solution build "
+"""PowerModels solution build"""
 function build_sol_powermodels(sp::JuMP.Model)
     solve_time = 0.0
     try 
@@ -47,7 +48,7 @@ function build_sol_powermodels(sp::JuMP.Model)
         solution_builder = PowerModels.get_solution)
 end
 
-"Reservoir solution build "
+"""Reservoir solution build"""
 function build_sol_reservoirs(sp::JuMP.Model)
     store = Dict{Symbol, Any}(
             :reservoir => JuMP.value.(sp[:reservoir]),
