@@ -13,15 +13,8 @@ Solution method is handled by [SDDP.jl](https://github.com/odow/SDDP.jl).
 
 ## Installation
 
-Dependencies to this package include the packages PowerModels and SDDP. Therefore you should first install as follows:
+The current package is unregistered so you will need to add it as follows:
 
 ```julia
-Pkg.add("PowerModels")
-Pkg.clone("https://github.com/odow/SDDP.jl.git")
-```
-
-The current package is unregistered so you will need to `Pkg.clone` it as follows:
-
-```julia
-Pkg.clone("https://github.com/andrewrosemberg/HydroPowerModels.jl.git")
+julia> ] add https://github.com/andrewrosemberg/HydroPowerModels.jl.git 
 ```

@@ -2,7 +2,7 @@ language: julia
 os:
     - linux
 julia:
-    - 0.6.4
+    - 1.0
 matrix:
     allow_failures:
         - julia: nightly
@@ -11,9 +11,9 @@ notifications:
 sudo: false
 dist: trusty
 
-install:
-  - pip --version
-  - pip install --user --upgrade pip
+# install:
+#   - pip --version
+#   - pip install --user --upgrade pip
 
 addons:
     apt_packages:
@@ -21,10 +21,11 @@ addons:
         - qt5-default
 script:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-    - julia -e 'Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
-    - julia -e 'Pkg.test("HydroPowerModels"; coverage=true)'
+    #- julia -e 'using Pkg; Pkg.add(PackageSpec(url = "https://github.com/odow/MathOptFormat.jl"))'
+    #- julia -e 'using Pkg; Pkg.add(PackageSpec(url = "https://github.com/odow/SDDP.jl"))'
+    - julia -e 'if VERSION >= v"0.7.0-" using Pkg; end; Pkg.test("HydroPowerModels"; coverage=true)'
 after_success:
     # push coverage results to Codecov
     - echo $TRAVIS_JULIA_VERSION
-    - julia -e 'cd(Pkg.dir("HydroPowerModels")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
-    - julia -e 'cd(Pkg.dir("HydroPowerModels")); Pkg.add("Documenter"); include(joinpath("docs", "make.jl"))'
+    - julia -e 'import Pkg; cd(Pkg.dir("HydroPowerModels")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+    - julia -e 'import Pkg; cd(Pkg.dir("HydroPowerModels")); Pkg.add("Documenter"); include(joinpath("docs", "make.jl"))'

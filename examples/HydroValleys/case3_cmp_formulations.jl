@@ -27,7 +27,7 @@ Variable types in this example:\n
 """
 #' # Init Case
 
-#' ## Importing package and solver
+#' ## Importing package and optimizer
 
 using Ipopt,Clp
 using HydroPowerModels
@@ -43,20 +43,21 @@ dcp_stats = Dict()
 
 #' ## Parameters
 
-params = set_param( stages = 12, 
+params = create_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
                     post_method             = PowerModels.post_opf,
-                    solver                  = ClpSolver())
+                    optimizer                  = Clp.Optimizer)
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = solve(m, iteration_limit = 60);
+HydroPowerModels.train(m;iteration_limit = 60);
 
 #' ## Simulation
-srand(1111)
-results = simulate_model(m, 100);
+import Random
+Random.seed!(1111)
+results = HydroPowerModels.simulate(m, 100);
 
 #' ## Results
 dcp_stats["DC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(results))
@@ -65,20 +66,21 @@ dcp_stats["DC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(resul
 
 #' ## Parameters
 
-params = set_param( stages = 12, 
+params = create_param( stages = 12, 
                     model_constructor_grid  = SOCWRPowerModel,
                     post_method             = PowerModels.post_opf,
-                    solver                  = IpoptSolver(tol=1e-6))
+                    optimizer                  = IpoptSolver(tol=1e-6))
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = solve(m, iteration_limit = 60);
+HydroPowerModels.train(m;iteration_limit = 60);
 
 #' ## Simulation
-srand(1111)
-results = simulate_model(m, 100);
+import Random
+Random.seed!(1111)
+results = HydroPowerModels.simulate(m, 100);
 
 #' ## Results
 dcp_stats["SOC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(results))
@@ -87,20 +89,21 @@ dcp_stats["SOC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(resu
 
 #' ## Parameters
 
-params = set_param( stages = 12, 
+params = create_param( stages = 12, 
                     model_constructor_grid  = ACPPowerModel,
                     post_method             = PowerModels.post_opf,
-                    solver                  = IpoptSolver(tol=1e-6))
+                    optimizer                  = IpoptSolver(tol=1e-6))
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = solve(m, iteration_limit = 60);
+HydroPowerModels.train(m;iteration_limit = 60);
 
 #' ## Simulation
-srand(1111)
-results = simulate_model(m, 100);
+import Random
+Random.seed!(1111)
+results = HydroPowerModels.simulate(m, 100);
 
 #' ## Results
 dcp_stats["AC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(results))

@@ -18,32 +18,34 @@
 
 #' # Case
 
-#' ## Importing package and solver
+#' ## Importing package and optimizer
 
-using Ipopt
+using SCS
 using HydroPowerModels
 
 #' ## Load Case Specifications
 data = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"))
 
-params = set_param( stages = 12, 
-                    model_constructor_grid  = SOCWRPowerModel,
+params = create_param( stages = 12, 
+                    model_constructor_grid  = SOCWRConicPowerModel,
                     post_method             = PowerModels.post_opf,
-                    solver                  = IpoptSolver(tol=1e-6))
+                    optimizer               = SCS.Optimizer)
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-status = solve(m, iteration_limit = 60);
+HydroPowerModels.train(m;iteration_limit = 60);
 
 #' ## Simulation
-srand(1111)
-results = simulate_model(m, 100);
+import Random
+Random.seed!(1111)
+results = HydroPowerModels.simulate(m, 100);
+results
 
 #' ## Plotting Results
 
-if !isdefined(:plot_bool)
+if !@isdefined plot_bool
     plot_bool = true
 end
 

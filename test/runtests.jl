@@ -1,4 +1,4 @@
-using HydroPowerModels, Base.Test
+using HydroPowerModels, Test
 using JuMP, PowerModels, SDDP
 
 plot_bool = false
