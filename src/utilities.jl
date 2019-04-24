@@ -9,18 +9,18 @@ function upstream_hydro!(data::Dict)
         data["hydro"]["Hydrogenerators"][i]["upstrem_hydros"] = []
     end
     for i in 1:data["hydro"]["nHyd"]
-        for idx in data["hydro"]["Hydrogenerators"][i]["dowstream_turn"]
+        for idx in data["hydro"]["Hydrogenerators"][i]["downstream_turn"]
             j = findall(x->x["index"]==idx,data["hydro"]["Hydrogenerators"])
             if length(j)!=1
-                error("Incoherent dowstream_turn list")
+                error("Incoherent downstream_turn list")
             end
             j = j[1]
             data["hydro"]["Hydrogenerators"][j]["upstrem_hydros"] = append!(data["hydro"]["Hydrogenerators"][j]["upstrem_hydros"],i)
         end
-        for idx in data["hydro"]["Hydrogenerators"][i]["dowstream_spill"]
+        for idx in data["hydro"]["Hydrogenerators"][i]["downstream_spill"]
             j = findall(x->x["index"]==idx,data["hydro"]["Hydrogenerators"])
             if length(j)!=1
-                error("Incoherent dowstream_spill list")
+                error("Incoherent downstream_spill list")
             end
             j = j[1]
             data["hydro"]["Hydrogenerators"][j]["upstrem_hydros"] = append!(data["hydro"]["Hydrogenerators"][j]["upstrem_hydros"],i)

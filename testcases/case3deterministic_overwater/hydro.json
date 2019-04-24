@@ -8,8 +8,8 @@
             "initial_volume":200,
             "production_factor":1,
             "spill_cost":0,
-            "dowstream_turn": [],
-            "dowstream_spill": []
+            "downstream_turn": [],
+            "downstream_spill": []
         }
     ]
 }

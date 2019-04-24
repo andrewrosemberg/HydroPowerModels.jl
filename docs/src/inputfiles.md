@@ -110,15 +110,22 @@ This is an example of a Hydro Description file:
         {   
             "index": 1, # Index of Hydrogenerators.
             "index_grid": 3, # Index of generator in network.
+            "name": "", # Name.
             "max_volume":10, # (Hm3) Maximun Volume of Reservoir.
             "min_volume":0, # (Hm3) Minimun Volume of Reservoir.
+            "max_turn": 100 # (m3/s) Maximun Outflow of Reservoir.
+            "min_turn": 0 # (m3/s) Minimun Outflow of Reservoir.
             "initial_volume":0, # (Hm3) Initial Volume of Reservoir.
             "production_factor":1, # (MW/ (m3/s)) Production Factor.
             "spill_cost":0, # (dol/Hm3) Cost of Spillage.
-            "dowstream_turn": [], # Hydro Generators dowstream of turn.
-            "dowstream_spill": [] # Hydro Generators dowstream of spillage.
+            "downstream_turn": [], # Hydro Generators downstream of turn.
+            "downstream_spill": [] # Hydro Generators downstream of spillage.
         }
     ]
 }
 
 ```
+
+## Inflows: "inflows.csv" 
+
+Inflows are expected in (m3/s) in a csv file representing a matrix, where rows are the stages and columns are the scenarious.
