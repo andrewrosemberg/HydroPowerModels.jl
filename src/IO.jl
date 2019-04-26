@@ -64,9 +64,11 @@ function create_param(;stages::Int = 1,
                     model_constructor_grid = DCPPowerModel, 
                     post_method = PowerModels.post_opf,optimizer = Clp.Optimizer,
                     setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)),
-                    verbose = false)
+                    verbose = false,
+                    stage_hours = 1)
     params = Dict()
     params["stages"] = stages
+    params["stage_hours"] = stage_hours
     params["model_constructor_grid"] = model_constructor_grid
     params["post_method"] = post_method
     params["optimizer"] = optimizer

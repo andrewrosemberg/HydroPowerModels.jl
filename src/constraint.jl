@@ -9,9 +9,11 @@ function rainfall_noises(sp, data::Dict, t::Int)
 end
 
 """creates hydro balance constraint"""
-function constraint_hydro_balance(sp, data::Dict)    
+function constraint_hydro_balance(sp, data::Dict, params::Dict)    
     @constraints(sp, begin
-        hydro_balance[i=1:data["hydro"]["nHyd"]], sp[:reservoir][i].out == sp[:reservoir][i].in + sp[:inflow][i] - sp[:outflow][i] - sp[:spill][i] + sum(sp[:outflow][j] + sp[:spill][j] for j in data["hydro"]["Hydrogenerators"][i]["upstrem_hydros"])
+        hydro_balance[i=1:data["hydro"]["nHyd"]],   sp[:reservoir][i].out == sp[:reservoir][i].in + (sp[:inflow][i] - sp[:outflow][i])*(0.0036*params["stage_hours"]) - sp[:spill][i] + 
+                                                    sum(sp[:spill][j] for j in data["hydro"]["Hydrogenerators"][i]["upstrem_hydros_spill"]) +
+                                                    sum(sp[:outflow][j] for j in data["hydro"]["Hydrogenerators"][i]["upstrem_hydros_turn"])*(0.0036*params["stage_hours"])
     end)
     return nothing
 end
