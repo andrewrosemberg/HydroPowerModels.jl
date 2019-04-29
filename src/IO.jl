@@ -227,7 +227,7 @@ function plotresults(results::Dict;nplts::Int = 3)
 
     # Hydro Generation and Reservoir Volume first 3 Hydro
     
-    scen_voume = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:reservoir][res].out for i=1:nsim, j=1:nstages]' for res = 1:min(results[:data][1]["hydro"]["nHyd"],3)])
+    scen_voume = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:reservoir][res].out for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
 
     plt =   [   [plotscenarios(scen_gen[gen], title  = "Hydro Generation $gen",
                     ylabel = "MWh",
@@ -318,7 +318,7 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
 
     dcp_stats["volume"] = Dict()
 
-    scen_voume = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:reservoir][res].out for i=1:nsim, j=1:nstages]' for res = 1:min(results[:data][1]["hydro"]["nHyd"],3)])
+    scen_voume = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:reservoir][res].out for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
 
     for res = 1:min(results[:data][1]["hydro"]["nHyd"],nitem)
         dcp_stats["volume"]["$res"] = quantile_scen(scen_voume[res], quants, output_dict=true)
