@@ -133,10 +133,11 @@ function plotresults(results::Dict;nplts::Int = 3)
 
     # Thermal Generation first 3 gen
 
+    ngen = length(results[:data][1]["powersystem"]["gen"])
     idxhyd = idx_hydro(results[:data][1])
-    idxgen = setdiff(collect(1:min(length(results[:data][1]["powersystem"]["gen"]),nplts)),idxhyd)
+    idxgen = setdiff(collect(1:min(ngen,nplts)),idxhyd)
     baseMVA =  [results[:simulations][i][j][:powersystem]["solution"]["baseMVA"] for i=1:nsim, j=1:nstages]'
-    scen_gen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["pg"] for i=1:nsim, j=1:nstages]'.*baseMVA for gen =1:3]
+    scen_gen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["pg"] for i=1:nsim, j=1:nstages]'.*baseMVA for gen =1:ngen]
 
     plt =   [plotscenarios(scen_gen[gen], title  = "Thermal Generation $gen",
                 ylabel = "MWh",
@@ -153,7 +154,7 @@ function plotresults(results::Dict;nplts::Int = 3)
     # Thermal Reactive Generation
 
     if results[:params]["model_constructor_grid"] == PowerModels.ACPPowerModel
-        scen_qgen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["qg"] for i=1:100, j=1:results[:params]["stages"]]'.*baseMVA for gen =1:3]
+        scen_qgen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["qg"] for i=1:100, j=1:results[:params]["stages"]]'.*baseMVA for gen =1:ngen]
 
         plt =   [plotscenarios(scen_qgen[gen], title  = "Thermal Reactive Generation $gen",
                 ylabel = "MWh",
@@ -169,8 +170,9 @@ function plotresults(results::Dict;nplts::Int = 3)
     end
     # Branch flow first 3 brc
 
-    idxbrc = collect(1:min(length(results[:data][1]["powersystem"]["branch"]),nplts))
-    scen_branch = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["pf"] for i=1:nsim, j=1:nstages]'.*baseMVA for brc =1:3]
+    nbrc = length(results[:data][1]["powersystem"]["branch"])
+    idxbrc = collect(1:min(nbrc,nplts))
+    scen_branch = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["pf"] for i=1:nsim, j=1:nstages]'.*baseMVA for brc =1:nbrc]
 
     plt =   [plotscenarios(scen_branch[brc], title  = "Branch Flow $brc",
                 ylabel = "MWh",
@@ -187,7 +189,7 @@ function plotresults(results::Dict;nplts::Int = 3)
     # Branch Reactive flow
 
     if results[:params]["model_constructor_grid"] == PowerModels.ACPPowerModel
-        scen_branch_qf = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["qf"] for i=1:100, j=1:results[:params]["stages"]]'.*baseMVA for brc =1:3]
+        scen_branch_qf = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["qf"] for i=1:100, j=1:results[:params]["stages"]]'.*baseMVA for brc =1:nbrc]
 
         plt =   [plotscenarios(scen_branch_qf[brc], title  = "Branch Reactive Flow $brc",
                 ylabel = "MWh",
@@ -205,8 +207,9 @@ function plotresults(results::Dict;nplts::Int = 3)
     # Voltage angle first 3 bus
     
     if results[:params]["model_constructor_grid"] != PowerModels.GenericPowerModel{PowerModels.SOCWRForm}
-        idxbus = collect(1:min(length(results[:data][1]["powersystem"]["bus"]),nplts))
-        scen_va = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["va"] for i=1:nsim, j=1:nstages]' for bus =1:3])
+        nbus = length(results[:data][1]["powersystem"]["bus"])
+        idxbus = collect(1:min(nbus,nplts))
+        scen_va = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["va"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
 
         plt =   [plotscenarios(scen_va[bus], title  = "Voltage angle $bus",
                     ylabel = "Radians",
@@ -262,10 +265,11 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
 
     dcp_stats["pg"] = Dict()
 
+    ngen = length(results[:data][1]["powersystem"]["gen"])
     idxhyd = idx_hydro(results[:data][1])
-    idxgen = setdiff(collect(1:min(length(results[:data][1]["powersystem"]["gen"]),nitem)),idxhyd)
+    idxgen = setdiff(collect(1:min(ngen,nitem)),idxhyd)
     baseMVA =  [results[:simulations][i][j][:powersystem]["solution"]["baseMVA"] for i=1:nsim, j=1:nstages]'
-    scen_gen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["pg"] for i=1:nsim, j=1:nstages]'.*baseMVA for gen =1:3]
+    scen_gen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["pg"] for i=1:nsim, j=1:nstages]'.*baseMVA for gen =1:ngen]
     
     for i = 1:size(idxgen,1)
         gen = idxgen[i]
@@ -276,8 +280,9 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
 
     dcp_stats["pf"] = Dict()
 
-    idxbrc = collect(1:min(length(results[:data][1]["powersystem"]["branch"]),nitem))
-    scen_branch = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["pf"] for i=1:nsim, j=1:nstages]'.*baseMVA for brc =1:3]
+    nbrc = length(results[:data][1]["powersystem"]["branch"])
+    idxbrc = collect(1:min(nbrc,nitem))
+    scen_branch = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["pf"] for i=1:nsim, j=1:nstages]'.*baseMVA for brc =1:nbrc]
 
     for i = 1:size(idxbrc,1)
         brc = idxbrc[i]
@@ -290,8 +295,9 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
 
         dcp_stats["va"] = Dict()
 
-        idxbus = collect(1:min(length(results[:data][1]["powersystem"]["bus"]),nitem))
-        scen_va = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["va"] for i=1:nsim, j=1:nstages]' for bus =1:3])
+        nbus = length(results[:data][1]["powersystem"]["bus"])
+        idxbus = collect(1:min(nbus,nitem))
+        scen_va = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["va"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
 
         for i = 1:size(idxbus,1)
             bus = idxbus[i]

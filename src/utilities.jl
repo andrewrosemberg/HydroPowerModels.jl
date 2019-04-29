@@ -57,7 +57,7 @@ end
 
 """hydrogenerators indexes"""
 function idx_hydro(data::Dict)
-    [hydro["index_grid"] for hydro in data["hydro"]["Hydrogenerators"]]
+    [hydro["i_grid"] for hydro in data["hydro"]["Hydrogenerators"]]
 end
 
 """find vector index of hydrogenerators on grid"""
