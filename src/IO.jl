@@ -140,7 +140,7 @@ function plotresults(results::Dict;nplts::Int = 3)
     scen_gen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["pg"] for i=1:nsim, j=1:nstages]'.*baseMVA for gen =1:ngen]
 
     plt =   [plotscenarios(scen_gen[gen], title  = "Thermal Generation $gen",
-                ylabel = "MWh",
+                ylabel = "MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,
@@ -157,7 +157,7 @@ function plotresults(results::Dict;nplts::Int = 3)
         scen_qgen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["qg"] for i=1:100, j=1:results[:params]["stages"]]'.*baseMVA for gen =1:ngen]
 
         plt =   [plotscenarios(scen_qgen[gen], title  = "Thermal Reactive Generation $gen",
-                ylabel = "MWh",
+                ylabel = "MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,
@@ -175,7 +175,7 @@ function plotresults(results::Dict;nplts::Int = 3)
     scen_branch = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["pf"] for i=1:nsim, j=1:nstages]'.*baseMVA for brc =1:nbrc]
 
     plt =   [plotscenarios(scen_branch[brc], title  = "Branch Flow $brc",
-                ylabel = "MWh",
+                ylabel = "MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,
@@ -192,7 +192,7 @@ function plotresults(results::Dict;nplts::Int = 3)
         scen_branch_qf = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["qf"] for i=1:100, j=1:results[:params]["stages"]]'.*baseMVA for brc =1:nbrc]
 
         plt =   [plotscenarios(scen_branch_qf[brc], title  = "Branch Reactive Flow $brc",
-                ylabel = "MWh",
+                ylabel = "MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,
@@ -230,16 +230,18 @@ function plotresults(results::Dict;nplts::Int = 3)
     scen_voume = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:reservoir][res].out for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
 
     plt =   [   [plotscenarios(scen_gen[gen], title  = "Hydro Generation $gen",
-                    ylabel = "MWh",
+                    ylabel = "MW",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
                     right_margin = 10mm,
                     left_margin = 10mm               
                     )
                 for gen in idxhyd[1:min(results[:data][1]["hydro"]["nHyd"],nplts)]]
-                ;
-                [plotscenarios(scen_voume[res], title  = "Volume Reservoir $res",
-                    ylabel = "m³",
+    ]
+    plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
+    nplots += 1
+    plt =   [   [plotscenarios(scen_voume[res], title  = "Volume Reservoir $res",
+                    ylabel = "Hm³",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
                     right_margin = 10mm,
