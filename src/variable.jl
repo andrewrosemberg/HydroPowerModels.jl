@@ -1,7 +1,7 @@
 """creates outflow variables specified in data"""
 function variable_inflow(sp, data::Dict)
     @variables(sp, begin
-            inflow[r=1:data["hydro"]["nHyd"]]      >= 0            
+    data["hydro"]["Hydrogenerators"][r]["min_turn"] <= inflow[r=1:data["hydro"]["nHyd"]] <= data["hydro"]["Hydrogenerators"][r]["max_turn"]           
     end)
 end
 

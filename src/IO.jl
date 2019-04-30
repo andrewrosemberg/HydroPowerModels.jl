@@ -103,6 +103,22 @@ function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
     med_scen = Statistics.median(scen;dims=2)
     nstag,nscen = size(scen)
 
+    # plot if all scenarious are equal
+
+    if prod(isapprox.(med_scen-quantile_scen(scen,0.0), 0.0, atol=1e-1))
+        p1 = plot(round.(med_scen,digits =5),
+            color = "Steel Blue", 
+            xticks = (collect(1:Int(floor(nstag/4)):nstag), [string(i) for  i in collect(1:Int(floor(nstag/4)):nstag)]),
+            label = "Max and Min";
+            kwargs...)
+
+        if save
+            savefig(p1, savepath*"$fileformat")
+            return nothing
+        end
+        return p1 
+    end
+
     # plot
     p1 = plot(med_scen, ribbon=(med_scen-quantile_scen(scen,0.0),quantile_scen(scen,1.0)-med_scen),
                 color = "gray", 
@@ -131,7 +147,7 @@ function plotresults(results::Dict;nplts::Int = 3)
     nsim = length(results[:simulations])
     nstages = length(results[:simulations][1])
 
-    # Thermal Generation first 3 gen
+    # Thermal Generation
 
     ngen = length(results[:data][1]["powersystem"]["gen"])
     idxhyd = idx_hydro(results[:data][1])
@@ -168,7 +184,7 @@ function plotresults(results::Dict;nplts::Int = 3)
         plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
         nplots += 1
     end
-    # Branch flow first 3 brc
+    # Branch flow
 
     nbrc = length(results[:data][1]["powersystem"]["branch"])
     idxbrc = collect(1:min(nbrc,nplts))
@@ -204,7 +220,7 @@ function plotresults(results::Dict;nplts::Int = 3)
         nplots += 1
     end
 
-    # Voltage angle first 3 bus
+    # Voltage angle
     
     if results[:params]["model_constructor_grid"] != PowerModels.GenericPowerModel{PowerModels.SOCWRForm}
         nbus = length(results[:data][1]["powersystem"]["bus"])
@@ -225,30 +241,101 @@ function plotresults(results::Dict;nplts::Int = 3)
     
     end
 
-    # Hydro Generation and Reservoir Volume first 3 Hydro
-    
-    scen_voume = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:reservoir][res].out for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+    # Nodal price
 
-    plt =   [   [plotscenarios(scen_gen[gen], title  = "Hydro Generation $gen",
+    nbus = length(results[:data][1]["powersystem"]["bus"])
+    idxbus = collect(1:min(nbus,nplts))
+    scen_pld = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
+
+    plt =   [plotscenarios(scen_pld[bus], title  = "Nodal price bus $bus",
+                ylabel = "Dollars/MW",
+                xlabel = "Stages",
+                bottom_margin = 10mm,
+                right_margin = 10mm,
+                left_margin = 10mm               
+                )
+            for bus in idxbus
+    ]
+    plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
+    nplots += 1
+
+    # Hydro Generation
+    
+    plt =   [   plotscenarios(scen_gen[gen], title  = "Hydro Generation $gen",
                     ylabel = "MW",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
                     right_margin = 10mm,
                     left_margin = 10mm               
                     )
-                for gen in idxhyd[1:min(results[:data][1]["hydro"]["nHyd"],nplts)]]
+                for gen in idxhyd[1:min(results[:data][1]["hydro"]["nHyd"],nplts)]
     ]
     plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
     nplots += 1
-    plt =   [   [plotscenarios(scen_voume[res], title  = "Volume Reservoir $res",
+
+    # Hydro Turn
+    
+    scen_turn = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:outflow][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+    
+    plt =   [   plotscenarios(scen_turn[res], title  = "Hydro Turn $res",
+                    ylabel = "m³",
+                    xlabel = "Stages",
+                    bottom_margin = 10mm,
+                    right_margin = 10mm,
+                    left_margin = 10mm               
+                    )  
+                for res = 1:min(results[:data][1]["hydro"]["nHyd"],nplts)
+    ]
+    plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
+    nplots += 1
+
+    # Hydro Spill
+    
+    scen_spill = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:spill][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+    
+    plt =   [   plotscenarios(scen_spill[res], title  = "Hydro Spill $res",
                     ylabel = "Hm³",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
                     right_margin = 10mm,
                     left_margin = 10mm               
                     )  
-                for res = 1:min(results[:data][1]["hydro"]["nHyd"],nplts)]
+                for res = 1:min(results[:data][1]["hydro"]["nHyd"],nplts)
     ]
+    plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
+    nplots += 1    
+
+    # Reservoir Volume
+
+    scen_voume = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:reservoir][res].out for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+    
+    plt =   [   plotscenarios(scen_voume[res], title  = "Volume Reservoir $res",
+                    ylabel = "Hm³",
+                    xlabel = "Stages",
+                    bottom_margin = 10mm,
+                    right_margin = 10mm,
+                    left_margin = 10mm               
+                    )  
+                for res = 1:min(results[:data][1]["hydro"]["nHyd"],nplts)
+    ]
+    
+    plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
+    nplots += 1
+
+    # Inflows
+
+    scen_inflows = convert(Array{Array{Float64,2},1},[[results[:data][1]["hydro"]["Hydrogenerators"][res]["inflow"][j,results[:simulations][i][j][:noise_term]] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+    
+    plt =   [   plotscenarios(scen_inflows[res], title  = "Inflows Reservoir $res",
+                    ylabel = "m³",
+                    xlabel = "Stages",
+                    bottom_margin = 10mm,
+                    right_margin = 10mm,
+                    left_margin = 10mm               
+                    )  
+                for res = 1:min(results[:data][1]["hydro"]["nHyd"],nplts)
+    ]
+    
     plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
     nplots += 1
 
