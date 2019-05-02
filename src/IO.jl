@@ -245,7 +245,7 @@ function plotresults(results::Dict;nplts::Int = 3)
 
     nbus = length(results[:data][1]["powersystem"]["bus"])
     idxbus = collect(1:min(nbus,nplts))
-    scen_pld = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
+    scen_pld = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
 
     plt =   [plotscenarios(scen_pld[bus], title  = "Nodal price bus $bus",
                 ylabel = "Dollars/MW",
@@ -268,7 +268,7 @@ function plotresults(results::Dict;nplts::Int = 3)
                     right_margin = 10mm,
                     left_margin = 10mm               
                     )
-                for gen in idxhyd[1:min(results[:data][1]["hydro"]["nHyd"],nplts)]
+                for gen in idxhyd[1:min(size(idxhyd,1),nplts)]
     ]
     plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
     nplots += 1
