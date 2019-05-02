@@ -1,3 +1,5 @@
+import Statistics
+
 """calculate number of hydrogenerators"""
 function countgenerators!(data::Dict)
     data["hydro"]["nHyd"] = size(data["hydro"]["Hydrogenerators"],1)
@@ -89,4 +91,52 @@ function gatherusefulinfo!(data::Dict)
     index2i!(data)
 
     return nothing
+end
+
+"""Quantile Scenarios"""
+function quantile_scen(scen::Array{Float64,2},quant::Float64)
+    return quantile_scen(scen,[quant])[:,1]
+end
+
+"""Quantile Scenarios"""
+function quantile_scen(scen::Array{Float64,2},quants::Array{Float64};output_dict::Bool=false)
+    quantiles = [Statistics.quantile(scen[i, :], quant) for i = 1:size(scen, 1),quant in quants]
+    if output_dict
+        output = Dict()
+        for col = 1:length(quants)
+            output["$(quant*100)%"] = quantiles[:,col]
+        end
+        return output
+    end
+
+    return quantiles
+end
+
+"""Multilayer Dict to Onelayer Dict"""
+function flat_dict(mlt_dict::Dict{Any,Any})
+    if typeof(collect(values(mlt_dict))[1]) != Dict{Any,Any}
+        return mlt_dict
+    end
+    
+    one_dict = Dict()
+    kws = collect(keys(mlt_dict))
+
+    recursion_ret = [flat_dict(i) for i in values(mlt_dict)]
+    for i = 1:size(recursion_ret,1)
+        item = recursion_ret[i]
+        for (ikw,val) in item
+            one_dict[kws[i]*"_"*ikw] = val
+        end
+    end
+
+    return one_dict
+
+end
+
+"""truncate values dict"""
+function signif_dict(one_dict::Dict, digits::Integer)
+    for kw in keys(one_dict)
+        one_dict[kw] = signif.(one_dict[kw],digits)
+    end
+    return one_dict
 end

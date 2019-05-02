@@ -15,10 +15,11 @@ include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
 include("train.jl")
+include("visualize_data.jl")
 
 export  hydrothermaloperation, parse_folder, create_param,
         plotresults, plotscenarios, set_active_demand!, flat_dict,
-        descriptivestatistics_results, signif_dict
+        descriptivestatistics_results, signif_dict, plot_grid
 
 Reexport.@reexport using PowerModels, SDDP
 
