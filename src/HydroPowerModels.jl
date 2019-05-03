@@ -19,7 +19,7 @@ include("visualize_data.jl")
 
 export  hydrothermaloperation, parse_folder, create_param,
         plotresults, plotscenarios, set_active_demand!, flat_dict,
-        descriptivestatistics_results, signif_dict, plot_grid
+        descriptivestatistics_results, signif_dict, plot_grid, plot_hydro_grid
 
 Reexport.@reexport using PowerModels, SDDP
 

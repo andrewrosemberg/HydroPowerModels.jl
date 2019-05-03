@@ -322,7 +322,7 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
     return dcp_stats
 end
 
-function plot_grid(data::Dict,path::String)
+function plot_grid(data::Dict,path::String;size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
 
     gatherusefulinfo!(data)
 
@@ -359,13 +359,21 @@ function plot_grid(data::Dict,path::String)
         load_nodes[bus_i] += data["powersystem"]["load"]["$i"]["pd"]*data["powersystem"]["baseMVA"]
     end
 
+    # number of nodes
+    num_nodes = nbus+ sum(load_nodes .> 0)+sum(hydro_nodes .> 0)+sum(thermal_nodes .> 0)
+    
     # node size
-    nodesize = fill(0.4,nbus+sum(load_nodes .> 0)+sum(hydro_nodes .> 0)+sum(thermal_nodes .> 0))
+    nodesize = fill(0.4,num_nodes)
 
     # nodes membership (3: Hydro, 2: Thermal)
-    membership = fill(1,nbus+sum(load_nodes .> 0)+sum(hydro_nodes .> 0)+sum(thermal_nodes .> 0))
+    membership = fill(1,num_nodes)
 
-
+    # node label
+    if node_label
+        nodelabel = [1:nbus;fill("",sum(hydro_nodes .> 0));fill("",sum(thermal_nodes .> 0));fill("",sum(load_nodes .> 0))]
+    else
+        nodelabel = nothing
+    end
     # create nodes
     for bus_i in 1:length(data["powersystem"]["bus"])
         if hydro_nodes[bus_i] > 0
@@ -399,5 +407,67 @@ function plot_grid(data::Dict,path::String)
     # membership color
     nodefillc = nodecolor[Int64.(membership)]
 
-    draw(PDF(path, 15cm, 15cm), gplot(g, nodefillc=nodefillc, nodesize=nodesize))
+    draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist))
+end
+
+function plot_hydro_grid(data::Dict,path::String;size_fig = [12cm, 12cm],node_label=false,nodelabeldist=8.5)
+
+    gatherusefulinfo!(data)
+
+    nHyd = data["hydro"]["nHyd"]
+
+    nNodes = nHyd
+
+    g = DiGraph(nNodes)
+
+    # nodes bus
+    node2bus = []
+
+    # hydro_size
+    hydro_size = fill(0.0,nHyd)
+
+    for i=1:nHyd
+        hydro = data["hydro"]["Hydrogenerators"][i]
+        hydro_size[i] = hydro["max_volume"]
+
+        for hyd in hydro["downstream_turn"]
+            add_edge!(g, i, hyd)
+        end
+        for hyd in hydro["downstream_spill"]
+            add_edge!(g, i, hyd)
+        end
+        
+        bus_i = data["powersystem"]["gen"]["$(hydro["i_grid"])"]["gen_bus"]
+        
+        if bus_i != nothing 
+            node = findall(x->x==bus_i,node2bus)
+            if isempty(node)
+                append!(node2bus,bus_i)
+                add_vertex!(g)
+                nNodes +=1
+                node = [size(node2bus,1)]
+            end
+            add_edge!(g, i, Int64(nHyd+node[1]))
+        end
+    end
+
+    # node size
+    nodesize = fill(0.4,nNodes)
+    
+    nodesize[1:nHyd] = 1.000005.^(hydro_size.*1000)
+    nodecolor = ["black", "blue"]
+
+    # membership color
+    membership = fill(1,nNodes)
+    membership[1:nHyd] .= 2
+    nodefillc = nodecolor[membership]
+
+    # node label
+    if node_label
+        nodelabel = [fill("",nHyd);node2bus]
+    else
+        nodelabel = nothing
+    end
+
+    draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.05))
 end
