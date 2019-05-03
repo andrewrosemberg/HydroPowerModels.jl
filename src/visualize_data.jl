@@ -431,10 +431,16 @@ function plot_hydro_grid(data::Dict,path::String;size_fig = [12cm, 12cm],node_la
         hydro_size[i] = hydro["max_volume"]
 
         for hyd in hydro["downstream_turn"]
-            add_edge!(g, i, hyd)
+            j = findall(x->x["index"]==hyd,data["hydro"]["Hydrogenerators"])
+            if !isempty(j)
+                add_edge!(g, i, j[1])
+            end
         end
         for hyd in hydro["downstream_spill"]
-            add_edge!(g, i, hyd)
+            j = findall(x->x["index"]==hyd,data["hydro"]["Hydrogenerators"])
+            if !isempty(j)
+                add_edge!(g, i, j[1])
+            end
         end
         
         bus_i = data["powersystem"]["gen"]["$(hydro["i_grid"])"]["gen_bus"]
