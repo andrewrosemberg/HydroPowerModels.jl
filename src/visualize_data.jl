@@ -363,7 +363,7 @@ function plot_grid(data::Dict,path::String;size_fig = [15cm, 15cm],node_label=fa
     num_nodes = nbus+ sum(load_nodes .> 0)+sum(hydro_nodes .> 0)+sum(thermal_nodes .> 0)
     
     # node size
-    nodesize = fill(0.4,num_nodes)
+    nodesize = fill(0.0,num_nodes)
 
     # nodes membership (3: Hydro, 2: Thermal)
     membership = fill(1,num_nodes)
@@ -381,7 +381,7 @@ function plot_grid(data::Dict,path::String;size_fig = [15cm, 15cm],node_label=fa
             nNodes +=1
             add_edge!(g, nNodes, bus_i)
             membership[nNodes] = 3
-            nodesize[nNodes] = 1.005^hydro_nodes[bus_i]
+            nodesize[nNodes] = log(hydro_nodes[bus_i])
         end
 
         if thermal_nodes[bus_i] > 0
@@ -389,7 +389,7 @@ function plot_grid(data::Dict,path::String;size_fig = [15cm, 15cm],node_label=fa
             nNodes +=1
             add_edge!(g, nNodes, bus_i)
             membership[nNodes] = 2
-            nodesize[nNodes] = 1.005^hydro_nodes[bus_i]
+            nodesize[nNodes] = log(thermal_nodes[bus_i])
         end
 
         if load_nodes[bus_i] > 0
@@ -397,9 +397,13 @@ function plot_grid(data::Dict,path::String;size_fig = [15cm, 15cm],node_label=fa
             nNodes +=1
             add_edge!(g, nNodes, bus_i)
             membership[nNodes] = 4
-            nodesize[nNodes] = 1.005^hydro_nodes[bus_i]
+            nodesize[nNodes] = log(load_nodes[bus_i])
         end
 
+    end
+
+    for n in 1:num_nodes
+        nodesize[n] = nodesize[n] == 0 ? unique(sort(nodesize))[2] : nodesize[n]
     end
     
     nodecolor = ["black", "red", "blue", "orange"]
@@ -443,9 +447,8 @@ function plot_hydro_grid(data::Dict,path::String;size_fig = [12cm, 12cm],node_la
             end
         end
         
-        bus_i = data["powersystem"]["gen"]["$(hydro["i_grid"])"]["gen_bus"]
-        
-        if bus_i != nothing 
+        if hydro["index_grid"] != nothing 
+            bus_i = data["powersystem"]["gen"]["$(hydro["i_grid"])"]["gen_bus"]
             node = findall(x->x==bus_i,node2bus)
             if isempty(node)
                 append!(node2bus,bus_i)
@@ -458,9 +461,9 @@ function plot_hydro_grid(data::Dict,path::String;size_fig = [12cm, 12cm],node_la
     end
 
     # node size
-    nodesize = fill(0.4,nNodes)
+    nodesize = fill(maximum(log.(hydro_size.*1000,1.002))*0.5,nNodes)
     
-    nodesize[1:nHyd] = 1.000005.^(hydro_size.*1000)
+    nodesize[1:nHyd] = log.(hydro_size.*1000,1.002)
     nodecolor = ["black", "blue"]
 
     # membership color
@@ -475,5 +478,5 @@ function plot_hydro_grid(data::Dict,path::String;size_fig = [12cm, 12cm],node_la
         nodelabel = nothing
     end
 
-    draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.05))
+    draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.005))
 end
