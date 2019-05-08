@@ -23,3 +23,10 @@ function constraint_hydro_generation(sp, data::Dict, pm::GenericPowerModel)
     )
     return nothing
 end
+
+"""add deficit variables"""
+function constraint_mod_deficit(sp, data::Dict, pm::GenericPowerModel)
+    for i=1:length(con(pm, 0, 1, :kcl_p))
+        set_coefficient(con(pm, 0, 1, :kcl_p)[i], sp[:deficit][i], -1)
+    end
+end

@@ -16,6 +16,7 @@ include("IO.jl")
 include("simulate.jl")
 include("train.jl")
 include("visualize_data.jl")
+include("objective.jl")
 
 export  hydrothermaloperation, parse_folder, create_param,
         plotresults, plotscenarios, set_active_demand!, flat_dict,
@@ -83,9 +84,20 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
 
         # hydro_generation
         constraint_hydro_generation(sp, data, pm)
+
+        # deficit
+        variable_deficit(sp, data, pm)
+        constraint_mod_deficit(sp, data, pm)
+
+        # costs stage
+        variable_cost(sp, data)
+        add_gen_cost(sp, data)
+        add_spill_cost(sp, data)
+        add_deficit_cost(sp, data)
         
         # Stage objective
-        @stageobjective(sp, objective_function(sp) + sum(data["hydro"]["Hydrogenerators"][i]["spill_cost"]*sp[:spill][i] for i=1:data["hydro"]["nHyd"]))
+        set_objective(sp, data)
+
     end
 
     # save data
