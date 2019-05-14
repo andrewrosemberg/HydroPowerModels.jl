@@ -5,10 +5,12 @@ function variable_inflow(sp, data::Dict)
     end)
 end
 
+
+# TODO: add data["hydro"]["Hydrogenerators"][r]["min_turn"] as penalized constraint
 """creates outflow variables specified in data"""
 function variable_outflow(sp, data::Dict)
     @variables(sp, begin
-        data["hydro"]["Hydrogenerators"][r]["min_turn"] <= outflow[r=1:data["hydro"]["nHyd"]] <= data["hydro"]["Hydrogenerators"][r]["max_turn"]            
+        0 <= outflow[r=1:data["hydro"]["nHyd"]] <= data["hydro"]["Hydrogenerators"][r]["max_turn"]            
     end)
 end
 
