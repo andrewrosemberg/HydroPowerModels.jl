@@ -21,9 +21,10 @@ function variable_spillage(sp, data::Dict)
     end)
 end
 
+# TODO: add data["hydro"]["Hydrogenerators"][r]["min_volume"] as penalized constraint
 """creates volume variables specified in data"""
 function variable_volume(sp, data::Dict)
-    @variable(sp, data["hydro"]["Hydrogenerators"][r]["min_volume"] <= reservoir[r = 1:data["hydro"]["nHyd"]] <= data["hydro"]["Hydrogenerators"][r]["max_volume"], SDDP.State, initial_value = data["hydro"]["Hydrogenerators"][r]["initial_volume"])
+    @variable(sp, 0 <= reservoir[r = 1:data["hydro"]["nHyd"]] <= data["hydro"]["Hydrogenerators"][r]["max_volume"], SDDP.State, initial_value = data["hydro"]["Hydrogenerators"][r]["initial_volume"])
 end
 
 """creates deficit variables"""

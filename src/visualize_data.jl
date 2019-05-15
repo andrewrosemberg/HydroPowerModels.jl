@@ -90,6 +90,10 @@ function plotresults(results::Dict;nplts::Int = 3)
         plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
         nplots += 1
     end
+
+    # circuit MVA
+    baseMVA = results[:data][1]["powersystem"]["baseMVA"]
+
     # Branch flow
 
     nbrc = length(results[:data][1]["powersystem"]["branch"])
@@ -155,6 +159,24 @@ function plotresults(results::Dict;nplts::Int = 3)
 
     plt =   [plotscenarios(scen_pld[bus], title  = "Nodal price bus $bus",
                 ylabel = "Dollars/MW",
+                xlabel = "Stages",
+                bottom_margin = 10mm,
+                right_margin = 10mm,
+                left_margin = 10mm               
+                )
+            for bus in idxbus
+    ]
+    plt_total[nplots+1] = plot(plt...,layout=(1,size(plt,1)))
+    nplots += 1
+
+    # Deficit
+
+    nbus = length(results[:data][1]["powersystem"]["bus"])
+    idxbus = collect(1:min(nbus,nplts))
+    scen_def = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["deficit"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
+
+    plt =   [plotscenarios(scen_def[bus].*baseMVA, title  = "Deficit bus $bus",
+                ylabel = "MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,

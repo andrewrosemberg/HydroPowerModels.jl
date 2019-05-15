@@ -90,6 +90,9 @@ function gatherusefulinfo!(data::Dict)
     # find index hydrogen
     index2i!(data)
 
+    # add zeroed loads on buses w no loads for deficit coherence
+    add_loads!(data)
+
     return nothing
 end
 
@@ -139,4 +142,33 @@ function signif_dict(one_dict::Dict, digits::Integer)
         one_dict[kw] = signif.(one_dict[kw],digits)
     end
     return one_dict
+end
+
+"""add zeroed loads on buses w no loads for deficit coherence"""
+function add_loads!(data::Dict)
+    locked_buses = unique([load["load_bus"] for load in values(data["powersystem"]["load"])])
+    free_buses = setdiff(collect(1:length(data["powersystem"]["bus"])),locked_buses)
+
+    load_idx = length(data["powersystem"]["load"])+1
+    for bus in free_buses
+        data["powersystem"]["load"]["$load_idx"] = load_dict(   load_bus = bus,
+                                                                pd = 0,
+                                                                index = load_idx)
+        load_idx +=1
+    end
+end
+
+""" creates a load dictionary """
+function load_dict(;
+        load_bus= 1, # bus where load is present
+        status= 1, # status (ON: 1, OFF:0)
+        pd= 1, # reactive power demand
+        qd= 0.12*pd, # real power demand
+        index= 1) # index
+
+    lod = Dict( "load_bus"=> load_bus,
+        "status"=> status,
+        "qd"=> qd,
+        "pd"=> pd,
+        "index"=> index)
 end
