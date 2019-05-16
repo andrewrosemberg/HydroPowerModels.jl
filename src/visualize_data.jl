@@ -344,7 +344,7 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
     return dcp_stats
 end
 
-function plot_grid(data::Dict,path::String;size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+function plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
 
     gatherusefulinfo!(data)
 
@@ -433,10 +433,14 @@ function plot_grid(data::Dict,path::String;size_fig = [15cm, 15cm],node_label=fa
     # membership color
     nodefillc = nodecolor[Int64.(membership)]
 
-    draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist))
+    if path != nothing
+        draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist))
+    else
+        gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist)
+    end
 end
 
-function plot_hydro_grid(data::Dict,path::String;size_fig = [12cm, 12cm],node_label=false,nodelabeldist=8.5)
+function plot_hydro_grid(data::Dict;path=nothing,size_fig = [12cm, 12cm],node_label=false,nodelabeldist=8.5)
 
     gatherusefulinfo!(data)
 
@@ -500,5 +504,9 @@ function plot_hydro_grid(data::Dict,path::String;size_fig = [12cm, 12cm],node_la
         nodelabel = nothing
     end
 
-    draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.005))
+    if path != nothing
+        draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.005))    
+    else
+        gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.005)
+    end
 end
