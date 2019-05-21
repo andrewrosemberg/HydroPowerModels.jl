@@ -1,4 +1,4 @@
-import Statistics
+using Statistics
 
 """calculate number of hydrogenerators"""
 function countgenerators!(data::Dict)
@@ -38,7 +38,7 @@ end
 
 """create ref for anonimous variables on model"""
 function createvarrefs!(sp::JuMP.Model,pm::GenericPowerModel)
-    for listvarref in values(var(pm,pm.cnw,pm.ccnd))
+    for listvarref in values(PowerModels.var(pm,pm.cnw,pm.ccnd))
         for variableref in values(listvarref)
             if typeof(variableref) == JuMP.VariableRef
                 sp[Symbol(name(variableref))] = variableref
@@ -137,9 +137,11 @@ function flat_dict(mlt_dict::Dict{Any,Any})
 end
 
 """truncate values dict"""
-function signif_dict(one_dict::Dict, digits::Integer)
+function signif_dict(one_dict::Dict, digts::Integer)
     for kw in keys(one_dict)
-        one_dict[kw] = signif.(one_dict[kw],digits)
+        if typeof(one_dict[kw]) <: AbstractFloat
+            one_dict[kw] = round.(one_dict[kw],digits=digts)
+        end
     end
     return one_dict
 end

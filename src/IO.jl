@@ -19,7 +19,7 @@ function read_inflow(file::String, nHyd::Int)
 end
 
 """Read hydro case folder"""
-function parse_folder(folder::String; stages::Int = 1)        
+function parse_folder(folder::String; stages::Int = 1,digts::Int=7)        
     data = Dict()
     try
         data["powersystem"] = parse_file_json(joinpath(folder,"PowerModels.json"))
@@ -32,6 +32,9 @@ function parse_folder(folder::String; stages::Int = 1)
         data["powersystem"] = PowerModels.parse_file(joinpath(folder,"PowerModels.m"))
     end
     data["hydro"] = parse_file_json(joinpath(folder,"hydro.json"))
+    for i = 1:length(data["hydro"]["Hydrogenerators"])
+        data["hydro"]["Hydrogenerators"][i] = signif_dict(data["hydro"]["Hydrogenerators"][i],digts)
+    end
     vector_inflows, nCen = read_inflow(joinpath(folder,"inflows.csv"),length(data["hydro"]["Hydrogenerators"]))
     for i = 1:length(data["hydro"]["Hydrogenerators"])
         data["hydro"]["Hydrogenerators"][i]["inflow"]= vector_inflows[i]
@@ -59,7 +62,8 @@ end
 """Create Parameters Dictionary"""
 function create_param(;stages::Int = 1,
                     model_constructor_grid = DCPPowerModel, 
-                    post_method = PowerModels.post_opf,optimizer = Clp.Optimizer,
+                    post_method = PowerModels.post_opf,
+                    optimizer = with_optimizer(GLPK.Optimizer),
                     setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)),
                     verbose = false,
                     stage_hours = 1)

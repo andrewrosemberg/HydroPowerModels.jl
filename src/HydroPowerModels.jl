@@ -40,7 +40,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
     policygraph = SDDP.LinearPolicyGraph(
                     sense       = :Min,
                     stages      = params["stages"],
-                    optimizer   = with_optimizer(params["optimizer"]),
+                    optimizer   = params["optimizer"],
                     lower_bound = 0.0,
                     direct_mode = false
                                             ) do sp,t

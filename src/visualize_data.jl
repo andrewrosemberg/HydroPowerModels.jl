@@ -642,18 +642,28 @@ function plot_aggregated_results(results::Dict)
     # circuit MVA
     baseMVA = results[:data][1]["powersystem"]["baseMVA"]
 
+    # nodes loads
+    load_nodes = fill(0.0,nstages,nbus)
+    for t in 1:nstages
+        data = results[:data][min(t,length(results[:data]))]
+        for i in 1:length(data["powersystem"]["load"])
+            bus_i = data["powersystem"]["load"]["$i"]["load_bus"]
+            load_nodes[t,bus_i] += data["powersystem"]["load"]["$i"]["pd"]*data["powersystem"]["baseMVA"]
+        end
+    end
+
     # Nodal price
     nbus = length(results[:data][1]["powersystem"]["bus"])
     idxbus = collect(1:nbus)
     scen_pld_all = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
-
+    
     scen_pld = deepcopy(scen_pld_all[idxbus[1]])
     scen_pld .=0
     for bus in idxbus
-        scen_pld = scen_pld .+ scen_pld_all[bus]
+        scen_pld = scen_pld .+ scen_pld_all[bus].*hcat(fill(load_nodes[:,bus],nsim)...)
     end
     scen_pld /= nbus
-    plt = plotscenarios(scen_pld, title  = "Mean Nodal price ",
+    plt = plotscenarios(scen_pld, title  = "Load Weighted Average Nodal price ",
                 ylabel = "Dollars/MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
