@@ -99,6 +99,19 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         # Stage objective
         set_objective(sp, data)
 
+        # # variable primal start
+        # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
+        # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:deficit], 0)
+        # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:inflow], 0)
+        # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:outflow], 0)
+        # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:spill], 0)
+        # for r in sp[:reservoir]
+        #     JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), r.in, 0) 
+        # end
+        # for r in sp[:reservoir]
+        #     JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), r.out, 0) 
+        # end
+
     end
 
     # save data
