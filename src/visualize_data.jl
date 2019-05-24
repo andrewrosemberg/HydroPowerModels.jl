@@ -127,8 +127,7 @@ function plotresults(results::Dict;nc::Int = 3)
     end
 
     # Voltage angle
-    
-    if results[:params]["model_constructor_grid"] != PowerModels.GenericPowerModel{PowerModels.SOCWRForm}
+    try    
         nbus = length(results[:data][1]["powersystem"]["bus"])
         idxbus = collect(1:nbus)
         scen_va = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["va"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
@@ -144,7 +143,7 @@ function plotresults(results::Dict;nc::Int = 3)
         ]
         plt_total[nplots+1:nplots+length(plt)] = plt
         nplots +=length(plt) 
-    
+    catch
     end
 
     # Nodal price
@@ -767,7 +766,7 @@ function plot_aggregated_results(results::Dict)
 
     # Inflows
 
-    scen_inflows_all = convert(Array{Array{Float64,2},1},[[results[:data][1]["hydro"]["Hydrogenerators"][res]["inflow"][j,results[:simulations][i][j][:noise_term]] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+    scen_inflows_all = convert(Array{Array{Float64,2},1},[[results[:data][1]["hydro"]["Hydrogenerators"][res]["inflow"][cidx(j,data["hydro"]["size_inflow"][1]),results[:simulations][i][j][:noise_term]] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
     
     scen_inflows = deepcopy(scen_inflows_all[1])
     scen_inflows .=0
@@ -786,4 +785,20 @@ function plot_aggregated_results(results::Dict)
     nplots += 1
 
     return plot(plt_total[1:nplots]...,nc=3,size = (3*400, 500*ceil(Int,nplots/3)),legend=false)
+end
+
+""" plot_bound """
+function plot_bound(m)
+    niter = length(m.policygraph.most_recent_training_results.log)
+    val = [m.policygraph.most_recent_training_results.log[iter].bound for iter in 1:niter]
+
+    xticks = unique!([collect(1:Int(floor(niter/4)):niter);niter])
+    plot(val,
+        xticks = (xticks, [string(i) for  i in xticks]),
+        label = "Bound",
+        title = "Bound x iterations",
+        bottom_margin = 10mm,
+        right_margin = 10mm,
+        left_margin = 10mm
+        )
 end
