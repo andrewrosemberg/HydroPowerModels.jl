@@ -174,3 +174,41 @@ function load_dict(;
         "pd"=> pd,
         "index"=> index)
 end
+
+""" water value """
+function water_energy!(data::Dict)
+    countgenerators!(data)
+    for i in 1:data["hydro"]["nHyd"]
+        if !haskey(data["hydro"]["Hydrogenerators"][i],"water_energy")
+            water_energy_res!(data,i)
+        end
+    end
+    return nothing
+end
+
+""" water value """
+function water_energy_res!(data::Dict,res::Int)
+    data["hydro"]["Hydrogenerators"][res]["water_energy"] = 0.0
+    water_val_turn = data["hydro"]["Hydrogenerators"][res]["production_factor"]
+    for idx in data["hydro"]["Hydrogenerators"][res]["downstream_turn"]
+        j = findall(x->x["index"]==idx,data["hydro"]["Hydrogenerators"])
+        if length(j)!=1
+            error("Incoherent downstream_turn list")
+        end
+        j = j[1]
+        water_val_turn += water_energy_res!(data,j)
+    end
+    water_val_spill = 0.0
+    for idx in data["hydro"]["Hydrogenerators"][res]["downstream_spill"]
+        j = findall(x->x["index"]==idx,data["hydro"]["Hydrogenerators"])
+        if length(j)!=1
+            error("Incoherent downstream_spill list")
+        end
+        j = j[1]
+        water_val_spill += water_energy_res!(data,j)
+    end
+
+    data["hydro"]["Hydrogenerators"][res]["water_energy"] += (water_val_turn+water_val_spill)/2
+    
+    return data["hydro"]["Hydrogenerators"][res]["water_energy"]
+end

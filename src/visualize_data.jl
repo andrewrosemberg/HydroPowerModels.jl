@@ -242,7 +242,7 @@ function plotresults(results::Dict;nc::Int = 3)
     nplots +=length(plt) 
 
     # Inflows
-    scen_inflows = convert(Array{Array{Float64,2},1},[[results[:data][1]["hydro"]["Hydrogenerators"][res]["inflow"][j,results[:simulations][i][j][:noise_term]] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+    scen_inflows = convert(Array{Array{Float64,2},1},[[results[:data][1]["hydro"]["Hydrogenerators"][res]["inflow"][cidx(j,results[:data][1]["hydro"]["size_inflow"][1]),results[:simulations][i][j][:noise_term]] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
 
     plt =   [   plotscenarios(scen_inflows[res], title  = "Inflows Reservoir $res",
                     ylabel = "m³/s",
@@ -746,16 +746,18 @@ function plot_aggregated_results(results::Dict)
 
     # Reservoir Volume
 
+    water_energy!(results[:data][1])
+
     scen_voume_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:reservoir][res].out for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
     
     scen_voume = deepcopy(scen_voume_all[1])
     scen_voume .=0
     for res = 1:nHyd
-        scen_voume = scen_voume .+ scen_voume_all[res]
+        scen_voume = scen_voume .+ (scen_voume_all[res].*results[:data][1]["hydro"]["Hydrogenerators"][res]["water_energy"])./(0.0036*results[:params]["stage_hours"])
     end
 
     plt = plotscenarios(scen_voume, title  = "Volume Reservoir",
-                    ylabel = "Hm³",
+                    ylabel = "MW",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
                     right_margin = 10mm,
@@ -766,16 +768,16 @@ function plot_aggregated_results(results::Dict)
 
     # Inflows
 
-    scen_inflows_all = convert(Array{Array{Float64,2},1},[[results[:data][1]["hydro"]["Hydrogenerators"][res]["inflow"][cidx(j,data["hydro"]["size_inflow"][1]),results[:simulations][i][j][:noise_term]] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+    scen_inflows_all = convert(Array{Array{Float64,2},1},[[results[:data][1]["hydro"]["Hydrogenerators"][res]["inflow"][cidx(j,results[:data][1]["hydro"]["size_inflow"][1]),results[:simulations][i][j][:noise_term]] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
     
     scen_inflows = deepcopy(scen_inflows_all[1])
     scen_inflows .=0
     for res = 1:nHyd
-        scen_inflows = scen_inflows .+ scen_inflows_all[res]
+        scen_inflows = scen_inflows .+ (scen_inflows_all[res].*results[:data][1]["hydro"]["Hydrogenerators"][res]["water_energy"])
     end
 
     plt = plotscenarios(scen_inflows, title  = "Inflows",
-                    ylabel = "m³/s",
+                    ylabel = "MW",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
                     right_margin = 10mm,
