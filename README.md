@@ -31,4 +31,4 @@ A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Opti
 * Solution method is handled by [SDDP.jl](https://github.com/odow/SDDP.jl).
 
 **Presentations**
-*JuMP-Dev 2019 (Santiago, Chile) https://youtu.be/H6LmhGJ2kc8
+* JuMP-Dev 2019 (Santiago, Chile) https://youtu.be/H6LmhGJ2kc8
