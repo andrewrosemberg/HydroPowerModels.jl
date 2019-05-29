@@ -1,5 +1,6 @@
 using JSON
 using CSV
+using GLPK
 
 """Read hydro description json file"""
 function parse_file_json(file::String)
@@ -61,9 +62,13 @@ end
 
 """Create Parameters Dictionary"""
 function create_param(;stages::Int = 1,
-                    model_constructor_grid = DCPPowerModel, 
+                    model_constructor_grid = DCPPowerModel,
+                    model_constructor_grid_backward = model_constructor_grid,
+                    model_constructor_grid_forward = model_constructor_grid_backward,
                     post_method = PowerModels.post_opf,
                     optimizer = with_optimizer(GLPK.Optimizer),
+                    optimizer_backward = optimizer,
+                    optimizer_forward = optimizer_backward,
                     setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)),
                     verbose = false,
                     stage_hours = 1)
@@ -71,8 +76,12 @@ function create_param(;stages::Int = 1,
     params["stages"] = stages
     params["stage_hours"] = stage_hours
     params["model_constructor_grid"] = model_constructor_grid
+    params["model_constructor_grid_backward"] = model_constructor_grid_backward
+    params["model_constructor_grid_forward"] = model_constructor_grid_forward
     params["post_method"] = post_method
     params["optimizer"] = optimizer
+    params["optimizer_backward"] = optimizer_backward
+    params["optimizer_forward"] = optimizer_forward
     params["verbose"] = verbose
     params["setting"] = setting
     return params

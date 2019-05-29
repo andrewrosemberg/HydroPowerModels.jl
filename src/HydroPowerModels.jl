@@ -36,14 +36,26 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         PowerModels.silence()
     end
 
+    # if set silence the solver
+    # related to https://github.com/JuliaOpt/JuMP.jl/pull/1921
+    if !params["verbose"]
+        try
+            MOI.set(JuMP.backend(Model(params["optimizer"])), MOI.Silent(), true)
+        catch
+            @info "Silent() attribute not implemented by the optimizer."
+        end
+    end
+
     # Model Definition
     policygraph = SDDP.LinearPolicyGraph(
                     sense       = :Min,
                     stages      = params["stages"],
                     optimizer   = params["optimizer"],
+                    optimizer_forward = params["optimizer_forward"],
+                    optimizer_backward = params["optimizer_backward"],
                     lower_bound = 0.0,
                     direct_mode = false
-                                            ) do sp,t
+                                            ) do sp, t, isforward
         
         # if set silence the solver
         # related to https://github.com/JuliaOpt/JuMP.jl/pull/1921
@@ -51,7 +63,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
             try
                 MOI.set(JuMP.backend(sp), MOI.Silent(), true)
             catch
-                @info "Silent() attribute not implemented by the optimizer."
+                #@info "Silent() attribute not implemented by the optimizer."
             end
         end
         # Extract current data
@@ -60,9 +72,14 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         # gather useful information from data
         gatherusefulinfo!(data)
 
-        # build eletric grid model using PowerModels                                   
-        pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid"], 
-            params["post_method"], jump_model=sp, setting = params["setting"])
+        # build eletric grid model using PowerModels
+        if isforward
+            pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid_forward"], 
+                params["post_method"], jump_model=sp, setting = params["setting"])
+        else
+            pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid_backward"], 
+                params["post_method"], jump_model=sp, setting = params["setting"])
+        end
         
         # create reference to variables
         createvarrefs!(sp,pm)
