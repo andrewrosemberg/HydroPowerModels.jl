@@ -88,6 +88,9 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         sp.ext[:pm] = pm
         sp.ext[:data] = data
 
+        # save lower_bound
+        sp.ext[:lower_bound] = 0.0
+
         # resevoir variables
         variable_volume(sp, data)
         
@@ -118,16 +121,16 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
 
         # # variable primal start
         # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
-        # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:deficit], 0)
-        # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:inflow], 0)
-        # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:outflow], 0)
-        # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:spill], 0)
-        # for r in sp[:reservoir]
-        #     JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), r.in, 0) 
-        # end
-        # for r in sp[:reservoir]
-        #     JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), r.out, 0) 
-        # end
+        JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:deficit], 0.0)
+        JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:inflow], 0.0)
+        JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:outflow], 0.0)
+        JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:spill], 0.0)
+        for r in sp[:reservoir]
+            JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), r.in, 0.0) 
+        end
+        for r in sp[:reservoir]
+            JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), r.out, 0.0) 
+        end
 
     end
 

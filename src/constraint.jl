@@ -1,10 +1,13 @@
 """rainfall noises"""
 function rainfall_noises(sp, data::Dict, t::Int)    
         SDDP.parameterize(sp, collect(1:size(data["hydro"]["scenario_probabilities"],2)), data["hydro"]["scenario_probabilities"][cidx(t,data["hydro"]["size_inflow"][1]),:]) do ω
-            if JuMP.MathOptInterface.get(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp)[end]) == nothing
-                JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
+            # if JuMP.MathOptInterface.get(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp)[end]) == nothing
+            #     JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
+            # end
+            nostart = findall(x-> x == nothing, JuMP.MathOptInterface.get.(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp)))
+            for theta in nostart
+                JuMP.MathOptInterface.set(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp)[theta], sp.ext[:lower_bound])
             end
-            #JuMP.MathOptInterface.set(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp)[end], sp.ext[:lower_bound])
             for i in 1:data["hydro"]["nHyd"]
                 JuMP.fix(sp[:inflow][i], data["hydro"]["Hydrogenerators"][i]["inflow"][t,ω]; force=true)
             end        
