@@ -93,7 +93,7 @@ This is an example of a Network Description file:
       "load_bus": 3, # load's bus number.
       "status": 1, # Initial load status, 1 = in-service, 0 = out-of-service.
       "qd": 0, # reactive power demand.
-      "pd": 1, # (GWH) real power demand.
+      "pd": 1, # (MW) real power demand.
       "index": 1 # index.
     }
   }

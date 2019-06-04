@@ -1,11 +1,13 @@
 {
     "Hydrogenerators":[
-        {
+        {   
             "index": 1,
             "index_grid": 3,
-            "max_volume":150,
+            "max_volume":0.00015,
             "min_volume":0,
-            "initial_volume":200,
+            "max_turn": 80,
+            "min_turn": 0,
+            "initial_volume":0.00005,
             "production_factor":1,
             "spill_cost":0,
             "downstream_turn": [],

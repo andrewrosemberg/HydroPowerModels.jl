@@ -29,7 +29,7 @@ Variable types in this example:\n
 
 #' ## Importing package and optimizer
 
-using Ipopt,Clp
+using Ipopt,GLPK
 using HydroPowerModels
 
 #' ## Load Case Specifications
@@ -46,7 +46,7 @@ dcp_stats = Dict()
 params = create_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
                     post_method             = PowerModels.post_opf,
-                    optimizer                  = Clp.Optimizer)
+                    optimizer                  = GLPK.Optimizer)
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);

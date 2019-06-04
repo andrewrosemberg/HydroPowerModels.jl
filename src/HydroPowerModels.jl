@@ -1,6 +1,6 @@
 module HydroPowerModels
 
-using JuMP, Clp, PowerModels, SDDP
+using JuMP, GLPK, PowerModels, SDDP
 import Reexport
 
 mutable struct HydroPowerModel

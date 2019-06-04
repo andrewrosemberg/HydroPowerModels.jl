@@ -67,12 +67,6 @@ git-tree-sha1 = "94d16e77dfacc59f6d6c1361866906dbb65b6f6b"
 uuid = "324d7699-5711-5eae-9e2f-1d82baa6b597"
 version = "0.5.2"
 
-[[Clp]]
-deps = ["BinaryProvider", "Compat", "Libdl", "LinQuadOptInterface", "MathOptInterface", "MathProgBase", "Pkg"]
-git-tree-sha1 = "46f748413b4234e18319acc7ba87d5ce1fce7681"
-uuid = "e2554f3b-3117-50c0-817c-e040a3ddf72d"
-version = "0.6.2"
-
 [[Codecs]]
 deps = ["Test"]
 git-tree-sha1 = "70885e5e038cba1c4c17a84ad6c40756e10a4fb5"
@@ -270,10 +264,10 @@ uuid = "2e9cd046-0924-5485-92f1-d5272153d98b"
 version = "0.6.0"
 
 [[HTTP]]
-deps = ["Base64", "Dates", "Distributed", "IniFile", "MbedTLS", "Random", "Sockets", "Test"]
-git-tree-sha1 = "25db0e3f27bd5715814ca7e4ad22025fdcf5cc6e"
+deps = ["Base64", "Dates", "IniFile", "MbedTLS", "Sockets"]
+git-tree-sha1 = "854fad2a2b9cc6678f70ed15a65fc7e572056d39"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "0.8.0"
+version = "0.8.2"
 
 [[HTTPClient]]
 deps = ["Compat", "LibCURL"]
@@ -337,9 +331,9 @@ uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
 [[Interpolations]]
 deps = ["AxisAlgorithms", "LinearAlgebra", "OffsetArrays", "Random", "Ratios", "SharedArrays", "SparseArrays", "StaticArrays", "WoodburyMatrices"]
-git-tree-sha1 = "f38e6a95b7dc441cb6fc8559c64a1cb3bb7ec6ca"
+git-tree-sha1 = "e1bac96b5ef3ea23b50e801b4a988ec21861a47f"
 uuid = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
-version = "0.12.1"
+version = "0.12.2"
 
 [[Ipopt]]
 deps = ["BinaryProvider", "Compat", "Libdl", "MathOptInterface", "MathProgBase"]
@@ -375,6 +369,12 @@ deps = ["Calculus", "DataStructures", "ForwardDiff", "LinearAlgebra", "MathOptIn
 git-tree-sha1 = "5df42febdee8ac7db9de66c712e439a6ff06459d"
 uuid = "4076af6c-e467-56ae-b986-b466b2749572"
 version = "0.19.1"
+
+[[KNITRO]]
+deps = ["Libdl", "MathOptInterface", "MathProgBase", "SparseArrays"]
+git-tree-sha1 = "1cbe38a8f9f6c04fd404cd2afab3bed87ff49fbe"
+uuid = "67920dd8-b58e-52a8-8622-53c4cffbe346"
+version = "0.7.0"
 
 [[LibCURL]]
 deps = ["BinaryProvider", "Libdl"]
@@ -577,10 +577,10 @@ deps = ["Printf"]
 uuid = "9abbd945-dff8-562f-b5e8-e1ebf5ef1b79"
 
 [[ProgressMeter]]
-deps = ["Distributed", "Printf", "Random", "Test"]
-git-tree-sha1 = "48058bc11607676e5bbc0b974af79106c6200787"
+deps = ["Distributed", "Printf"]
+git-tree-sha1 = "0f08e0e74e5b160ca20d3962a2620038b75881c7"
 uuid = "92933f4c-e287-5a05-a399-4b506db050ca"
-version = "0.9.0"
+version = "1.0.0"
 
 [[REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets"]
@@ -713,9 +713,9 @@ version = "1.0.0"
 
 [[Tables]]
 deps = ["IteratorInterfaceExtensions", "LinearAlgebra", "Requires", "TableTraits", "Test"]
-git-tree-sha1 = "c5d784c61e9d243a5a6a8458d19f535b70bdedeb"
+git-tree-sha1 = "351a4b894122e1553c6ed05fda54086ab036adef"
 uuid = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
-version = "0.2.4"
+version = "0.2.5"
 
 [[Test]]
 deps = ["Distributed", "InteractiveUtils", "Logging", "Random"]
