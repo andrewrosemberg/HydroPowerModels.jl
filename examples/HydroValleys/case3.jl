@@ -26,7 +26,7 @@ using HydroPowerModels
 if !@isdefined plot_bool
     plot_bool = true
 end
-
+using Random
 seed = 1221
 
 #' ## Load Case Specifications
@@ -44,7 +44,7 @@ end
 params = create_param(  stages = 12, 
                         model_constructor_grid  = DCPPowerModel,
                         post_method             = PowerModels.post_opf,
-                        optimizer               = GLPK.Optimizer);
+                        optimizer               = with_optimizer(GLPK.Optimizer));
 
 #' ## Build Model
 #+ results =  "hidden"

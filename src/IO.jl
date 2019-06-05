@@ -24,11 +24,13 @@ function parse_folder(folder::String; stages::Int = 1,digts::Int=7)
     data = Dict()
     try
         data["powersystem"] = parse_file_json(joinpath(folder,"PowerModels.json"))
-        data["powersystem"]["source_version"] = VersionNumber(data["powersystem"]["source_version"]["major"],
-                                                              data["powersystem"]["source_version"]["minor"],
-                                                              data["powersystem"]["source_version"]["patch"],
-                                                              Tuple{}(data["powersystem"]["source_version"]["prerelease"]),
-                                                              Tuple{}(data["powersystem"]["source_version"]["build"]))
+        if typeof(data["powersystem"]["source_version"]) <: AbstractDict
+            data["powersystem"]["source_version"] = VersionNumber(data["powersystem"]["source_version"]["major"],
+                                                                data["powersystem"]["source_version"]["minor"],
+                                                                data["powersystem"]["source_version"]["patch"],
+                                                                Tuple{}(data["powersystem"]["source_version"]["prerelease"]),
+                                                                Tuple{}(data["powersystem"]["source_version"]["build"]))
+        end
     catch
         data["powersystem"] = PowerModels.parse_file(joinpath(folder,"PowerModels.m"))
     end

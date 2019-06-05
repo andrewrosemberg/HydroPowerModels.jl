@@ -22,7 +22,7 @@ Set Parameters to run, for example, an DC Economic Hydrothermal Dispatch:
 params = create_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
                     post_method             = PowerModels.post_opf,
-                    optimizer               = GLPK.Optimizer);
+                    optimizer               = with_optimizer(GLPK.Optimizer));
 ```
 
 Build the Model and execute the SDDP method:
