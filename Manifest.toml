@@ -62,10 +62,10 @@ uuid = "49dc2e85-a5d0-5ad3-a950-438e2897f1b9"
 version = "0.4.1"
 
 [[CategoricalArrays]]
-deps = ["Compat", "Future", "Missings", "Printf", "Reexport", "Requires"]
-git-tree-sha1 = "94d16e77dfacc59f6d6c1361866906dbb65b6f6b"
+deps = ["Compat", "Future", "JSON", "Missings", "Printf", "Reexport"]
+git-tree-sha1 = "a769ea972a3c018d24ba7b6cb5030a1b7578e1e7"
 uuid = "324d7699-5711-5eae-9e2f-1d82baa6b597"
-version = "0.5.2"
+version = "0.5.3"
 
 [[Codecs]]
 deps = ["Test"]
@@ -110,10 +110,10 @@ uuid = "a81c6b42-2e10-5240-aca2-a61377ecd94b"
 version = "0.7.3"
 
 [[Conda]]
-deps = ["Compat", "JSON", "VersionParsing"]
-git-tree-sha1 = "b625d802587c2150c279a40a646fba63f9bd8187"
+deps = ["JSON", "VersionParsing"]
+git-tree-sha1 = "9a11d428dcdc425072af4aea19ab1e8c3e01c032"
 uuid = "8f4d0f93-b110-5947-807f-2305c1781a2d"
-version = "1.2.0"
+version = "1.3.0"
 
 [[Contour]]
 deps = ["LinearAlgebra", "StaticArrays", "Test"]
@@ -635,7 +635,7 @@ version = "0.5.1"
 
 [[SDDP]]
 deps = ["Documenter", "GLPK", "JSON", "JuMP", "Literate", "MathOptFormat", "Printf", "Random", "RecipesBase", "Reexport", "Statistics", "TimerOutputs"]
-git-tree-sha1 = "242b0441b790d1b175272549d563421c3529412d"
+git-tree-sha1 = "6a99e4da9848c7b476977e6ddb53d8130fca5e7c"
 repo-rev = "forw_diff_back"
 repo-url = "https://github.com/andrewrosemberg/SDDP.jl.git"
 uuid = "f4570300-c277-11e8-125c-4912f86ce65d"
@@ -758,10 +758,10 @@ uuid = "81def892-9a0e-5fdd-b105-ffc91e053289"
 version = "1.1.3"
 
 [[VideoIO]]
-deps = ["BinaryProvider", "ColorTypes", "Dates", "FileIO", "FixedPointNumbers", "Glob", "ImageCore", "ImageTransformations", "Libdl", "ProgressMeter", "Requires"]
-git-tree-sha1 = "bf4e87d5721fe576930cd40dec09a4ee5d9ffacd"
+deps = ["BinaryProvider", "ColorTypes", "Dates", "FileIO", "FixedPointNumbers", "Glob", "ImageCore", "ImageTransformations", "Libdl", "ProgressMeter", "Requires", "StatsBase"]
+git-tree-sha1 = "384f53a1e3fb31525091c7d611335e2f4b1ea5df"
 uuid = "d6d074c3-1acf-5d4c-9a43-ef38773959a2"
-version = "0.6.4"
+version = "0.6.5"
 
 [[WeakRefStrings]]
 deps = ["Random", "Test"]
