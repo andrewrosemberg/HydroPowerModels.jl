@@ -405,22 +405,29 @@ For this study, a 160 stage horizon planning and simulation have been executed u
 
 \subsection{Results} %\label{subsub:results}
 
-The simulate command returns a detailed dictionary of the execution. In order to plot those results returned by the simulate function, you may choose from a variety of methods, including the function ’plot\underline{\space}aggregated\underline{\space}results()’. This function receives the dictionary results and generates the most common aggregated variable plots, which best summarize simulations of a hydrothermal dispatch:
+The simulate command returns a detailed dictionary of the execution. In order to plot those results returned by the simulate function, you may choose from a variety of methods, including the function \texttt{plot\_aggregate\_results()}. This function receives the dictionary results and generates the most common aggregated variable plots, which best summarize simulations of a hydrothermal dispatch:
 
 \begin{lstlisting}[language = Julia]
 plot_aggregated_results(results)
 \end{lstlisting}
 
-Figures \ref{fig:plot_agg_result_thermal} to \ref{fig:plot_agg_result_inflow} show the output from the above command. As mentioned, the plots are of aggregated quantities, but the methods used to aggregate were chosen in order to help analysis. For example: The final nodal price is an average of nodal prices weighted by the contribution of local loads to the total demand; Reservoir volume was grouped weighted by the amount of energy that could be produced by the stored water (as was the inflow of water). 
+% Figures \ref{fig:plot_agg_result_thermal} to
+Figures 2 to \ref{fig:plot_agg_result_inflow} show the output from the above command. As mentioned, the plots are of aggregated quantities, but the methods used to aggregate were chosen in order to help analysis. For example: The final nodal price is an average of nodal prices weighted by the contribution of local loads to the total demand; Reservoir volume was grouped weighted by the amount of energy that could be produced by the stored water (as was the inflow of water). 
 
-As expected the optimal dispatch of the simulations uses more hydro-generators, however it needs thermal-generators to met all demands without deficit.
-
-On this hydro-dominated system, the uncertain inflow is a driving factor of optimal dispatch. As we can see in \ref{fig:plot_agg_result_inflow}, the inflow has a strong seasonality component, resulting the significant seasonality trait observable in the variables of the policy simulations \ref{fig:plot_agg_result_thermal}-\ref{fig:plot_agg_result_load},\ref{fig:plot_agg_result_hydrogen}-\ref{fig:plot_agg_result_vol},.
+As expected the optimal dispatch of the simulations uses more hydro-generators, however it needs thermal-generators to met all demands without deficit. On this hydro-dominated system, the uncertain inflow is a driving factor of optimal dispatch. As we can see in Figure \ref{fig:plot_agg_result_inflow}, the inflow has a strong seasonality component, resulting the significant seasonality trait observable in the variables of the policy simulations.
+%\ref{fig:plot_agg_result_thermal}
+2-\ref{fig:plot_agg_result_load}, \ref{fig:plot_agg_result_hydrogen}-\ref{fig:plot_agg_result_vol}.
 
 Similar studies are possible for any case and formulation chosen, helping to analyze existing realistic cases and assess impacts of future system changes. 
 
+% \begin{figure}[!ht]\label{fig:thermal}
+% \centering
+% \includegraphics[width=0.5\columnwidth]{fig/plot_agg_result_thermal.png}
+% \caption{Aggregated quantity of thermal generation.}
+% \end{figure}
+
 \begin{figure}[H]
-\centerline{\includegraphics[width=0.55\linewidth]{fig/plot_agg_result_thermal.png}}
+\centerline{\includegraphics[width=0.5\linewidth]{fig/plot_agg_result_thermal.png}}
 \label{fig:plot_agg_result_thermal}
 \caption{Thermal Generation}
 \end{figure}
@@ -472,3 +479,4 @@ Similar studies are possible for any case and formulation chosen, helping to ana
 \end{document}
 
 % Inspired by the International Journal of Computer Applications template
+
