@@ -51,11 +51,11 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
                     sense       = :Min,
                     stages      = params["stages"],
                     optimizer   = params["optimizer"],
-                    optimizer_forward = params["optimizer_forward"],
-                    optimizer_backward = params["optimizer_backward"],
+                    #optimizer_forward = params["optimizer_forward"],
+                    #optimizer_backward = params["optimizer_backward"],
                     lower_bound = 0.0,
                     direct_mode = false
-                                            ) do sp, t, isforward
+                                            ) do sp, t #, isforward
         
         # if set silence the solver
         # related to https://github.com/JuliaOpt/JuMP.jl/pull/1921
@@ -73,13 +73,16 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         gatherusefulinfo!(data)
 
         # build eletric grid model using PowerModels
-        if isforward
-            pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid_forward"], 
-                params["post_method"], jump_model=sp, setting = params["setting"])
-        else
-            pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid_backward"], 
-                params["post_method"], jump_model=sp, setting = params["setting"])
-        end
+        pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid"], 
+            params["post_method"], jump_model=sp, setting = params["setting"])
+        
+        #if isforward # NOT YET IMPLEMENTED
+            #pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid_forward"], 
+                #params["post_method"], jump_model=sp, setting = params["setting"])
+        #else
+            #pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid_backward"], 
+            #    params["post_method"], jump_model=sp, setting = params["setting"])
+        #end
         
         # create reference to variables
         createvarrefs!(sp,pm)
