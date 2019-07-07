@@ -1,0 +1,92 @@
+\begin{thebibliography}{10}
+
+\bibitem{sddpy}
+sddpy python for stochastic dual dynamic programming algorithm, 2019.
+
+\bibitem{artzner1999coherent}
+Philippe Artzner, Freddy Delbaen, Jean-Marc Eber, and David Heath.
+Coherent measures of risk.
+{\em Mathematical finance}, 9(3):203--228, 1999.
+
+\bibitem{bezanson2017julia}
+Jeff Bezanson, Alan Edelman, Stefan Karpinski, and Viral~B Shah.
+Julia: A fresh approach to numerical computing.
+{\em SIAM review}, 59(1):65--98, 2017.
+
+\bibitem{FATS}
+Léopold Cambier and Damien Scieur.
+leopoldcambier/fast: v0.9.1b, March 2018.
+
+\bibitem{carpentier1962contribution}
+J~Carpentier.
+Contribution to the economic dispatch problem.
+{\em Bulletin de la Societe Francoise des Electriciens}, 3(8):431--447, 1962.
+
+\bibitem{8442948}
+Carleton Coffrin, Russell Bent, Kaarthik Sundar, Yeesian Ng, and Miles Lubin.
+Powermodels.jl: An open-source framework for exploring power flow formulations.
+In {\em 2018 Power Systems Computation Conference (PSCC)}, pages 1--8, June
+  2018.
+
+\bibitem{dowson_sddp.jl}
+Oscar Dowson and Lea Kapelevich.
+{SDDP}.jl: a {Julia} package for {Stochastic} {Dual} {Dynamic} {Programming}.
+{\em Optimization Online}, 2017.
+
+\bibitem{DunningHuchetteLubin2017}
+Iain Dunning, Joey Huchette, and Miles Lubin.
+Jump: A modeling language for mathematical optimization.
+{\em SIAM Review}, 59(2):295--320, 2017.
+
+\bibitem{leclerestochdynamicprogramming}
+Vincent Lecl{\`e}re, Henri G{\'e}rard, Fran{\c{c}}ois Pacaud, and Tristan
+  Rigaut.
+Stochdynamicprogramming. jl a julia library for multistage stochastic
+  optimization.
+
+\bibitem{StructDualDynProg}
+Benoît Legat.
+leopoldcambier/structdualdynprog.jl: v0.2.0, October 2018.
+
+\bibitem{lohndorf2018quasar}
+N~L{\"o}hndorf.
+Quasar optimization software 2.4, 2018.
+
+\bibitem{maceira_ten_2008}
+Maria Elvira~Pineiro Maceira, V.~S. Duarte, D.~D.~J. Penna, L.~A.~M. Moraes,
+  and A.~C.~G. Melo.
+Ten years of application of stochastic dual dynamic programming in official and
+  agent studies in {{Brazil}}: Description of the {{NEWAVE}} program.
+{\em 16th PSCC, Glasgow, Scotland}, pages 14--18, 2008.
+
+\bibitem{molzahn2019survey}
+Daniel~K Molzahn, Ian~A Hiskens, et~al.
+A survey of relaxations and approximations of the power flow equations.
+{\em Foundations and Trends{\textregistered} in Electric Energy Systems},
+  4(1-2):1--221, 2019.
+
+\bibitem{pereira1991multi}
+Mario~VF Pereira and Leontina~MVG Pinto.
+Multi-stage stochastic optimization applied to energy planning.
+{\em Mathematical programming}, 52(1-3):359--375, 1991.
+
+\bibitem{terlaky_marginal_2017}
+Andy Philpott.
+On the {{Marginal Value}} of {{Water}} for {{Hydroelectricity}}.
+In Tam{\'a}s Terlaky, Miguel~F. Anjos, and Shabbir Ahmed, editors, {\em
+  Advances and {{Trends}} in {{Optimization}} with {{Engineering
+  Applications}}}, pages 405--425. {Society for Industrial and Applied
+  Mathematics}, Philadelphia, PA, 2017.
+
+\bibitem{psr_software_2019}
+{PSR}.
+Software | {{PSR}}, 2019.
+[Online; accessed 2019-07-06].
+
+\bibitem{raso2016optimist}
+Luciano Raso, David Dorchies, Jan Kwakkel, and Pierre~Olivier Malaterre.
+Optimist: a python library for water system optimal operation and analysis
+  using sddp.
+2016.
+
+\end{thebibliography}

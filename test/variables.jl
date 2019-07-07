@@ -1,4 +1,4 @@
-using Clp
+using GLPK
 
 @testset "Variables" begin
     @testset "@variable" begin
@@ -23,7 +23,7 @@ using Clp
         m = SDDP.LinearPolicyGraph(
             sense   = :Min,
             stages  = 1,
-            optimizer  = with_optimizer(Clp.Optimizer),
+            optimizer  = with_optimizer(GLPK.Optimizer),
             lower_bound = 0.0,
                     direct_mode=false
                                             ) do sp,t

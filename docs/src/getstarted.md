@@ -1,12 +1,12 @@
 ## Getting started
 
-Once PowerModels, SDDP and a solver (like Clp or Ipopt) are installed, and a case data folder (e.g. "case3") has been acquired, an Hydrothermal Multistage Steady-State Power Network Optimization can be executed.
+Once PowerModels, SDDP and a solver (like GLPK or Ipopt) are installed, and a case data folder (e.g. "case3") has been acquired, an Hydrothermal Multistage Steady-State Power Network Optimization can be executed.
 
 First import the necessary packages:
 
 ```julia
 using HydroPowerModels
-using Ipopt, Clp
+using Ipopt, GLPK
 ```
 
 Load Case by passing the respective folder:
@@ -22,7 +22,7 @@ Set Parameters to run, for example, an DC Economic Hydrothermal Dispatch:
 params = create_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
                     post_method             = PowerModels.post_opf,
-                    optimizer               = Clp.Optimizer);
+                    optimizer               = with_optimizer(GLPK.Optimizer));
 ```
 
 Build the Model and execute the SDDP method:
@@ -91,7 +91,7 @@ baseMVA =  [results[:simulations][i][j][:powersystem]["solution"]["baseMVA"] for
 scen_gen = [results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["pg"] for i=1:100, j=1:12]'.*baseMVA
 
 plotscenarios(scen_gen, title  = "Thermal Generation 1",
-                ylabel = "MWh",
+                ylabel = "MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,

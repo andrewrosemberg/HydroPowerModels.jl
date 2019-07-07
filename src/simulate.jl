@@ -45,7 +45,7 @@ function build_sol_powermodels(sp::JuMP.Model)
     end
     status = JuMP.termination_status(sp)
     built_sol = PowerModels.build_solution(sp.ext[:pm],status,solve_time,
-        solution_builder = PowerModels.get_solution)
+        solution_builder = get_solution)
 end
 
 """Reservoir solution build"""
@@ -56,4 +56,15 @@ function build_sol_reservoirs(sp::JuMP.Model)
             :spill => JuMP.value.(sp[:spill])
         )
     return store
+end
+
+""
+function get_solution(pm::GenericPowerModel, sol::Dict{String,<:Any})
+    PowerModels.get_solution(pm, sol)
+    add_kcl_deficit(sol, pm)
+end
+
+""
+function add_kcl_deficit(sol, pm::GenericPowerModel)
+    PowerModels.add_setpoint(sol, pm, "bus", "deficit", :deficit)
 end

@@ -1,6 +1,6 @@
 module HydroPowerModels
 
-using JuMP, Clp, PowerModels, SDDP
+using JuMP, GLPK, PowerModels, SDDP
 import Reexport
 
 mutable struct HydroPowerModel
@@ -15,10 +15,13 @@ include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
 include("train.jl")
+include("visualize_data.jl")
+include("objective.jl")
 
 export  hydrothermaloperation, parse_folder, create_param,
         plotresults, plotscenarios, set_active_demand!, flat_dict,
-        descriptivestatistics_results, signif_dict
+        descriptivestatistics_results, signif_dict, plot_grid, plot_hydro_grid,
+        plot_grid_dispatched, plot_aggregated_results, plot_bound
 
 Reexport.@reexport using PowerModels, SDDP
 
@@ -33,14 +36,26 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         PowerModels.silence()
     end
 
+    # if set silence the solver
+    # related to https://github.com/JuliaOpt/JuMP.jl/pull/1921
+    if !params["verbose"]
+        try
+            MOI.set(JuMP.backend(Model(params["optimizer"])), MOI.Silent(), true)
+        catch
+            @info "Silent() attribute not implemented by the optimizer."
+        end
+    end
+
     # Model Definition
     policygraph = SDDP.LinearPolicyGraph(
-                    sense   = :Min,
-                    stages  = params["stages"],
-                    optimizer  = with_optimizer(params["optimizer"]),
+                    sense       = :Min,
+                    stages      = params["stages"],
+                    optimizer   = params["optimizer"],
+                    #optimizer_forward = params["optimizer_forward"],
+                    #optimizer_backward = params["optimizer_backward"],
                     lower_bound = 0.0,
-                    direct_mode=false
-                                            ) do sp,t
+                    direct_mode = false
+                                            ) do sp, t #, isforward
         
         # if set silence the solver
         # related to https://github.com/JuliaOpt/JuMP.jl/pull/1921
@@ -48,23 +63,26 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
             try
                 MOI.set(JuMP.backend(sp), MOI.Silent(), true)
             catch
-                @info "Silent() attribute not implemented by the optimizer."
+                #@info "Silent() attribute not implemented by the optimizer."
             end
         end
         # Extract current data
         data = alldata[min(t,size(alldata,1))]
-        # calculate number of hydrogenerators
-        countgenerators!(data)
         
-        # compoute upstream_hydro
-        upstream_hydro!(data)
+        # gather useful information from data
+        gatherusefulinfo!(data)
 
-        # count available inflow data
-        countavailableinflow!(data)
-
-        # build eletric grid model using PowerModels                                   
+        # build eletric grid model using PowerModels
         pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid"], 
             params["post_method"], jump_model=sp, setting = params["setting"])
+        
+        #if isforward # NOT YET IMPLEMENTED
+            #pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid_forward"], 
+                #params["post_method"], jump_model=sp, setting = params["setting"])
+        #else
+            #pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid_backward"], 
+            #    params["post_method"], jump_model=sp, setting = params["setting"])
+        #end
         
         # create reference to variables
         createvarrefs!(sp,pm)
@@ -72,6 +90,9 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         # save GenericPowerModel and Data
         sp.ext[:pm] = pm
         sp.ext[:data] = data
+
+        # save lower_bound
+        sp.ext[:lower_bound] = 0.0
 
         # resevoir variables
         variable_volume(sp, data)
@@ -83,13 +104,37 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         # hydro balance
         variable_inflow(sp, data)
         rainfall_noises(sp, data, cidx(t,data["hydro"]["size_inflow"][1]))
-        constraint_hydro_balance(sp, data)
+        constraint_hydro_balance(sp, data, params)
 
         # hydro_generation
         constraint_hydro_generation(sp, data, pm)
+
+        # deficit
+        variable_deficit(sp, data, pm)
+        constraint_mod_deficit(sp, data, pm)
+
+        # costs stage
+        variable_cost(sp, data)
+        add_gen_cost(sp, data)
+        add_spill_cost(sp, data)
+        add_deficit_cost(sp, data)
         
         # Stage objective
-        @stageobjective(sp, objective_function(sp) + sum(data["hydro"]["Hydrogenerators"][i]["spill_cost"]*sp[:spill][i] for i=1:data["hydro"]["nHyd"]))
+        set_objective(sp, data)
+
+        # # variable primal start
+        # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
+        JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:deficit], 0.0)
+        JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:inflow], 0.0)
+        JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:outflow], 0.0)
+        JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), sp[:spill], 0.0)
+        for r in sp[:reservoir]
+            JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), r.in, 0.0) 
+        end
+        for r in sp[:reservoir]
+            JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), r.out, 0.0) 
+        end
+
     end
 
     # save data

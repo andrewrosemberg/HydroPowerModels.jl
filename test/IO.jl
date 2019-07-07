@@ -1,8 +1,8 @@
-using Clp
+using GLPK
 
 @testset "IO" begin
     @testset "Input parameters" begin
-        optimizer = Clp.Optimizer
+        optimizer = GLPK.Optimizer
         params = create_param( stages                  = 3, 
                             model_constructor_grid  = DCPPowerModel,
                             post_method             = PowerModels.post_opf,
