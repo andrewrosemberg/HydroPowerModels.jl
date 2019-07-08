@@ -5,7 +5,7 @@ using HydroPowerModels
 #       Load Case
 ########################################
 testcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
-data = HydroPowerModels.parse_folder(joinpath(testcases_dir,"case3deterministic_nowater"))
+alldata = HydroPowerModels.parse_folder(joinpath(testcases_dir,"case3deterministic_nowater"))
 
 ########################################
 #       Set Parameters
@@ -20,7 +20,7 @@ params = create_param(  stages = 12,
 ########################################
 #       Build Model
 ########################################
-m = hydrothermaloperation(data, params)
+m = hydrothermaloperation(alldata, params)
 
 ########################################
 #       Solve

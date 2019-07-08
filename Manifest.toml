@@ -262,12 +262,6 @@ git-tree-sha1 = "e3ead4211073d4117a0d2ef7d1efc5c8092c8412"
 uuid = "a2bd30eb-e257-5431-a919-1863eab51364"
 version = "0.4.0"
 
-[[Gurobi]]
-deps = ["Compat", "Libdl", "LinQuadOptInterface", "MathProgBase"]
-git-tree-sha1 = "c2e1b1d4ce50764188c6496f298fa58bbf5e923e"
-uuid = "2e9cd046-0924-5485-92f1-d5272153d98b"
-version = "0.6.0"
-
 [[HTTP]]
 deps = ["Base64", "Dates", "IniFile", "MbedTLS", "Sockets"]
 git-tree-sha1 = "03ddc88af7f2d963fac5aa9f3ac8e11914d68a78"
@@ -373,12 +367,6 @@ deps = ["Calculus", "DataStructures", "ForwardDiff", "LinearAlgebra", "MathOptIn
 git-tree-sha1 = "5df42febdee8ac7db9de66c712e439a6ff06459d"
 uuid = "4076af6c-e467-56ae-b986-b466b2749572"
 version = "0.19.1"
-
-[[KNITRO]]
-deps = ["Libdl", "MathOptInterface", "MathProgBase", "SparseArrays"]
-git-tree-sha1 = "1cbe38a8f9f6c04fd404cd2afab3bed87ff49fbe"
-uuid = "67920dd8-b58e-52a8-8622-53c4cffbe346"
-version = "0.7.0"
 
 [[LibCURL]]
 deps = ["BinaryProvider", "Libdl"]

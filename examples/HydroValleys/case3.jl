@@ -32,7 +32,7 @@ seed = 1221
 #' ## Load Case Specifications
 
 #' Data
-data = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"));
+alldata = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"));
 
 #' Plot power grid graph
 if plot_bool == true
