@@ -3,7 +3,9 @@ using GLPK
 @testset "Variables" begin
     @testset "@variable" begin
         sp = Model()
-        data = Dict("hydro" => Dict("nHyd" => 4))     
+        data = Dict("hydro" => Dict("nHyd" => 4,
+        "Hydrogenerators" => [Dict("max_turn" => 200) for r =1:4]))
+         
         # inflow            
         HydroPowerModels.variable_inflow(sp, data)
         @test size(sp[:inflow],1) == 4
