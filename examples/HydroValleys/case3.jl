@@ -60,7 +60,9 @@ end_time = time() - start_time
 (SDDP.termination_status(m.policygraph), end_time)
 
 #' Bounds
-plot_bound(m)
+if plot_bool == true
+    plot_bound(m)
+end
 
 #' ## Simulation
 import Random
@@ -82,7 +84,7 @@ end
 
 #' # Annex 1: Case Summary
 if plot_bool == true
-    PowerModels.print_summary(data["powersystem"])
+    PowerModels.print_summary(alldata[1]["powersystem"])
 end
 
 #' # Annex 2: Plot Results

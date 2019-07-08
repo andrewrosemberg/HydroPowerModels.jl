@@ -147,6 +147,7 @@ function plotresults(results::Dict;nc::Int = 3)
     end
 
     # Nodal price
+    try
     nbus = length(results[:data][1]["powersystem"]["bus"])
     idxbus = collect(1:nbus)
     scen_pld = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
@@ -162,7 +163,8 @@ function plotresults(results::Dict;nc::Int = 3)
     ]
     plt_total[nplots+1:nplots+length(plt)] = plt
     nplots +=length(plt) 
-
+    catch
+    end
     # Deficit
 
     nbus = length(results[:data][1]["powersystem"]["bus"])
@@ -255,10 +257,19 @@ function plotresults(results::Dict;nc::Int = 3)
     ]    
     plt_total[nplots+1:nplots+length(plt)] = plt
     nplots +=length(plt) 
-    
-    l = @layout [ grid(floor(Int,nplots/nc),nc);  grid(1,mod(nplots,nc))]
-    nlines = floor(Int,nplots/nc)+1
-    l.heights = grid(2,1,heights=[floor(Int,nplots/nc)/nlines;1/nlines]).heights
+    if mod(nplots,nc) > 0 && floor(Int,nplots/nc) > 0
+        l = @layout [ grid(floor(Int,nplots/nc),nc);  grid(1,mod(nplots,nc))]
+        nlines = floor(Int,nplots/nc)+1
+        l.heights = grid(2,1,heights=[floor(Int,nplots/nc)/nlines;1/nlines]).heights
+    elseif floor(Int,nplots/nc) > 0
+        l = @layout grid(floor(Int,nplots/nc),nc)
+        nlines = floor(Int,nplots/nc)
+        l.heights = grid(nlines,1,heights=[1/nlines for n = 1:nlines]).heights
+    else
+        l = @layout grid(1,mod(nplots,nc))
+        nlines = 1
+        l.heights = grid(1,1,heights=[1]).heights
+    end    
 
     return plot(plt_total[1:nplots]...,layout=l,size = (nc*400,400*ceil(Int,nplots/nc)),legend=false)
 end
@@ -654,6 +665,7 @@ function plot_aggregated_results(results::Dict)
 
     # Nodal price
     idxbus = collect(1:nbus)
+    try
     scen_pld_all = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
     
     scen_pld = deepcopy(scen_pld_all[idxbus[1]])
@@ -671,7 +683,8 @@ function plot_aggregated_results(results::Dict)
                 )
     plt_total[nplots+1] = plt
     nplots += 1
-
+    catch
+    end
     # Deficit
     scen_def_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["deficit"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
     scen_def = deepcopy(scen_def_all[idxbus[1]])
@@ -792,7 +805,7 @@ end
 """ plot_bound """
 function plot_bound(m)
     niter = length(m.policygraph.most_recent_training_results.log)
-    val = [m.policygraph.most_recent_training_results.log[iter].bound for iter in 1:niter]
+    val = round.([m.policygraph.most_recent_training_results.log[iter].bound for iter in 1:niter],digits =5)
 
     xticks = unique!([collect(1:Int(floor(niter/4)):niter);niter])
     plot(val,
