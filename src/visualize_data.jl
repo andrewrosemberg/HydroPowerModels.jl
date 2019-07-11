@@ -73,7 +73,7 @@ function plotresults(results::Dict;nc::Int = 3)
     nplots +=length(plt) 
 
     # Thermal Reactive Generation
-    if results[:params]["model_constructor_grid"] == PowerModels.ACPPowerModel
+    if results[:params]["model_constructor_grid_forward"] == PowerModels.ACPPowerModel
         scen_qgen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["qg"] for i=1:100, j=1:results[:params]["stages"]]'.*baseMVA for gen =1:ngen]
         plt =   [plotscenarios(scen_qgen[gen], title  = "Thermal Reactive Generation $gen",
                 ylabel = "MW",
@@ -111,7 +111,7 @@ function plotresults(results::Dict;nc::Int = 3)
 
     # Branch Reactive flow
 
-    if results[:params]["model_constructor_grid"] == PowerModels.ACPPowerModel
+    if results[:params]["model_constructor_grid_forward"] == PowerModels.ACPPowerModel
         scen_branch_qf = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["qf"] for i=1:100, j=1:results[:params]["stages"]]'.*baseMVA for brc =1:nbrc]
         plt =   [plotscenarios(scen_branch_qf[brc], title  = "Branch Reactive Flow $brc",
                 ylabel = "MW",
