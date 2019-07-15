@@ -15,7 +15,7 @@ include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
 include("train.jl")
-include("visualize_data.jl")
+include("visualization/visualize_data.jl")
 include("objective.jl")
 
 export  hydrothermaloperation, parse_folder, create_param,

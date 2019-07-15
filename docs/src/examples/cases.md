@@ -6,4 +6,6 @@ https://andrewrosemberg.github.io/HydroPowerModels.jl/latest/examples/case3_5yea
 
 https://andrewrosemberg.github.io/HydroPowerModels.jl/latest/examples/case3_ac
 
+https://andrewrosemberg.github.io/HydroPowerModels.jl/latest/examples/case3_soc
+
 

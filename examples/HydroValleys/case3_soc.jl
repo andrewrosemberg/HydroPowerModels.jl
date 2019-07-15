@@ -19,7 +19,7 @@
 #' # Case
 
 #' ## Importing package and optimizer
-using SCS
+using ECOS
 using HydroPowerModels
 
 #' ## Initialization
@@ -33,7 +33,7 @@ seed = 1221
 #' ## Load Case Specifications
 
 #' Data
-data = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"));
+alldata = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"));
 
 #' Plot power grid graph
 if plot_bool == true
@@ -45,7 +45,7 @@ end
 params = create_param(  stages = 12, 
                         model_constructor_grid  = SOCWRConicPowerModel,
                         post_method             = PowerModels.post_opf,
-                        optimizer               = with_optimizer(SCS.Optimizer))
+                        optimizer               = with_optimizer(ECOS.Optimizer))
 
 #' ## Build Model
 #+ results =  "hidden"
@@ -61,18 +61,22 @@ end_time = time() - start_time
 (SDDP.termination_status(m.policygraph), end_time)
 
 #' Bounds
-plot_bound(m)
+if plot_bool == true
+    plot_bound(m)
+end
 
 #' ## Simulation
+#+ results =  "hidden"
 import Random
 Random.seed!(seed)
 results = HydroPowerModels.simulate(m, 100);
-results
 
 #' ## Testing Results
-#' Bound
 using Test
-@test isapprox(sum(s[:stage_objective] for s in results[:simulations][1]), 9400.0, atol=1)
+#' Bound
+@test isapprox(SDDP.calculate_bound(m.policygraph), 13279.088, atol=1)
+#' Number of Simulations
+@test length(results[:simulations]) == 100
 
 #' ## Plot Aggregated Results
 if plot_bool == true
@@ -81,7 +85,7 @@ end
 
 #' # Annex 1: Case Summary
 if plot_bool == true
-    PowerModels.print_summary(data["powersystem"])
+    PowerModels.print_summary(alldata[1]["powersystem"])
 end
 
 #' # Annex 2: Plot Results
