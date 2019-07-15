@@ -74,8 +74,10 @@ results = HydroPowerModels.simulate(m, 100);
 #' ## Testing Results
 using Test
 #' Bound
+#+ results =  "hidden"
 @test isapprox(SDDP.calculate_bound(m.policygraph), 13279.088, atol=1)
 #' Number of Simulations
+#+ results =  "hidden"
 @test length(results[:simulations]) == 100
 
 #' ## Plot Aggregated Results

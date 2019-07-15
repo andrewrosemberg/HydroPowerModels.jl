@@ -166,7 +166,7 @@ function plotresults(results::Dict;nc::Int = 3)
     catch
     end
     # Deficit
-
+    try
     nbus = length(results[:data][1]["powersystem"]["bus"])
     idxbus = collect(1:nbus)
     scen_def = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["deficit"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
@@ -181,7 +181,9 @@ function plotresults(results::Dict;nc::Int = 3)
             for bus in idxbus
     ]
     plt_total[nplots+1:nplots+length(plt)] = plt
-    nplots +=length(plt) 
+    nplots +=length(plt)
+    catch
+    end
 
     # Hydro Generation
     nHyd = results[:data][1]["hydro"]["nHyd"]
@@ -686,6 +688,7 @@ function plot_aggregated_results(results::Dict)
     catch
     end
     # Deficit
+    try
     scen_def_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["deficit"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
     scen_def = deepcopy(scen_def_all[idxbus[1]])
     scen_def .=0
@@ -701,6 +704,8 @@ function plot_aggregated_results(results::Dict)
                 )
     plt_total[nplots+1] = plt
     nplots += 1
+    catch
+    end
 
     # Hydro Generation
     scen_gen = deepcopy(scen_gen_all[idxhyd[1]])
