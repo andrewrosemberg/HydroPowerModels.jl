@@ -26,9 +26,13 @@ export  hydrothermaloperation, parse_folder, create_param,
 Reexport.@reexport using PowerModels, SDDP
 
 """
-data is a dict with all information of the problem. 
+    hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
 
-param is a dict containing solution parameters.
+Create a hydrothermal power operation model containing the policygraph the system data and the planning parameters.
+
+Required parameters are:
+-   data is a dict with all information of the problem. 
+-   param is a dict containing solution parameters.
 """
 function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
     # verbose

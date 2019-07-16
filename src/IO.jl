@@ -2,7 +2,9 @@ using JSON
 using CSV
 using GLPK
 
-"""Read hydro description json file"""
+"""
+Read hydro description json file.
+"""
 function parse_file_json(file::String)
     return JSON.parse(String(read(file)))
 end
@@ -19,7 +21,16 @@ function read_inflow(file::String, nHyd::Int)
     return vector_inflows, nCen
 end
 
-"""Read hydro case folder"""
+"""
+    parse_folder(folder::String; stages::Int = 1,digts::Int=7)
+
+Read hydrothermal case folder.
+
+Parameters:
+-   folder  : Path to case folder.
+-   stages  : Number of stages.
+-   digts   : Number of digits to take into acoint from case description files.
+"""
 function parse_folder(folder::String; stages::Int = 1,digts::Int=7)        
     data = Dict()
     try
@@ -62,7 +73,29 @@ function set_active_demand!(alldata::Array{Dict{Any,Any}}, demand::Array{Float64
     return nothing
 end
 
-"""Create Parameters Dictionary"""
+"""
+    create_param(;stages::Int = 1,
+        model_constructor_grid = DCPPowerModel,
+        model_constructor_grid_backward = model_constructor_grid,
+        model_constructor_grid_forward = model_constructor_grid_backward,
+        post_method = PowerModels.post_opf,
+        optimizer = with_optimizer(GLPK.Optimizer),
+        optimizer_backward = optimizer,
+        optimizer_forward = optimizer_backward,
+        setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)),
+        verbose = false,
+        stage_hours = 1)
+
+Create Parameters Dictionary.
+
+Keywords are:
+-   stages::Int             : Number of stages.
+-   model_constructor_grid  : Network formulation (Types from <https://github.com/lanl-ansi/PowerModels.jl>).
+-   optimizer               : Optimizer factory (<http://www.juliaopt.org/JuMP.jl/v0.19.0/solvers/>).
+-   setting                 : PowerModels settings (<https://github.com/lanl-ansi/PowerModels.jl/blob/e28644bf85232a5322adeeb847c0d18b7ff4f235/src/core/base.jl#L6-L34>)) .
+-   verbose                 : Boolean to indicate information prints.
+-   stage_hours             : Number of hours in each stage.
+"""
 function create_param(;stages::Int = 1,
                     model_constructor_grid = DCPPowerModel,
                     model_constructor_grid_backward = model_constructor_grid,

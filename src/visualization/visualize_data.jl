@@ -3,7 +3,19 @@ import Cairo, Fontconfig
 using LightGraphs, GraphPlot, Compose
 using Random, Reel
 
-"""Plots a set o scenarios"""
+"""
+    plotscenarios(scen::Array{Float64,2}; savepath::String ="",
+        save::Bool = false, fileformat::String = "png", kwargs...)
+
+Plots a set of scenarios.
+
+Parameters:
+-   scen        : Scenarios matrix (Stages x Scenarious).
+-   save        : Bool to indicate if figure is to be saved.
+-   savepath    : Path save figure.
+-   fileformat  : Figure file format.
+-   kwargs      : Aditional keyword arguments for plot function.
+"""
 function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
         save::Bool = false, fileformat::String = "png", kwargs...)
 
@@ -46,7 +58,16 @@ function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
     return p1    
 end
 
-"""Common Plots"""
+"""
+    plotresults(results::Dict;nc::Int = 3)
+
+Common Plots.
+
+Parameters:
+-   results        : Simulations output.
+-   nc             : Number of figures per line.
+
+"""
 function plotresults(results::Dict;nc::Int = 3)
     plt_total = Array{Plots.Plot}(undef,10000)
     nplots = 0
@@ -350,7 +371,18 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
     return dcp_stats
 end
 
-""" Plot Grid installed Power"""
+"""
+    plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+
+Plot Grid installed Power.
+
+Paremeters:
+-   data         : HydroPowerModel single stage data.
+-   path         : Path to save grid plot.
+-   size_fig     : Size figure.
+-   node_label   : Plot nodel label on grid.
+-   nodelabeldist: Nodel label distance from node.
+"""
 function plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
 
     gatherusefulinfo!(data)
@@ -622,7 +654,15 @@ function plot_grid_dispatched(results::Dict;seed=1111,quant::Float64=0.5,size_fi
     end
 end
 
-"""aggregated Results Plots"""
+"""
+plot_aggregated_results(results::Dict)
+
+Plot Aggregated Results. Figures are of aggregated quantities, but the methods used to aggregate were chosen in order to help analysis. For example: The final nodal price is an average of nodal prices weighted by the contribution of local loads to the total demand; Reservoir volume was grouped weighted by the amount of energy that could be produced by the stored water (as was the inflow of water). 
+
+Paremeter:
+-   results: Simulation results.
+
+"""
 function plot_aggregated_results(results::Dict)
     plt_total = Array{Plots.Plot}(undef,20)
     nplots = 0
@@ -807,7 +847,11 @@ function plot_aggregated_results(results::Dict)
     return plot(plt_total[1:nplots]...,nc=3,size = (3*400, 500*ceil(Int,nplots/3)),legend=false)
 end
 
-""" plot_bound """
+"""
+    plot_bound(m)
+
+Plots the SDDP outer bound per iteration.
+"""
 function plot_bound(m)
     niter = length(m.policygraph.most_recent_training_results.log)
     val = round.([m.policygraph.most_recent_training_results.log[iter].bound for iter in 1:niter],digits =5)
