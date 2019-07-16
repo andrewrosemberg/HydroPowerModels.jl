@@ -17,6 +17,10 @@
 
 \begin{abstract}
 
+% <review @frapac>
+% at the end of the paragraph:
+% SDDP -> SDDP algorithm.
+% </review>
 \textit{HydroPowerModels.jl} is a Julia package for solving multistage, steady-state, hydro-dominated, power network optimization problems with stochastic dual dynamic programming. Our state-of-the-art open source tool is flexible enough for practitioners in the electrical sector to test new ideas in an efficient way. This tool was made possible by the Julia language and the surrounding ecosystem of packages. We use \textit{JuMP}, a package for mathematical programming modeling; \textit{PowerModels.jl}, a JuMP-extension for power network optimization; and \textit{SDDP.jl}, another extension that implements the SDDP.
 
 \end{abstract}
@@ -26,6 +30,11 @@
 The hydrothermal dispatch problem is important for the planning and operation of hydro-dominated electrical systems such as the Brazilian national grid. The objective is to coordinate generation, energy distribution, and hydro-storage management in order to minimize the cost of operation. In this context, the hydrothermal dispatch problem is a medium-term planning problem where uncertainties related to the hydrology (i.e., rainfall and other inflows) of the hydroelectric plants and consumer-demand have fundamental importance. Generation takes two main forms: i) hydro-generation with a low marginal cost, and ii) thermal-generation, with a high marginal cost. However, in hydro-dominated systems such as Brazil, there is often insufficient capacity of thermal generation to meet demand. Thus, the system-operator faces a trade-off between using water for cheap generation in the present, against conserving water for future periods of drought. Because of this trade-off, the hydrothermal dispatch problem is often modeled as a multistage stochastic problem \cite{pereira1991multi,maceira_ten_2008,terlaky_marginal_2017}.
  %\vskip 6pt
 
+% <review @frapac>
+% I recommend to cite "Bertsekas, Dynamic Programming and optimal control"  when first refering
+% to Stochastic Dynamic Programming. Citing the seminal article of Richard Bellman
+% seems also a good idea.
+% </review>
 Solving multistage stochastic programs, however, is a challenging numerical problem. The solution of the problem is intractable and common approximations such as stochastic dynamic programming can suffer from high dimensionality (frequently referred as the curse of dimensionality). One method that partially overcomes the curse of dimensionality is the stochastic dual dynamic programming algorithm (SDDP) of ~\cite{pereira1991multi}.
 
 A number of programs implementing SDDP are in-use around the world, ranging from unpublished implementations in academic institutions to professional software such as PSR's \textit{SDDP}\footnote{Confusingly, the ``SDDP'' acronym is used to denote a software product, the original algorithm of \cite{pereira1991multi}, and a more general class of algorithms inspired by the original SDDP algorithm.} \cite{psr_software_2019}. However, until recently, there was no fast, reliable, and open-source implementation of the SDDP algorithm. Without such a tool, researchers and practitioners have not had a common ground for the discussion and analysis of different hydrothermal dispatch formulations and their solutions.
@@ -39,7 +48,14 @@ The next sections are organized as follows: 1) A brief understanding of multista
 \section{Multistage Stochastic Optimization}
 \label{sec:multistochopt}
 
-Stochastic Programming (SP) is a branch of optimization under uncertainty, where the value of random variables ($\omega$) influence the problem's conditions and consequently the optimal decisions. Uncertainty relates to the probability distributions of parameters and may be incorporated to the problem in various manners. 
+% <review @frapac>
+% 1/ I would cite the book of Ruczinsky, Dentcheva and Shapiro when
+%    first refering to Stochastic Programming.
+% 2/ I would rephrase the first sentence as:
+%   "where the value of random variables" -> "where the realization of some
+%   random variables"
+% </review>
+Stochastic Programming (SP) is a branch of optimization under uncertainty, where the value of random variables ($\omega$) influence the problem's conditions and consequently the optimal decisions. Uncertainty relates to the probability distributions of parameters and may be incorporated to the problem in various manners.
 
 One class of simple stochastic programs is known as a two-stage problem with recourse. It can be formulated as follows:
 
@@ -62,13 +78,18 @@ One class of simple stochastic programs is known as a two-stage problem with rec
 & & g^T u \\
 & \text{s.t.}
 & & A u = b(\omega)- E x \\
-& & & u \in \mathcal{U} 
+& & & u \in \mathcal{U}
 \end{aligned}
 \right. \right\}.
 \end{equation*}
 
 The objective of the first stage is composed of an \textit{immediate cost} term $c^T x$ and a \textit{cost-to-go function} $\mathcal{Q}(x)$. $\mathcal{Q}$ is a function of some decision variables of the first stage $x$ that fix the state of the second stage (its feasible region). These variables are called \textit{state variables}. First stage decisions are made under uncertainty, while the decision variables of the second stage $u$ are chosen after the realization of the variable $\omega$ (under a deterministic scope) and are so called \textit{recourse variables}. The function $\rho$ is known as a \textit{risk measure} \cite{artzner1999coherent} and is commonly assumed to be the expectation operator $\mathbb{E}$.
 
+% <review @frapac>
+% I would be more specific about what a policy is. Maybe introduce the
+% notation $u_t = \pi_t(x_t)$ to emphasize the fact that $\pi_t$ is a mapping
+% from a state to a decision $u$.
+% </review>
 The goal of this problem is to find an optimal stage decision $x$ and an optimal second-stage decision $u$ for each realization of $\omega$ conditioned on $x$. Collectively, this set of decisions is known as a \textit{policy}.
 
 The two-stage problem discussed above naturally extends to a \textit{multistage} problem via recursion. A multistage stochastic program with $T$ stages can be formulated as follows:
@@ -76,8 +97,8 @@ The two-stage problem discussed above naturally extends to a \textit{multistage}
  \begin{equation*}
     \begin{aligned}[t]
         \underset{x_1 \in \mathcal{X}_1}{\text{min}}
-        & f_1(x_1) + \\ 
-        & \qquad \rho[ \underset{x_2 \in \mathcal{X}_2(x_1,\omega_{2})}{\text{inf}} f_2(x_2,\omega_{2}) + \\ 
+        & f_1(x_1) + \\
+        & \qquad \rho[ \underset{x_2 \in \mathcal{X}_2(x_1,\omega_{2})}{\text{inf}} f_2(x_2,\omega_{2}) + \\
         & \qquad \qquad \rho[... + \rho[\underset{x_T \in \mathcal{X}_T(x_{T-1},\omega_{T})}{\text{inf}} f_T(x_T,\omega_{T})]...]] \\
     \end{aligned}
 \end{equation*}
@@ -93,14 +114,17 @@ Assuming the problem is linear, we have:
 
 In this setting, the uncertain data $\omega_1 , ..., \omega_T$ is revealed gradually over time. The sequence $\omega_t \in \mathbb{R}^{d_t}$ of data vectors is viewed as a stochastic process, i.e., as a sequence of random variables with a specified probability distribution.
 
-Just like in the two stage problem, there are state variables at every stage that partially impact the objective through the risk measure of the subsequent stages optimal values. The policy optimized by this problem is a mapping from the realized stochastic process to the decisions for each stage. 
+Just like in the two stage problem, there are state variables at every stage that partially impact the objective through the risk measure of the subsequent stages optimal values. The policy optimized by this problem is a mapping from the realized stochastic process to the decisions for each stage.
 
+% <review @frapac>
+% "dynamic programming~\cite{bellman1957}"
+% </review>
 Using dynamic programming, the nested formulation of a multistage stochastic program may be represented by the following Bellman recursion for each stage:
 
  \begin{equation*}
     Q_t(x_{t-1}, \omega_{t}) = \left\{
     \begin{aligned}
-    & \underset{x_t}{\text{min}} 
+    & \underset{x_t}{\text{min}}
     & & c_t^T x_{t} + \rho_{t+1}[Q_{t+1}(x_{t}, \omega_{t+1})]  \\
     & \text{s.t.} \notag
     & & A_t x_t = b_t(\omega_{t})- E_t x_{t-1} \qquad [\pi_t(\omega_{t})]\\
@@ -111,23 +135,31 @@ Using dynamic programming, the nested formulation of a multistage stochastic pro
 
 For the purpose of simplicity, we assume that $\mathcal{Q}_{T+1}(\cdot, \cdot) = 0$.
 
-In these equations, the optimal value at stage $t$ depends on previous decision $x_{t-1}$ and the realization of the data process $\omega_t$. Finally, the optimal value of the first stage problem gives the optimal value of the corresponding multistage problem. 
+In these equations, the optimal value at stage $t$ depends on previous decision $x_{t-1}$ and the realization of the data process $\omega_t$. Finally, the optimal value of the first stage problem gives the optimal value of the corresponding multistage problem.
 
 \section{The Hydrothermal Dispatch Problem}
 \label{sec:problemformulation}
 %
-The hydrothermal dispatch problem is a multistage stochastic optimization problem that comprises an optimal power flow (OPF) problem and the hydro storage management for multiple periods and scenarios. 
+The hydrothermal dispatch problem is a multistage stochastic optimization problem that comprises an optimal power flow (OPF) problem and the hydro storage management for multiple periods and scenarios.
 
-Introduced by \cite{carpentier1962contribution}, the OPF problem extends the economic dispatch problem, where the goal is to plan the operation of an electrical power system by determining the contribution of available energy sources in supplying demands, to include constraints representing the power flow equations, resulting in a more realistic model of the dispatch. 
+Introduced by \cite{carpentier1962contribution}, the OPF problem extends the economic dispatch problem, where the goal is to plan the operation of an electrical power system by determining the contribution of available energy sources in supplying demands, to include constraints representing the power flow equations, resulting in a more realistic model of the dispatch.
 
+% <review @frapac>
+% Typo:
+% "represent present" -> "represent"
+% </review>
 Since its introduction, the OPF problem has received additional constraints to better represent present power systems. The adopted version of the \textit{PowerModels.jl} package, is a AC Optimal Power Flow problem. The AC Power Flow constraints implement voltage bounds, generation bounds, nodal conservation of power, power flow on lines and thermal limit of the lines (power flow limit) for an alternating current system. Different from original OPF formulations, support was also added for multiple load and shunt components on each bus together with a line charging that supports conductance and asymmetrical values.
 
-Besides the modifications from \textit{PowerModels.jl}, deficit variables to work as slack to the attendance of each load have frequently been used by the electrical sector and will be incorporated in our package. This variables allow a more detailed evaluation of the cost of not attending some demands. 
+Besides the modifications from \textit{PowerModels.jl}, deficit variables to work as slack to the attendance of each load have frequently been used by the electrical sector and will be incorporated in our package. This variables allow a more detailed evaluation of the cost of not attending some demands.
 
 The optimal dispatch tries to find the most economic use of system resources and is the objective function of an OPF. However, in a hydrothermal power system, where water is a main resource and its inflow is uncertain, risk averse planning is an important task to ensure the lowest cost operation. The necessary hydro storage management to attend demand during periods of scarcity adds an extra layer of decisions and constraints.
 
 Reservoir operation is a problem composed by the balance of incoming and outgoing flow of water as well as its usage to generate power. Since many storage facilities are linked through rivers, this problem may be simply viewed as a directed flow graph where each node in the graph represents a storage reservoir. A constraint binds the power generation of generators using water as fuel to the outflow of the respective storage. Operation is also restricted by the limits of reservoir volume and outflow.
 
+% <review @frapac>
+% Typo:
+% "a operation" -> "an operation"
+% </review>
 The solution of this problem returns a operation policy representing the optimal generation and hydro management possible given the horizon studied and the scenarios considered.
 
 As it is common for multistage problems, we will define the underlying sub-problem (i.e., $\mathcal{Q}$) that unifies the OPF problem with the hydro-thermal dispatch problem.
@@ -208,13 +240,13 @@ A complete mathematical model of the sub-problem is as follows,
 %
 \mbox{subject to: } & \nonumber \\
 & \angle V_{r} = 0  \;\; \forall r \in R \label{eq_ref_bus}\\
-& D_i+ \sum_{\substack{k \in G_i}} S^g_k - \sum_{\substack{k \in L_i}} S^d_k - \sum_{\substack{k \in S_i}} Y^s_k |V_i|^2 \nonumber \\ 
+& D_i+ \sum_{\substack{k \in G_i}} S^g_k - \sum_{\substack{k \in L_i}} S^d_k - \sum_{\substack{k \in S_i}} Y^s_k |V_i|^2 \nonumber \\
 & \qquad = \sum_{\substack{(i,j)\in E_i \cup E_i^R}} S_{ij} \;\; \forall i\in N \label{eq_kcl_shunt} \\
 & S_{ij} = \left( Y_{ij} + Y^c_{ij}\right)^* \frac{|V_i|^2}{|{T}_{ij}|^2} - Y^*_{ij} \frac{V_i V^*_j}{{T}_{ij}} \;\; \forall (i,j)\in E \label{eq_power_from}\\
 & S_{ji} = \left( Y_{ij} + Y^c_{ji} \right)^* |V_j|^2 - Y^*_{ij} \frac{V^*_i V_j}{{T}^*_{ij}} \;\; \forall (i,j)\in E \label{eq_power_to}\\
 & |S_{ij}| \leq s^u_{ij} \;\; \forall (i,j) \in E \cup E^R \label{eq_thermal_limit}\\
 & \theta^{\Delta l}_{ij} \leq \angle (V_i V^*_j) \leq \theta^{\Delta u}_{ij} \;\; \forall (i,j) \in E \label{eq_angle_difference}  \\
-& \nu_h + U_h + \mathfrak{S}_h = \nu_{h,t-1} + a_h(\omega_t) + \nonumber \\ 
+& \nu_h + U_h + \mathfrak{S}_h = \nu_{h,t-1} + a_h(\omega_t) + \nonumber \\
 & \qquad  \sum_{\substack{k \in H^U_h}} U_k + \sum_{\substack{k \in H^{\mathfrak{S}}_h}} \mathfrak{S}_k \;\; \forall h \in H \label{eq_hydro_balance} \\
 & U_h p_h = \Re(S^g_{G^H_h}) \;\; \forall h \in H^G \label{eq_hydro_generation} \\
 & S^{gl}_k \leq S^g_k \leq S^{gu}_k \;\; \forall k \in G  \label{eq_gen_bounds}\\
@@ -227,49 +259,75 @@ A complete mathematical model of the sub-problem is as follows,
 
 The objective of the sub-problem (\ref{eq_objective}) is to minimize the costs of real power generation, cost of real energy supply's deficit, cost of spillage (in order to try and avoid degenerate solutions) and the cost-to-go function $\mathcal{Q}$.
 
-Constraint (\ref{eq_ref_bus}) fixes reference buses complex voltage angles to zero, as the remaining angles will be defined accordingly. 
+Constraint (\ref{eq_ref_bus}) fixes reference buses complex voltage angles to zero, as the remaining angles will be defined accordingly.
 
 Constraint (\ref{eq_gen_bounds}) bounds the complex power generation, representing the physical limitation of generators and fuel source availability.
 
 The magnitude of the complex voltage is bounded in constraint (\ref{eq_voltage_bounds}) by restricting the absolute square of its value. The upper limit alone defines a circular feasible region for each voltage, while the lower limit reshapes the region as a ring, bringing a non-convexity to the problem.
 
-The Branch complex power flow is formulated in (\ref{eq_power_from}) and (\ref{eq_power_to}), dependent on the voltage at each end and implementing elements of line charging and the effects of transformers. 
+The Branch complex power flow is formulated in (\ref{eq_power_from}) and (\ref{eq_power_to}), dependent on the voltage at each end and implementing elements of line charging and the effects of transformers.
 The power flow is bounded in (\ref{eq_thermal_limit}) through its absolute value. These power limits of the lines represent thermal limits and stability limits.
 
 Constraint (\ref{eq_kcl_shunt}) implements Kirchhoff’s Current law (KCL), which refers to power preservation at each node, balancing generation, demand, flow and shunt. Although, deficit variables have been added in order to guarantee feasibility in case of lack of power availability.
 
 Angle difference between buses are bounded in (\ref{eq_angle_difference}). The reason for the limits is to approximate the transient stability constraints of power flowing in branches. These restrictions refer to the synchronism among machines at each end of a line. The limits depend on the equipment installed and the system configuration.
 
-An important variable in a economic dispatch problem is the marginal cost of energy at each bus, which, in optimality, is determined by the dual value of (\ref{eq_kcl_shunt}). This value is also referred to as a shadow price, local marginal price (LMP), or nodal price. Regardless, this value represents the cost of an extra unit of energy in a bus.  
+% <review @frapac>
+% Typo:
+% "a economic" -> "an economic"
+% </review>
+An important variable in a economic dispatch problem is the marginal cost of energy at each bus, which, in optimality, is determined by the dual value of (\ref{eq_kcl_shunt}). This value is also referred to as a shadow price, local marginal price (LMP), or nodal price. Regardless, this value represents the cost of an extra unit of energy in a bus.
 
 The conservation of water equation is implemented in (\ref{eq_hydro_balance}), where the water stored at a reservoir should equal the water previously stored plus the incoming flow (precipitation and water from upstream reservoirs), minus the portion used to generate energy and the one spilled away.
 
 The binding of the hydro real power generation and water used is done in (\ref{eq_hydro_generation}), which depends on the efficiency of the generator modeled through a production factor.
 
-Constraints (\ref{eq_volume_limit}) and (\ref{eq_outflow_limit}) bound respectively the volume of water stored and the amount of water used in generation. These limits are defined by the capacity limit of storage facility and the equipment installed. 
+Constraints (\ref{eq_volume_limit}) and (\ref{eq_outflow_limit}) bound respectively the volume of water stored and the amount of water used in generation. These limits are defined by the capacity limit of storage facility and the equipment installed.
+
+% <review @frapac>
+% I would explicitly emphasized that we obtain a non-linear non-convex
+% optimization problem in (1), thus leading to some difficulties in
+% SDDP (as the convexity assumption is broken).
+% </review>
 
 \section{Network Formulations}
 \label{sec:powermodels}
 
-The AC Optimal Power Flow (AC-OPF) problem, defined in (\ref{AC_OPF}), captures the nonlinear and complex nature of the power flow. However, solving a nonlinear problem (NLP) is hard. The scarcity of efficient NLP solvers, the numerical issues created by large problem instances and the inconsistency of solutions (local optimums) reduce the depth of research using AC-OPF. Besides, the requirement of convexity frequently needed for applications limit its usage. 
+The AC Optimal Power Flow (AC-OPF) problem, defined in (\ref{AC_OPF}), captures the nonlinear and complex nature of the power flow. However, solving a nonlinear problem (NLP) is hard. The scarcity of efficient NLP solvers, the numerical issues created by large problem instances and the inconsistency of solutions (local optimums) reduce the depth of research using AC-OPF. Besides, the requirement of convexity frequently needed for applications limit its usage.
 
+% <review @frapac>
+% I would put the reference [13] in this paragraph.
+% </review>
 Hence, many approximations and relaxations have been developed for the AC-OPF. In general these are simplifications and are easier to solve, but ignore some parts of the problem. As a result, it is imperative to understand and weigh the advantages and compromises of each formulations when choosing one to use in a model.
 
-The \textit{Linear DC approximation} is a linear formulation which partially represents power voltage. This formulation makes some assumptions for linearization purposes: voltage magnitudes are sufficiently near nominal value (one), angle differences are close to zero, and there are practically no power losses. The effect of these assumptions is a linear model of a purely active power system. Still it is important to notice that, while this model seeks to approximate the feasible region of the AC power flow, it may not include the entire feasible region, including the global optimum. 
+% <review @frapac>
+% "The effect of these assumptions..." -> I would rephrase this sentence
+% </review>
+The \textit{Linear DC approximation} is a linear formulation which partially represents power voltage. This formulation makes some assumptions for linearization purposes: voltage magnitudes are sufficiently near nominal value (one), angle differences are close to zero, and there are practically no power losses. The effect of these assumptions is a linear model of a purely active power system. Still it is important to notice that, while this model seeks to approximate the feasible region of the AC power flow, it may not include the entire feasible region, including the global optimum.
 
+% <review @frapac>
+% "through mathematical" -> "through mathematically guaranteed"
+% </review>
 Instead of approximating parts of the power system, it is possible to relax some of the nonlinear constraints. These \textit{relaxations} contain all feasible points, and their solutions provide lower bounds to the original problem. In this regard, relaxations, through mathematical guarantees, may provide better and more reliable conclusions of a power system. Although, some relaxations are more precise than others and include less points unfeasible to the original problem.
 
 The \textit{Copper Plate} is the simplest linear relaxation and models the system by a centralized energy pool, relaxing transmission lines limits and the Kirchhoff’s laws. Easily implementable and solvable, this is the most simplified linear formulation, neglecting the entire grid of the problem. However, because of the simplifications of this model it produces only one shadow price, i.e. the marginal price of energy in each node of the network are equal. This may send a distorted signal to the agents responsible for the system, and may return the most unfeasible solution across all formulations.
 
 Another linear relaxation, the \textit{Transportation model}, or tube model, extends Copper Plate by adding line limits. Locational restrictions are better represented and the value of transmission lines are clearer. Although, by completely ignoring the power voltage, network design becomes less relevant and incorrect system analysis is possible.
 
+% <review @frapac>
+% "product of the voltage variables" -> "bilinear product of the voltage variables"
+% </review>
 The \textit{SOC relaxation} is a non-linear convex relaxation that is tighter than the linear versions, i.e., its feasible region is strictly contained inside them. This formulation relaxes the non-convex constraints of the problem, composed by the product of the voltage variables, by neglecting the phases of the voltages and saving only their branch wise difference and magnitudes. The resulting problem may be specified as a second order cone formulation, hence its name.
 
-The \textit{SDP relaxation} deals with the non-convex constraints of the problem by using the fact that they define a positive semi-definite matrix with rank 1. The relaxation comes from removing the rank 1 restriction. This formulation's feasible region is contained within the SOC relaxation's feasible region, providing a better bound to the original problem. 
+The \textit{SDP relaxation} deals with the non-convex constraints of the problem by using the fact that they define a positive semi-definite matrix with rank 1. The relaxation comes from removing the rank 1 restriction. This formulation's feasible region is contained within the SOC relaxation's feasible region, providing a better bound to the original problem.
 
 The \textit{QC relaxation} exploits the polar form of the non-convex constraints and uses known convex envelopes to relax each non-convex term present. These envelopes retain stricter links between the voltage variables, producing a tighter relaxation than the SOC formulation.
 
-These, and other relaxations, provide a good alternative to solve the original problem. Besides bounding the optimal value of the original problem, they have sufficiently good solutions for real world applications. An extensive survey of relaxations and approximations of the power flow equations is given in \cite{molzahn2019survey}. 
+% <review @frapac>
+% I would emphasize here that all these relaxations are convex, thus suitable
+% for using SDDP!
+% </review>
+These, and other relaxations, provide a good alternative to solve the original problem. Besides bounding the optimal value of the original problem, they have sufficiently good solutions for real world applications. An extensive survey of relaxations and approximations of the power flow equations is given in \cite{molzahn2019survey}.
 
 The \textit{PowerModels.jl} package, a framework for steady-state power network optimization, is able to construct these and other mathematical programming formulations of OPF problem. Since \textit{PowerModels.jl} uses \textit{JuMP.jl} to construct these formulations, they can be passed to a variety of solvers. This allows the user to easily choose an approximation or relaxation, solve it, and then discuss and compare the impacts of using different relaxations and approximations in the planning and operation of the economic dispatch problem.
 
@@ -288,19 +346,22 @@ The methodology, simply posed, approximates the cost-to-go function by the maxim
 
 SDDP is based on an interactive construction of the cost-to-go function approximations. The procedure may be divided in sub-sequential forward and backward passes, where the first chooses points in which the second will update the current approximation of the functions. For a detailed discussion of the SDDP algorithm, see \cite{pereira1991multi,dowson_sddp.jl}.
 
-Other solution algorithms have been proposed to solve multistage problems, such as progressive hedging and nested Benders. However, for most large instances, none has proven to be viable and efficient alternatives. SDDP has been extensively used to solve and plan hydrothermal dispatch operations since its original publication.  
+Other solution algorithms have been proposed to solve multistage problems, such as progressive hedging and nested Benders. However, for most large instances, none has proven to be viable and efficient alternatives. SDDP has been extensively used to solve and plan hydrothermal dispatch operations since its original publication.
 
-On the other hand, this method is a complex and difficult to implement algorithm. Moreover, to make it flexible enough for different applications while not compromising performance is a main issue. Hence, the historical scarcity of reliable and open software versions has limited development and discussions of its contributions. Yet, new and efficient implementations have risen with the advance of open-source languages as the Julia language.  
+On the other hand, this method is a complex and difficult to implement algorithm. Moreover, to make it flexible enough for different applications while not compromising performance is a main issue. Hence, the historical scarcity of reliable and open software versions has limited development and discussions of its contributions. Yet, new and efficient implementations have risen with the advance of open-source languages as the Julia language.
 
 One such implementation is \textit{SDDP.jl}, a Julia/JuMP package for solving large multistage convex stochastic optimization problems using stochastic dual dynamic programming. It provides a practical and efficient way to find the solution to the hydrothermal dispatch problem. With this package it was possible to define the dynamics and random variables of our problem and solve the instantiated model with the SDDP algorithm.
 
 \section{HydroPowerModels.jl}
 \label{sec:hydropowermodels}
 
-\textit{HydroPowerModels.jl} uses the \textit{PowerModels.jl} and \textit{SDDP.jl} packages to implement and solve different hydrothermal dispatch formulations. It provides an interface to easily solve and simulate hydrothermal dispatch models and allows the creation of a collection of hydrothermal problems described in input files for the package (following the \textit{PowerModels.jl} standard), thereby helping the discussion of methodology and the resulting policies for specific case instances. 
+\textit{HydroPowerModels.jl} uses the \textit{PowerModels.jl} and \textit{SDDP.jl} packages to implement and solve different hydrothermal dispatch formulations. It provides an interface to easily solve and simulate hydrothermal dispatch models and allows the creation of a collection of hydrothermal problems described in input files for the package (following the \textit{PowerModels.jl} standard), thereby helping the discussion of methodology and the resulting policies for specific case instances.
 
 In contrast to the previously available official software for hydrothermal dispatch models, the proposed package is part of an academic open-source effort. This helps to promote the continuous improvement of models and solution algorithms for the research community.
 
+% <review @frapac>
+% "paid professional product" -> "commercial solvers"
+% </review>
 Other academic implementations of SDDP have being developed and may be applied to the hydrothermal dispatch problem. However, the advances of the Julia Language and \textit{JuMP.jl} are a much more adequate framework than those of MATLAB \cite{FATS} or Python \cite{raso2016optimist,sddpy}.  Moreover, a free and open-source tool can be of great help for the research community alternatively to paid professional products as \cite{lohndorf2018quasar} and the renowned version from PSR Inc.
 
 Additional implementations of SDDP are also available in Julia \cite{leclerestochdynamicprogramming} \cite{StructDualDynProg}, but \textit{SDDP.jl} \cite{dowson_sddp.jl} has proven an easy to learn, efficient version of SDDP that is flexible enough for the purposes of the \textit{HydroPowerModels.jl} package.
@@ -309,7 +370,7 @@ Additional implementations of SDDP are also available in Julia \cite{leclerestoc
 
 \begin{itemize}
     \item Load case data from input files describing: Power network data; Reservoir facilities details and water network data; Inflow scenarios.
-    \item Receive case parameters: Power network formulation; Number of stages; Number of hours in Stage and optimizer to solve the sub-problems. 
+    \item Receive case parameters: Power network formulation; Number of stages; Number of hours in Stage and optimizer to solve the sub-problems.
     \item Build the multistage, hydrothermal steady-state power network optimization problem.
     \item Run SDDP method to approximate the cost-to-go functions.
     \item Simulate the policy.
@@ -337,13 +398,13 @@ data = HydroPowerModels.parse_folder(
 
 Use \texttt{create\_param} to create a set of problem parameters. For example, a 12-stage problem using the DC approximation can be specified as follows:
 \begin{lstlisting}[language = Julia]
-params = create_param( 
- stages      = 12, 
+params = create_param(
+ stages      = 12,
  stage_hours = 168.0,
  model_constructor_grid = DCPPowerModel,
  optimizer   = with_optimizer(GLPK.Optimizer))
 \end{lstlisting}
-    
+
 Then, build the Model and execute the SDDP \texttt{train} method:
 
 \begin{lstlisting}[language = Julia]
@@ -399,7 +460,7 @@ For this study, a 160 stage horizon planning and simulation have been executed u
 
 \begin{itemize}
     \item Number of stages: 160
-    \item Number of hours in stage: 168 
+    \item Number of hours in stage: 168
     \item Network Formulation: Linear DC approximation
 \end{itemize}
 
@@ -412,13 +473,13 @@ plot_aggregated_results(results)
 \end{lstlisting}
 
 % Figures \ref{fig:plot_agg_result_thermal} to
-Figures 2 to \ref{fig:plot_agg_result_inflow} show the output from the above command. As mentioned, the plots are of aggregated quantities, but the methods used to aggregate were chosen in order to help analysis. For example: The final nodal price is an average of nodal prices weighted by the contribution of local loads to the total demand; Reservoir volume was grouped weighted by the amount of energy that could be produced by the stored water (as was the inflow of water). 
+Figures 2 to \ref{fig:plot_agg_result_inflow} show the output from the above command. As mentioned, the plots are of aggregated quantities, but the methods used to aggregate were chosen in order to help analysis. For example: The final nodal price is an average of nodal prices weighted by the contribution of local loads to the total demand; Reservoir volume was grouped weighted by the amount of energy that could be produced by the stored water (as was the inflow of water).
 
 As expected the optimal dispatch of the simulations uses more hydro-generators, however it needs thermal-generators to met all demands without deficit. On this hydro-dominated system, the uncertain inflow is a driving factor of optimal dispatch. As we can see in Figure \ref{fig:plot_agg_result_inflow}, the inflow has a strong seasonality component, resulting the significant seasonality trait observable in the variables of the policy simulations.
 %\ref{fig:plot_agg_result_thermal}
 2-\ref{fig:plot_agg_result_load}, \ref{fig:plot_agg_result_hydrogen}-\ref{fig:plot_agg_result_vol}.
 
-Similar studies are possible for any case and formulation chosen, helping to analyze existing realistic cases and assess impacts of future system changes. 
+Similar studies are possible for any case and formulation chosen, helping to analyze existing realistic cases and assess impacts of future system changes.
 
 % \begin{figure}[!ht]\label{fig:thermal}
 % \centering
@@ -474,6 +535,11 @@ Similar studies are possible for any case and formulation chosen, helping to ana
 \label{fig:plot_agg_result_inflow}
 \end{figure}
 
+% <review @frapac>
+% Here some references are not valid, as:
+% [1] (seems related to some issues with the bibtex)
+% [10] Is Leopold Cambier involved in StructDualDynProg? I would rather use the url to the github package...
+% </review>
 \input{bib.tex}
 
 \end{document}
