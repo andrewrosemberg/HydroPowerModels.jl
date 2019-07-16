@@ -12,7 +12,8 @@ makedocs(
         "Manual"    => "getstarted.md",
         "Examples"  => Any[ "Cases"=>"examples/cases.md",
                             "Case 3 - Comparing Formulations"=>"examples/case3_cmp_formulations.md",
-        ]
+        ],
+        "Reference" => "apireference.md"
     ]
 )
 

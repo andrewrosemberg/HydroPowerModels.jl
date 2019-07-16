@@ -4,6 +4,7 @@ authors = ["andrewrosemberg <andrew@ele.puc-rio.br>"]
 version = "0.1.0"
 
 [deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 ECOS = "e2685f51-7e38-5353-a97d-a921fd2c8199"
 InfrastructureModels = "2030c09a-7f63-5d83-885d-db604e0e9cc0"
