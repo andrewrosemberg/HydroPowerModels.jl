@@ -47,4 +47,3 @@ Reel = "71555da5-176e-5e73-a222-aebc6c6e4f2f"
 [targets]
 test = ["Test","ECOS","GLPK"]
 docs = ["Cairo","Compose","ECOS","Fontconfig","GLPK","GR","GraphPlot","Ipopt","LightGraphs","Plots","Test","Weave","Reel"]
-src/visualization = ["Cairo","Compose","Fontconfig","GraphPlot","LightGraphs","Plots","Reel"]
