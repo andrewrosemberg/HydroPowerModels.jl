@@ -1,6 +1,5 @@
 using JSON
 using CSV
-using GLPK
 
 """
 Read hydro description json file.
