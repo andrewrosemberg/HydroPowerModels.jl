@@ -709,10 +709,10 @@ uuid = "ea10d353-3f73-51f8-a26c-33c1cb351aa5"
 version = "0.6.1"
 
 [[Weave]]
-deps = ["Base64", "Compat", "Dates", "Highlights", "JSON", "Markdown", "Mustache", "Pkg", "Printf", "REPL", "Requires", "Serialization", "Test", "YAML"]
-git-tree-sha1 = "4f82ad56e761cb9a1525877d7650930e7c003ac1"
+deps = ["Base64", "Compat", "Dates", "Highlights", "JSON", "Markdown", "Mustache", "Printf", "REPL", "Requires", "Serialization", "YAML"]
+git-tree-sha1 = "a1698569cb25ddefb4bf538f39e77afdc7aa720e"
 uuid = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"
-version = "0.9.0"
+version = "0.9.1"
 
 [[WinRPM]]
 deps = ["BinDeps", "Compat", "HTTPClient", "LibExpat", "Libdl", "Libz", "URIParser"]
