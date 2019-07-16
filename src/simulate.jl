@@ -44,7 +44,7 @@ function build_sol_powermodels(sp::JuMP.Model)
         solve_time = 0.0
     end
     status = JuMP.termination_status(sp)
-    built_sol = PowerModels.build_solution(sp.ext[:pm],status,solve_time,
+    built_sol = PowerModels.build_solution(sp.ext[:pm],solve_time,
         solution_builder = get_solution)
 end
 
@@ -60,11 +60,11 @@ end
 
 ""
 function get_solution(pm::GenericPowerModel, sol::Dict{String,<:Any})
-    PowerModels.get_solution(pm, sol)
+    PowerModels.solution_opf!(pm, sol)
     add_kcl_deficit(sol, pm)
 end
 
 ""
 function add_kcl_deficit(sol, pm::GenericPowerModel)
-    PowerModels.add_setpoint(sol, pm, "bus", "deficit", :deficit)
+    PowerModels.add_setpoint!(sol, pm, "bus", "deficit", :deficit; status_name="bus_type", inactive_status_value = 4)
 end
