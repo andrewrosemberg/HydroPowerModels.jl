@@ -61,12 +61,6 @@ git-tree-sha1 = "26601961df6afacdd16d67c1eec6cfe75e5ae9ab"
 uuid = "324d7699-5711-5eae-9e2f-1d82baa6b597"
 version = "0.5.4"
 
-[[Clp]]
-deps = ["BinaryProvider", "Compat", "Libdl", "LinQuadOptInterface", "MathOptInterface", "MathProgBase", "Pkg"]
-git-tree-sha1 = "46f748413b4234e18319acc7ba87d5ce1fce7681"
-uuid = "e2554f3b-3117-50c0-817c-e040a3ddf72d"
-version = "0.6.2"
-
 [[Codecs]]
 deps = ["Test"]
 git-tree-sha1 = "70885e5e038cba1c4c17a84ad6c40756e10a4fb5"
@@ -408,12 +402,6 @@ repo-rev = "0eff7b4a1cc238b6d4c4546f0e25218724ee0031"
 repo-url = "https://github.com/JuliaOpt/MathOptInterface.jl.git"
 uuid = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
 version = "0.8.4"
-
-[[MathProgBase]]
-deps = ["Compat"]
-git-tree-sha1 = "3bf2e534e635df810e5f4b4f1a8b6de9004a0d53"
-uuid = "fdba3010-5040-5b88-9595-932c9decdf73"
-version = "0.7.7"
 
 [[MbedTLS]]
 deps = ["BinaryProvider", "Dates", "Distributed", "Libdl", "Random", "Sockets", "Test"]

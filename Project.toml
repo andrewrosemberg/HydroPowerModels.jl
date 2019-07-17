@@ -6,7 +6,6 @@ version = "0.1.0"
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 Cairo = "159f3aea-2a34-519c-b102-8c37f9878175"
-Clp = "e2554f3b-3117-50c0-817c-e040a3ddf72d"
 Compose = "a81c6b42-2e10-5240-aca2-a61377ecd94b"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 Fontconfig = "186bb1d3-e1f7-5a2c-a377-96d770f13627"
