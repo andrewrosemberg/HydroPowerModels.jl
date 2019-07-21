@@ -1,12 +1,20 @@
 \begin{thebibliography}{10}
 
-\bibitem{sddpy}
-sddpy python for stochastic dual dynamic programming algorithm, 2019.
-
 \bibitem{artzner1999coherent}
 Philippe Artzner, Freddy Delbaen, Jean-Marc Eber, and David Heath.
 Coherent measures of risk.
 {\em Mathematical finance}, 9(3):203--228, 1999.
+
+\bibitem{bellman1966dynamic}
+Richard Bellman.
+Dynamic programming.
+{\em Science}, 153(3731):34--37, 1966.
+
+\bibitem{bertsekas1995dynamic}
+Dimitri~P Bertsekas, Dimitri~P Bertsekas, Dimitri~P Bertsekas, and Dimitri~P
+  Bertsekas.
+{\em Dynamic programming and optimal control}, volume~1.
+Athena scientific Belmont, MA, 1995.
 
 \bibitem{bezanson2017julia}
 Jeff Bezanson, Alan Edelman, Stefan Karpinski, and Viral~B Shah.
@@ -46,18 +54,24 @@ Stochdynamicprogramming. jl a julia library for multistage stochastic
 
 \bibitem{StructDualDynProg}
 Benoît Legat.
-leopoldcambier/structdualdynprog.jl: v0.2.0, October 2018.
+Juliastochopt/structdualdynprog.jl: v0.2.0, October 2018.
+
+\bibitem{Lingquan2019}
+Alexander~Shapiro Lingquan~Ding, Shabbir~Ahmed.
+A python package for multi-stage stochastic programming, May 2019.
 
 \bibitem{lohndorf2018quasar}
 N~L{\"o}hndorf.
 Quasar optimization software 2.4, 2018.
 
-\bibitem{maceira_ten_2008}
-Maria Elvira~Pineiro Maceira, V.~S. Duarte, D.~D.~J. Penna, L.~A.~M. Moraes,
-  and A.~C.~G. Melo.
-Ten years of application of stochastic dual dynamic programming in official and
-  agent studies in {{Brazil}}: Description of the {{NEWAVE}} program.
-{\em 16th PSCC, Glasgow, Scotland}, pages 14--18, 2008.
+\bibitem{maceiral2018twenty}
+MEP Maceiral, DDJ Penna, AL~Diniz, RJ~Pinto, ACG Melo, CV~Vasconcellos, and
+  CB~Cruz.
+Twenty years of application of stochastic dual dynamic programming in official
+  and agent studies in brazil-main features and improvements on the newave
+  model.
+In {\em 2018 Power Systems Computation Conference (PSCC)}, pages 1--7. IEEE,
+  2018.
 
 \bibitem{molzahn2019survey}
 Daniel~K Molzahn, Ian~A Hiskens, et~al.
@@ -88,5 +102,10 @@ Luciano Raso, David Dorchies, Jan Kwakkel, and Pierre~Olivier Malaterre.
 Optimist: a python library for water system optimal operation and analysis
   using sddp.
 2016.
+
+\bibitem{shapiro2009lectures}
+Alexander Shapiro, Darinka Dentcheva, and Andrzej Ruszczy{\'n}ski.
+{\em Lectures on stochastic programming: modeling and theory}.
+SIAM, 2009.
 
 \end{thebibliography}

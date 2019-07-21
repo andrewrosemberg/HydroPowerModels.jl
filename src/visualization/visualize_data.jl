@@ -784,7 +784,7 @@ function plot_aggregated_results(results::Dict)
     nplots += 1
 
     # Hydro Spill
-    scen_spill_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:outflow][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+    scen_spill_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:spill][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
     
     scen_spill = deepcopy(scen_spill_all[1])
     scen_spill .=0
