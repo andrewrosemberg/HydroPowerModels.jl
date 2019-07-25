@@ -8,7 +8,7 @@ const EXAMPLES = Any[   "Cases"=>"examples/cases.md"]
 for file in ["case3.jl"]
     filename = joinpath(examples_dir, file)
     md_filename = replace(file, ".jl"=>".md")
-    push!(EXAMPLES, "examples/$(md_filename)")
+    push!(EXAMPLES, "examples/HydroValleys/$(md_filename)")
     Literate.markdown(filename, dirname(filename); documenter=true)
 end
 
