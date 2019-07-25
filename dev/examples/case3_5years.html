@@ -722,7 +722,7 @@ div.title {text-align: center;}
 <pre class='hljl'>
 <span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
     </span><span class='hljl-n'>Random</span><span class='hljl-oB'>.</span><span class='hljl-nf'>seed!</span><span class='hljl-p'>(</span><span class='hljl-n'>seed</span><span class='hljl-p'>)</span><span class='hljl-t'>
-    </span><span class='hljl-nf'>plot_grid</span><span class='hljl-p'>(</span><span class='hljl-n'>alldata</span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>],</span><span class='hljl-n'>node_label</span><span class='hljl-oB'>=</span><span class='hljl-kc'>false</span><span class='hljl-p'>)</span><span class='hljl-t'>
+    </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>plot_grid</span><span class='hljl-p'>(</span><span class='hljl-n'>alldata</span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>],</span><span class='hljl-n'>node_label</span><span class='hljl-oB'>=</span><span class='hljl-kc'>false</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-k'>end</span>
 </pre>
 
@@ -776,7 +776,7 @@ div.title {text-align: center;}
 
 
 <pre class="output">
-&#40;:statistical, 0.9812510013580322&#41;
+&#40;:statistical, 0.7900948524475098&#41;
 </pre>
 
 
@@ -785,7 +785,7 @@ div.title {text-align: center;}
 
 <pre class='hljl'>
 <span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
-    </span><span class='hljl-nf'>plot_bound</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-p'>)</span><span class='hljl-t'>
+    </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>plot_bound</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-k'>end</span>
 </pre>
 
@@ -805,7 +805,7 @@ div.title {text-align: center;}
 
 <pre class="output">
 Dict&#123;Symbol,Any&#125; with 5 entries:
-  :solve_time  &#61;&gt; 4.64736
+  :solve_time  &#61;&gt; 4.84988
   :params      &#61;&gt; Dict&#123;Any,Any&#125;&#40;&quot;optimizer&quot;&#61;&gt;OptimizerFactory&#40;Optimizer, &#40;&#41;
 , Ba…
   :machine     &#61;&gt; Dict&#40;:cpu&#61;&gt;&quot;Intel&#40;R&#41; Xeon&#40;R&#41; CPU @ 2.30GHz&quot;,:memory&#61;&gt;&quot;7.3
@@ -857,7 +857,7 @@ Test Passed
 
 <pre class='hljl'>
 <span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
-    </span><span class='hljl-nf'>plot_aggregated_results</span><span class='hljl-p'>(</span><span class='hljl-n'>results</span><span class='hljl-p'>)</span><span class='hljl-t'>
+    </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>plot_aggregated_results</span><span class='hljl-p'>(</span><span class='hljl-n'>results</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-k'>end</span>
 </pre>
 
@@ -973,7 +973,7 @@ Table: branch
 
 <pre class='hljl'>
 <span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
-    </span><span class='hljl-nf'>plotresults</span><span class='hljl-p'>(</span><span class='hljl-n'>results</span><span class='hljl-p'>)</span><span class='hljl-t'>
+    </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>plotresults</span><span class='hljl-p'>(</span><span class='hljl-n'>results</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-k'>end</span>
 </pre>
 
