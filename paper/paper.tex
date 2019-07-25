@@ -414,7 +414,7 @@ For a case study, consider a the hydrothermal dispatch of a realistic system wit
 In order for a qualitative view of the system, the package disposes a graph illustration plot:
 
 \begin{lstlisting}[language = Julia]
-plot_grid(data, node_label=false)
+HydroPowerModels.plot_grid(data, node_label=false)
 \end{lstlisting}
 
 \begin{figure}[htb]
@@ -440,7 +440,7 @@ For this study, a 160 stage horizon planning and simulation have been executed u
 The simulate command returns a detailed dictionary of the execution. In order to plot those results returned by the simulate function, you may choose from a variety of methods, including the function \texttt{plot\_aggregate\_results()}. This function receives the dictionary results and generates the most common aggregated variable plots, which best summarize simulations of a hydrothermal dispatch:
 
 \begin{lstlisting}[language = Julia]
-plot_aggregated_results(results)
+HydroPowerModels.plot_aggregated_results(results)
 \end{lstlisting}
 
 % Figures \ref{fig:plot_agg_result_thermal} to

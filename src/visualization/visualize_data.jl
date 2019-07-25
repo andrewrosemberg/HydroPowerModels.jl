@@ -59,7 +59,7 @@ function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
 end
 
 """
-    plotresults(results::Dict;nc::Int = 3)
+    HydroPowerModels.plotresults(results::Dict;nc::Int = 3)
 
 Common Plots.
 
@@ -372,7 +372,7 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
 end
 
 """
-    plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+    HydroPowerModels.plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
 
 Plot Grid installed Power.
 
@@ -655,7 +655,7 @@ function plot_grid_dispatched(results::Dict;seed=1111,quant::Float64=0.5,size_fi
 end
 
 """
-plot_aggregated_results(results::Dict)
+    HydroPowerModels.plot_aggregated_results(results::Dict)
 
 Plot Aggregated Results. Figures are of aggregated quantities, but the methods used to aggregate were chosen in order to help analysis. For example: The final nodal price is an average of nodal prices weighted by the contribution of local loads to the total demand; Reservoir volume was grouped weighted by the amount of energy that could be produced by the stored water (as was the inflow of water). 
 
@@ -848,7 +848,7 @@ function plot_aggregated_results(results::Dict)
 end
 
 """
-    plot_bound(m)
+    HydroPowerModels.plot_bound(m)
 
 Plots the SDDP outer bound per iteration.
 """

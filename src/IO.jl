@@ -21,7 +21,7 @@ function read_inflow(file::String, nHyd::Int)
 end
 
 """
-    parse_folder(folder::String; stages::Int = 1,digts::Int=7)
+    HydroPowerModels.parse_folder(folder::String; stages::Int = 1,digts::Int=7)
 
 Read hydrothermal case folder.
 
