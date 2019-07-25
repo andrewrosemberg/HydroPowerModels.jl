@@ -1,4 +1,16 @@
-using Documenter, HydroPowerModels
+using Documenter, Literate, HydroPowerModels
+
+examples_dir = joinpath(dirname(dirname(@__FILE__)), "examples/HydroValleys")
+docs_dir = dirname(@__FILE__)
+testcases_dir = joinpath(dirname(dirname(@__FILE__)), "testcases")
+
+const EXAMPLES = Any[   "Cases"=>"examples/cases.md"]
+for file in ["case3.jl"]
+    filename = joinpath(examples_dir, file)
+    md_filename = replace(file, ".jl"=>".md")
+    push!(EXAMPLES, "examples/$(md_filename)")
+    Literate.markdown(filename, dirname(filename); documenter=true)
+end
 
 makedocs(
     modules = [HydroPowerModels],
@@ -10,9 +22,7 @@ makedocs(
     pages = [
         "Home"      => "index.md",
         "Manual"    => "getstarted.md",
-        "Examples"  => Any[ "Cases"=>"examples/cases.md",
-                            "Case 3 - Comparing Formulations"=>"examples/case3_cmp_formulations.md",
-        ],
+        "Examples"  => EXAMPLES,
         "Reference" => "apireference.md"
     ]
 )
