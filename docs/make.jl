@@ -3,6 +3,10 @@ using Documenter, Literate, HydroPowerModels
 examples_dir = joinpath(dirname(dirname(@__FILE__)), "examples/HydroValleys")
 docs_dir = dirname(@__FILE__)
 
+testcases_dir = joinpath(dirname(dirname(@__FILE__)), "testcases")
+
+plot_bool = true
+
 const EXAMPLES = Any["examples/cases.md"]
 for file in ["case3.jl"]
     filename = joinpath(examples_dir, file)
