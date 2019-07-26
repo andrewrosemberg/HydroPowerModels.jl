@@ -2,14 +2,13 @@ using Documenter, Literate, HydroPowerModels
 
 examples_dir = joinpath(dirname(dirname(@__FILE__)), "examples/HydroValleys")
 docs_dir = dirname(@__FILE__)
-testcases_dir = joinpath(dirname(dirname(@__FILE__)), "testcases")
 
 const EXAMPLES = Any[   "Cases"=>"examples/cases.md"]
 for file in ["case3.jl"]
     filename = joinpath(examples_dir, file)
     md_filename = replace(file, ".jl"=>".md")
     push!(EXAMPLES,joinpath(docs_dir, md_filename))
-    Literate.markdown(filename, dirname(filename); documenter=true)
+    Literate.markdown(filename, joinpath(docs_dir, "src"); documenter=true)
 end
 
 makedocs(
