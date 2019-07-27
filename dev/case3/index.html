@@ -1,87 +1,26 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>- · HydroPowerModels.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>HydroPowerModels.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../">Home</a></li><li><a class="toctext" href="../getstarted/">Manual</a></li><li><span class="toctext">Examples</span><ul><li><a class="toctext" href="../examples/cases/">-</a></li><li class="current"><a class="toctext" href>-</a><ul class="internal"></ul></li></ul></li><li><a class="toctext" href="../apireference/">Reference</a></li></ul></nav><article id="docs"><header><nav><ul><li>Examples</li><li><a href>-</a></li></ul><a class="edit-page" href="https://github.com/andrewrosemberg/HydroPowerModels.jl/blob/master/../../../../build/andrewrosemberg/HydroPowerModels.jl/examples/HydroValleys/case3.jl"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>-</span><a class="fa fa-bars" href="#"></a></div></header><pre><code class="language-julia">#&#39; ---
-#&#39; title : Example Case 3 - Year Planning
-#&#39; author : Andrew Rosemberg
-#&#39; date : 15th Feb 2019
-#&#39; ---
-
-#&#39; # Introduction
-
-#&#39; This an example of the HydroPowerModels package for solving a simple stochastic case with the following specifications:
-#&#39;    - 3 Buses
-#&#39;    - 3 Lines
-#&#39;    - 2 Generators
-#&#39;    - 1 Reservoir and Hydrogenerator
-#&#39;    - 3 Scenarios
-#&#39;    - 12 Stages
-
-#&#39; # Case
-
-#&#39; ## Importing package and optimizer
-using GLPK
-using HydroPowerModels
-
-#&#39; ## Initialization</code></pre><pre><code class="language-julia">if !@isdefined plot_bool
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Introduction · HydroPowerModels.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>HydroPowerModels.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../">Home</a></li><li><a class="toctext" href="../getstarted/">Manual</a></li><li><span class="toctext">Examples</span><ul><li><a class="toctext" href="../examples/cases/">-</a></li><li class="current"><a class="toctext" href>Introduction</a><ul class="internal"><li class="toplevel"><a class="toctext" href="#Case-1">Case</a></li><li><a class="toctext" href="#Importing-package-and-optimizer-1">Importing package and optimizer</a></li><li><a class="toctext" href="#Initialization-1">Initialization</a></li><li><a class="toctext" href="#Load-Case-Specifications-1">Load Case Specifications</a></li><li><a class="toctext" href="#Build-Model-1">Build Model</a></li><li><a class="toctext" href="#Train-1">Train</a></li><li><a class="toctext" href="#Simulation-1">Simulation</a></li><li><a class="toctext" href="#Testing-Results-1">Testing Results</a></li><li><a class="toctext" href="#Plot-Aggregated-Results-1">Plot Aggregated Results</a></li><li class="toplevel"><a class="toctext" href="#Annex-1:-Case-Summary-1">Annex 1: Case Summary</a></li><li class="toplevel"><a class="toctext" href="#Annex-2:-Plot-Results-1">Annex 2: Plot Results</a></li></ul></li></ul></li><li><a class="toctext" href="../apireference/">Reference</a></li></ul></nav><article id="docs"><header><nav><ul><li>Examples</li><li><a href>Introduction</a></li></ul><a class="edit-page" href="https://github.com/andrewrosemberg/HydroPowerModels.jl/blob/master/../../../../build/andrewrosemberg/HydroPowerModels.jl/examples/HydroValleys/case3.jl"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Introduction</span><a class="fa fa-bars" href="#"></a></div></header><hr/><p>title : Example Case 3 - Year Planning author : Andrew Rosemberg date : 15th Feb 2019 –-</p><h1><a class="nav-anchor" id="Introduction-1" href="#Introduction-1">Introduction</a></h1><p>This an example of the HydroPowerModels package for solving a simple stochastic case with the following specifications:</p><ul><li>3 Buses</li><li>3 Lines</li><li>2 Generators</li><li>1 Reservoir and Hydrogenerator</li><li>3 Scenarios</li><li>12 Stages</li></ul><h1><a class="nav-anchor" id="Case-1" href="#Case-1">Case</a></h1><h2><a class="nav-anchor" id="Importing-package-and-optimizer-1" href="#Importing-package-and-optimizer-1">Importing package and optimizer</a></h2><pre><code class="language-julia">using GLPK
+using HydroPowerModels</code></pre><h2><a class="nav-anchor" id="Initialization-1" href="#Initialization-1">Initialization</a></h2><pre><code class="language-julia">if !@isdefined plot_bool
     plot_bool = true
 end
 using Random
-seed = 1221
-
-#&#39; ## Load Case Specifications
-
-#&#39; Data
-alldata = HydroPowerModels.parse_folder(joinpath(testcases_dir,&quot;case3&quot;));
-
-#&#39; Plot power grid graph
-if plot_bool == true
+seed = 1221</code></pre><pre><code class="language-none">1221</code></pre><h2><a class="nav-anchor" id="Load-Case-Specifications-1" href="#Load-Case-Specifications-1">Load Case Specifications</a></h2><p>Data</p><pre><code class="language-">alldata = HydroPowerModels.parse_folder(joinpath(testcases_dir,&quot;case3&quot;));</code></pre><p>Plot power grid graph</p><pre><code class="language-">if plot_bool == true
     Random.seed!(seed)
     HydroPowerModels.plot_grid(alldata[1],node_label=false)
-end
-
-#&#39; Parameters
-params = create_param(  stages = 12,
+end</code></pre><p>Parameters</p><pre><code class="language-julia">params = create_param(  stages = 12,
                         model_constructor_grid  = DCPPowerModel,
                         post_method             = PowerModels.post_opf,
-                        optimizer               = with_optimizer(GLPK.Optimizer));
-
-#&#39; ## Build Model</code></pre><pre><code class="language-julia">m = hydrothermaloperation(alldata, params);
-
-#&#39; ## Train</code></pre><pre><code class="language-">start_time = time()
+                        optimizer               = with_optimizer(GLPK.Optimizer));</code></pre><h2><a class="nav-anchor" id="Build-Model-1" href="#Build-Model-1">Build Model</a></h2><pre><code class="language-julia">m = hydrothermaloperation(alldata, params);</code></pre><h2><a class="nav-anchor" id="Train-1" href="#Train-1">Train</a></h2><pre><code class="language-">start_time = time()
 HydroPowerModels.train(m,iteration_limit = 100,stopping_rules= [SDDP.Statistical(num_replications = 20,iteration_period=20)]);
-end_time = time() - start_time
-
-#&#39; Termination Status and solve time (s)
-(SDDP.termination_status(m.policygraph), end_time)
-
-#&#39; Bounds
-if plot_bool == true
+end_time = time() - start_time</code></pre><p>Termination Status and solve time (s)</p><pre><code class="language-">(SDDP.termination_status(m.policygraph), end_time)</code></pre><p>Bounds</p><pre><code class="language-">if plot_bool == true
     HydroPowerModels.plot_bound(m)
-end
-
-#&#39; ## Simulation
-import Random
+end</code></pre><h2><a class="nav-anchor" id="Simulation-1" href="#Simulation-1">Simulation</a></h2><pre><code class="language-">import Random
 Random.seed!(seed)
 results = HydroPowerModels.simulate(m, 100);
-results
-
-#&#39; ## Testing Results
-using Test
-#&#39; Bound
-@test isapprox(SDDP.calculate_bound(m.policygraph), 15297.53846353836, atol=1)
-#&#39; Number of Simulations
-@test length(results[:simulations]) == 100
-
-#&#39; ## Plot Aggregated Results
-if plot_bool == true
+results</code></pre><h2><a class="nav-anchor" id="Testing-Results-1" href="#Testing-Results-1">Testing Results</a></h2><pre><code class="language-julia">using Test</code></pre><p>Bound</p><pre><code class="language-">@test isapprox(SDDP.calculate_bound(m.policygraph), 15297.53846353836, atol=1)</code></pre><p>Number of Simulations</p><pre><code class="language-">@test length(results[:simulations]) == 100</code></pre><h2><a class="nav-anchor" id="Plot-Aggregated-Results-1" href="#Plot-Aggregated-Results-1">Plot Aggregated Results</a></h2><pre><code class="language-">if plot_bool == true
     HydroPowerModels.plot_aggregated_results(results)
-end
-
-#&#39; # Annex 1: Case Summary
-if plot_bool == true
+end</code></pre><h1><a class="nav-anchor" id="Annex-1:-Case-Summary-1" href="#Annex-1:-Case-Summary-1">Annex 1: Case Summary</a></h1><pre><code class="language-">if plot_bool == true
     PowerModels.print_summary(alldata[1][&quot;powersystem&quot;])
-end
-
-#&#39; # Annex 2: Plot Results
-if plot_bool == true
+end</code></pre><h1><a class="nav-anchor" id="Annex-2:-Plot-Results-1" href="#Annex-2:-Plot-Results-1">Annex 2: Plot Results</a></h1><pre><code class="language-">if plot_bool == true
     HydroPowerModels.plotresults(results)
 end</code></pre><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../examples/cases/"><span class="direction">Previous</span><span class="title">-</span></a><a class="next" href="../apireference/"><span class="direction">Next</span><span class="title">Reference</span></a></footer></article></body></html>
