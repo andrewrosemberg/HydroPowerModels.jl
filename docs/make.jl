@@ -11,7 +11,7 @@ for file in ["case3.jl"]
     filename = joinpath(examples_dir, file)
     md_filename = replace(file, ".jl"=>".md")
     push!(EXAMPLES,md_filename)
-    Literate.markdown(filename, joinpath(docs_dir, "src"); documenter=true)
+    Literate.markdown(filename, joinpath(docs_dir, "src"); documenter=true, testcases_dir=testcases_dir)
 end
 
 makedocs(
