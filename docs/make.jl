@@ -2,7 +2,6 @@ using Documenter, Literate, HydroPowerModels
 
 examples_dir = joinpath(dirname(dirname(@__FILE__)), "examples/HydroValleys")
 docs_dir = dirname(@__FILE__)
-
 testcases_dir = joinpath(dirname(dirname(@__FILE__)), "testcases")
 
 plot_bool = true
