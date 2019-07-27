@@ -5,13 +5,18 @@ docs_dir = dirname(@__FILE__)
 testcases_dir = joinpath(dirname(dirname(@__FILE__)), "testcases")
 
 plot_bool = true
+function update_testcases_dir(content)
+    testcases_dir = String(joinpath(dirname(dirname(@__FILE__)), "testcases"))
+    
+    return "testcases_dir = $(testcases_dir) \n "*content
+end
 
 const EXAMPLES = Any["examples/cases.md"]
 for file in ["case3.jl"]
     filename = joinpath(examples_dir, file)
     md_filename = replace(file, ".jl"=>".md")
     push!(EXAMPLES,md_filename)
-    Literate.markdown(filename, joinpath(docs_dir, "src"); documenter=true, testcases_dir=testcases_dir)
+    Literate.markdown(filename, joinpath(docs_dir, "src"); documenter=true, preprocess = update_testcases_dir)
 end
 
 makedocs(
