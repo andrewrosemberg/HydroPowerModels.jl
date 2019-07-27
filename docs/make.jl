@@ -8,7 +8,7 @@ plot_bool = true
 function update_testcases_dir(content)
     testcases_dir = String(joinpath(dirname(dirname(@__FILE__)), "testcases"))
     
-    return "testcases_dir = $(testcases_dir) \n "*content
+    return "testcases_dir = $(testcases_dir) "*content
 end
 
 const EXAMPLES = Any["examples/cases.md"]
