@@ -31,6 +31,7 @@ seed = 1221
 # ## Load Case Specifications
 
 # Data
+testcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
 alldata = HydroPowerModels.parse_folder(joinpath(testcases_dir,"case3"));
 
 # Plot power grid graph
