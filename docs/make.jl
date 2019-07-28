@@ -6,7 +6,7 @@ testcases_dir = joinpath(dirname(dirname(@__FILE__)), "testcases")
 
 plot_bool = true
 function replace_paths(str)
-    path = "~/build/andrewrosemberg/HydroPowerModels.jl/testcases"
+    path = "~//build//andrewrosemberg//HydroPowerModels.jl//testcases"
     ex = "testcases"
     str = replace(str, "\"$(ex)\"" => path)
     
