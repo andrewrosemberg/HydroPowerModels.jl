@@ -5,10 +5,13 @@ docs_dir = dirname(@__FILE__)
 testcases_dir = joinpath(dirname(dirname(@__FILE__)), "testcases")
 
 plot_bool = true
-function update_testcases_dir(content)
-    testcases_dir = String(joinpath(dirname(dirname(@__FILE__)), "testcases"))
+function replace_paths(str)
+    path = "~/build/andrewrosemberg/HydroPowerModels.jl/testcases"
+    ex = "testcases"
+    content = read(path, String)
+    str = replace(str, "\"$(ex)\"" => content)
     
-    return "testcases_dir = $(testcases_dir) "*content
+    return str
 end
 
 const EXAMPLES = Any["examples/cases.md"]
@@ -16,7 +19,7 @@ for file in ["case3.jl"]
     filename = joinpath(examples_dir, file)
     md_filename = replace(file, ".jl"=>".md")
     push!(EXAMPLES,md_filename)
-    Literate.markdown(filename, joinpath(docs_dir, "src"); documenter=true)
+    Literate.markdown(filename, joinpath(docs_dir, "src"); documenter=true, preprocess = replace_paths)
 end
 
 makedocs(

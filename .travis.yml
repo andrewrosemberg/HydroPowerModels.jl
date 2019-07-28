@@ -11,6 +11,7 @@ notifications:
 sudo: false
 dist: trusty
 codecov: true
+coveralls: true
 jobs:
   include:
     - stage: "Documentation"
