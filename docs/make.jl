@@ -8,8 +8,7 @@ plot_bool = true
 function replace_paths(str)
     path = "~/build/andrewrosemberg/HydroPowerModels.jl/testcases"
     ex = "testcases"
-    content = read(path, String)
-    str = replace(str, "\"$(ex)\"" => content)
+    str = replace(str, "\"$(ex)\"" => path)
     
     return str
 end
