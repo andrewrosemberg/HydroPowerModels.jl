@@ -174,7 +174,7 @@ function plotresults(results::Dict;nc::Int = 3)
     scen_pld = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
 
     plt =   [plotscenarios(scen_pld[bus], title  = "Nodal price bus $bus",
-                ylabel = "Dollars/MW",
+                ylabel = "$/MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,
@@ -221,9 +221,9 @@ function plotresults(results::Dict;nc::Int = 3)
     plt_total[nplots+1:nplots+length(plt)] = plt
     nplots +=length(plt) 
 
-    # Hydro Turn
+    # Reservoir Outflow
     scen_turn = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:outflow][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
-    plt =   [   plotscenarios(scen_turn[res], title  = "Hydro Turn $res",
+    plt =   [   plotscenarios(scen_turn[res], title  = "Reservoir Outflow $res",
                     ylabel = "m³/s",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
@@ -717,7 +717,7 @@ function plot_aggregated_results(results::Dict)
     end
     scen_pld /= nbus
     plt = plotscenarios(scen_pld, title  = "Load Weighted Average Nodal price ",
-                ylabel = "Dollars/MW",
+                ylabel = "$/MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,
@@ -763,7 +763,7 @@ function plot_aggregated_results(results::Dict)
     plt_total[nplots+1] = plt
     nplots += 1
 
-    # Hydro Turn
+    # Reservoir Outflow
     nHyd = results[:data][1]["hydro"]["nHyd"] 
     scen_turn_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:outflow][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
     
@@ -773,7 +773,7 @@ function plot_aggregated_results(results::Dict)
         scen_turn = scen_turn .+ scen_turn_all[res]
     end
 
-    plt = plotscenarios(scen_turn, title  = "Hydro Turn",
+    plt = plotscenarios(scen_turn, title  = "Reservoir Outflow",
                     ylabel = "m³/s",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
@@ -783,8 +783,8 @@ function plot_aggregated_results(results::Dict)
     plt_total[nplots+1] = plt
     nplots += 1
 
-    # Hydro Spill
-    scen_spill_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:spill][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+    # Reservoir Spill
+    scen_spill_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:spill][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])./(0.0036*results[:params]["stage_hours"])
     
     scen_spill = deepcopy(scen_spill_all[1])
     scen_spill .=0
@@ -792,8 +792,8 @@ function plot_aggregated_results(results::Dict)
         scen_spill = scen_spill .+ scen_spill_all[res]
     end
 
-    plt = plotscenarios(scen_spill, title  = "Hydro Spill",
-                    ylabel = "Hm³",
+    plt = plotscenarios(scen_spill, title  = "Reservoir Spill",
+                    ylabel = "m³/s",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
                     right_margin = 10mm,
@@ -844,7 +844,7 @@ function plot_aggregated_results(results::Dict)
     plt_total[nplots+1] = plt
     nplots += 1
 
-    return plot(plt_total[1:nplots]...,nc=3,size = (3*400, 500*ceil(Int,nplots/3)),legend=false)
+    return plot(plt_total[1:nplots]...,nc=3,size = (4*400, 500*ceil(Int,nplots/3)),legend=false)
 end
 
 """
