@@ -174,7 +174,7 @@ function plotresults(results::Dict;nc::Int = 3)
     scen_pld = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
 
     plt =   [plotscenarios(scen_pld[bus], title  = "Nodal price bus $bus",
-                ylabel = "$/MW",
+                ylabel = "\$/MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,
@@ -717,7 +717,7 @@ function plot_aggregated_results(results::Dict)
     end
     scen_pld /= nbus
     plt = plotscenarios(scen_pld, title  = "Load Weighted Average Nodal price ",
-                ylabel = "$/MW",
+                ylabel = "\$/MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,
