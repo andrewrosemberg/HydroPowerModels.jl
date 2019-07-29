@@ -6,14 +6,6 @@ testcases_dir = joinpath(dirname(dirname(@__FILE__)), "testcases")
 
 plot_bool = true
 
-const EXAMPLES = Any["examples/cases.md"]
-for file in ["case3.jl"]
-    filename = joinpath(examples_dir, file)
-    md_filename = replace(file, ".jl"=>".md")
-    push!(EXAMPLES,md_filename)
-    Literate.markdown(filename, joinpath(docs_dir, "src"); documenter=true)
-end
-
 makedocs(
     modules = [HydroPowerModels],
     doctest  = false,
