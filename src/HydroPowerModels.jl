@@ -17,6 +17,7 @@ include("simulate.jl")
 include("train.jl")
 include("visualization/visualize_data.jl")
 include("objective.jl")
+include("build_model.jl")
 
 export  hydrothermaloperation, create_param,
         set_active_demand!, flat_dict, signif_dict
@@ -29,10 +30,10 @@ Reexport.@reexport using PowerModels, SDDP
 Create a hydrothermal power operation model containing the policygraph the system data and the planning parameters.
 
 Required parameters are:
--   data is a dict with all information of the problem. 
+-   alldata is a vector of dicts with information of the problem's stages. 
 -   param is a dict containing solution parameters.
 """
-function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
+function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; build_model::Function=HydroPowerModels.build_opf_powermodels)
     # verbose
     if !params["verbose"]
         PowerModels.silence()
@@ -75,8 +76,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict)
         gatherusefulinfo!(data)
 
         # build eletric grid model using PowerModels
-        pm = PowerModels.build_model(data["powersystem"], params["model_constructor_grid"], 
-            params["post_method"], jump_model=sp, setting = params["setting"])
+        pm = build_model(sp,data,params)
         
         #if isforward # NOT YET IMPLEMENTED
             #pm = PowerModels.build_model(data["powersystem"], params["model_constructor_grid_forward"], 
