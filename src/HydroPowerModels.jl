@@ -78,10 +78,10 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; buil
         # build eletric grid model using PowerModels
 
         if isforward
-            pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid_forward"], 
+            pm = PowerModels.build_model(data["powersystem"], params["model_constructor_grid_forward"], 
                 params["post_method"], jump_model=sp, setting = params["setting"])
         else
-            pm = PowerModels.build_generic_model(data["powersystem"], params["model_constructor_grid_backward"], 
+            pm = PowerModels.build_model(data["powersystem"], params["model_constructor_grid_backward"], 
                params["post_method"], jump_model=sp, setting = params["setting"])
         end
         
