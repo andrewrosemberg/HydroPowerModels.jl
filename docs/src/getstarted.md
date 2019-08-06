@@ -80,7 +80,7 @@ In order to plot the results returned by the simulate function, you may choose f
 The function ’plotresults()’ receives a results dictionary and generates the most common plots for a hydrothermal dispatch: 
 
 ```julia
-plotresults(results)
+HydroPowerModels.plotresults(results)
 ```
 
 Otherwise, it helps to organize values of a variable for all simulations and stages into a matrix and then plot using the  'plotscenarios'. The 'plotscenarios' function indicates the median and the following quantiles: [5%, 15%, 25%, 75%, 85%, 95%]. For example, to plot the values of the active generation of the 1st generator:
@@ -90,7 +90,7 @@ baseMVA =  [results[:simulations][i][j][:powersystem]["solution"]["baseMVA"] for
 
 scen_gen = [results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["pg"] for i=1:100, j=1:12]'.*baseMVA
 
-plotscenarios(scen_gen, title  = "Thermal Generation 1",
+HydroPowerModels.plotscenarios(scen_gen, title  = "Thermal Generation 1",
                 ylabel = "MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,

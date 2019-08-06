@@ -38,7 +38,7 @@ alldata = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"cas
 #' Plot power grid graph
 if plot_bool == true
     Random.seed!(seed)
-    plot_grid(alldata[1],node_label=false)
+    HydroPowerModels.plot_grid(alldata[1],node_label=false)
 end
 
 params = create_param(  stages = 12, 
@@ -61,7 +61,7 @@ end_time = time() - start_time
 
 #' Bounds
 if plot_bool == true
-    plot_bound(m)
+    HydroPowerModels.plot_bound(m)
 end
 
 #' ## Simulation
@@ -76,7 +76,7 @@ results[:simulations][1][1][:objective]
 
 #' ## Plot Aggregated Results
 if plot_bool == true
-    plot_aggregated_results(results)
+    HydroPowerModels.plot_aggregated_results(results)
 end
 
 #' # Annex 1: Case Summary
@@ -86,5 +86,5 @@ end
 
 #' # Annex 2: Plot Results
 if plot_bool == true
-    plotresults(results)
+    HydroPowerModels.plotresults(results)
 end

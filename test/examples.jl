@@ -3,6 +3,7 @@ const examples_dir = joinpath(dirname(dirname(@__FILE__)), "examples")
 const Examples = Dict(
     "HydroValleys" => [
             "case3.jl",
+            "case3_soc.jl",
             "case3deterministic.jl",
             "case3deterministic_nowater.jl",
             "case3deterministic_overwater.jl"

@@ -32,3 +32,4 @@ A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Opti
 
 **Presentations**
 * JuMP-Dev 2019 (Santiago, Chile) https://youtu.be/H6LmhGJ2kc8
+* JuliaCon 2019 (Baltimore, United States) https://www.youtube.com/watch?v=bnKX2uATrzA&t=41s

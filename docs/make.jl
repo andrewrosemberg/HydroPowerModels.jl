@@ -1,4 +1,11 @@
-using Documenter, HydroPowerModels
+using Documenter, Literate, HydroPowerModels
+
+examples_dir = joinpath(dirname(dirname(@__FILE__)), "examples/HydroValleys")
+docs_dir = dirname(@__FILE__)
+testcases_dir = joinpath(dirname(dirname(@__FILE__)), "testcases")
+
+plot_bool = true
+const EXAMPLES = Any["examples/cases.md"]
 
 makedocs(
     modules = [HydroPowerModels],
@@ -10,9 +17,8 @@ makedocs(
     pages = [
         "Home"      => "index.md",
         "Manual"    => "getstarted.md",
-        "Examples"  => Any[ "Cases"=>"examples/cases.md",
-                            "Case 3 - Comparing Formulations"=>"examples/case3_cmp_formulations.md",
-        ]
+        "Examples"  => EXAMPLES,
+        "Reference" => "apireference.md"
     ]
 )
 

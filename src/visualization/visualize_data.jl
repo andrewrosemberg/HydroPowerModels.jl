@@ -3,7 +3,19 @@ import Cairo, Fontconfig
 using LightGraphs, GraphPlot, Compose
 using Random, Reel
 
-"""Plots a set o scenarios"""
+"""
+    plotscenarios(scen::Array{Float64,2}; savepath::String ="",
+        save::Bool = false, fileformat::String = "png", kwargs...)
+
+Plots a set of scenarios.
+
+Parameters:
+-   scen        : Scenarios matrix (Stages x Scenarious).
+-   save        : Bool to indicate if figure is to be saved.
+-   savepath    : Path save figure.
+-   fileformat  : Figure file format.
+-   kwargs      : Aditional keyword arguments for plot function.
+"""
 function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
         save::Bool = false, fileformat::String = "png", kwargs...)
 
@@ -46,7 +58,16 @@ function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
     return p1    
 end
 
-"""Common Plots"""
+"""
+    HydroPowerModels.plotresults(results::Dict;nc::Int = 3)
+
+Common Plots.
+
+Parameters:
+-   results        : Simulations output.
+-   nc             : Number of figures per line.
+
+"""
 function plotresults(results::Dict;nc::Int = 3)
     plt_total = Array{Plots.Plot}(undef,10000)
     nplots = 0
@@ -153,7 +174,7 @@ function plotresults(results::Dict;nc::Int = 3)
     scen_pld = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
 
     plt =   [plotscenarios(scen_pld[bus], title  = "Nodal price bus $bus",
-                ylabel = "Dollars/MW",
+                ylabel = "\$/MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,
@@ -166,7 +187,7 @@ function plotresults(results::Dict;nc::Int = 3)
     catch
     end
     # Deficit
-
+    try
     nbus = length(results[:data][1]["powersystem"]["bus"])
     idxbus = collect(1:nbus)
     scen_def = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["deficit"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
@@ -181,7 +202,9 @@ function plotresults(results::Dict;nc::Int = 3)
             for bus in idxbus
     ]
     plt_total[nplots+1:nplots+length(plt)] = plt
-    nplots +=length(plt) 
+    nplots +=length(plt)
+    catch
+    end
 
     # Hydro Generation
     nHyd = results[:data][1]["hydro"]["nHyd"]
@@ -198,9 +221,9 @@ function plotresults(results::Dict;nc::Int = 3)
     plt_total[nplots+1:nplots+length(plt)] = plt
     nplots +=length(plt) 
 
-    # Hydro Turn
+    # Reservoir Outflow
     scen_turn = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:outflow][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
-    plt =   [   plotscenarios(scen_turn[res], title  = "Hydro Turn $res",
+    plt =   [   plotscenarios(scen_turn[res], title  = "Reservoir Outflow $res",
                     ylabel = "m³/s",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
@@ -348,7 +371,18 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
     return dcp_stats
 end
 
-""" Plot Grid installed Power"""
+"""
+    HydroPowerModels.plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+
+Plot Grid installed Power.
+
+Paremeters:
+-   data         : HydroPowerModel single stage data.
+-   path         : Path to save grid plot.
+-   size_fig     : Size figure.
+-   node_label   : Plot nodel label on grid.
+-   nodelabeldist: Nodel label distance from node.
+"""
 function plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
 
     gatherusefulinfo!(data)
@@ -620,7 +654,15 @@ function plot_grid_dispatched(results::Dict;seed=1111,quant::Float64=0.5,size_fi
     end
 end
 
-"""aggregated Results Plots"""
+"""
+    HydroPowerModels.plot_aggregated_results(results::Dict)
+
+Plot Aggregated Results. Figures are of aggregated quantities, but the methods used to aggregate were chosen in order to help analysis. For example: The final nodal price is an average of nodal prices weighted by the contribution of local loads to the total demand; Reservoir volume was grouped weighted by the amount of energy that could be produced by the stored water (as was the inflow of water). 
+
+Paremeter:
+-   results: Simulation results.
+
+"""
 function plot_aggregated_results(results::Dict)
     plt_total = Array{Plots.Plot}(undef,20)
     nplots = 0
@@ -675,7 +717,7 @@ function plot_aggregated_results(results::Dict)
     end
     scen_pld /= nbus
     plt = plotscenarios(scen_pld, title  = "Load Weighted Average Nodal price ",
-                ylabel = "Dollars/MW",
+                ylabel = "\$/MW",
                 xlabel = "Stages",
                 bottom_margin = 10mm,
                 right_margin = 10mm,
@@ -686,6 +728,7 @@ function plot_aggregated_results(results::Dict)
     catch
     end
     # Deficit
+    try
     scen_def_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["deficit"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
     scen_def = deepcopy(scen_def_all[idxbus[1]])
     scen_def .=0
@@ -701,6 +744,8 @@ function plot_aggregated_results(results::Dict)
                 )
     plt_total[nplots+1] = plt
     nplots += 1
+    catch
+    end
 
     # Hydro Generation
     scen_gen = deepcopy(scen_gen_all[idxhyd[1]])
@@ -718,7 +763,7 @@ function plot_aggregated_results(results::Dict)
     plt_total[nplots+1] = plt
     nplots += 1
 
-    # Hydro Turn
+    # Reservoir Outflow
     nHyd = results[:data][1]["hydro"]["nHyd"] 
     scen_turn_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:outflow][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
     
@@ -728,7 +773,7 @@ function plot_aggregated_results(results::Dict)
         scen_turn = scen_turn .+ scen_turn_all[res]
     end
 
-    plt = plotscenarios(scen_turn, title  = "Hydro Turn",
+    plt = plotscenarios(scen_turn, title  = "Reservoir Outflow",
                     ylabel = "m³/s",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
@@ -738,8 +783,8 @@ function plot_aggregated_results(results::Dict)
     plt_total[nplots+1] = plt
     nplots += 1
 
-    # Hydro Spill
-    scen_spill_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:outflow][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+    # Reservoir Spill
+    scen_spill_all = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:spill][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])./(0.0036*results[:params]["stage_hours"])
     
     scen_spill = deepcopy(scen_spill_all[1])
     scen_spill .=0
@@ -747,8 +792,8 @@ function plot_aggregated_results(results::Dict)
         scen_spill = scen_spill .+ scen_spill_all[res]
     end
 
-    plt = plotscenarios(scen_spill, title  = "Hydro Spill",
-                    ylabel = "Hm³",
+    plt = plotscenarios(scen_spill, title  = "Reservoir Spill",
+                    ylabel = "m³/s",
                     xlabel = "Stages",
                     bottom_margin = 10mm,
                     right_margin = 10mm,
@@ -799,10 +844,14 @@ function plot_aggregated_results(results::Dict)
     plt_total[nplots+1] = plt
     nplots += 1
 
-    return plot(plt_total[1:nplots]...,nc=3,size = (3*400, 500*ceil(Int,nplots/3)),legend=false)
+    return plot(plt_total[1:nplots]...,nc=3,size = (4*400, 500*ceil(Int,nplots/3)),legend=false)
 end
 
-""" plot_bound """
+"""
+    HydroPowerModels.plot_bound(m)
+
+Plots the SDDP outer bound per iteration.
+"""
 function plot_bound(m)
     niter = length(m.policygraph.most_recent_training_results.log)
     val = round.([m.policygraph.most_recent_training_results.log[iter].bound for iter in 1:niter],digits =5)

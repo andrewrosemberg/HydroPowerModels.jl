@@ -3,7 +3,8 @@ keywords:
   - Julia
   - Optimization
   - Energy
-  - Stochastic
+  - Stochastic Programming
+  - Optimal Power Flow
 authors:
   - name: Andrew W. Rosemberg
     orcid: 0000-0002-6880-8845
@@ -11,7 +12,7 @@ authors:
   - name: Alexandre Street
     affiliation: 1, 2
   - name: Joaquim D. Garcia
-    affiliation: 1, 2
+    affiliation: 1, 2, 5
   - name: Thuener Silva
     affiliation: 1, 3
   - name: \\ Davi M. Valladão
@@ -21,11 +22,13 @@ authors:
 affiliations:
   - name: Laboratory of Applied Mathematical Programming and Statistics (LAMPS)
     index: 1
-  - name: Department of Eletrical Engineering, PUC-RIO
+  - name: Department of Electrical Engineering, PUC-RIO
     index: 2
   - name: Department of Industrial Engineering, PUC-RIO
     index: 3
   - name: Department of Industrial Engineering, Northwestern University, Evanston
     index: 4
+  - name: PSR-Inc
+    index: 5
 date: 01 June 2019
 bibliography: ref.bib
