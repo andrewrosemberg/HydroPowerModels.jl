@@ -50,6 +50,7 @@ function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
     end
     plot!(p1, maximum(scen; dims=2), label = "Max and Min", color = "Steel Blue")
     plot!(p1, minimum(scen; dims=2), label = "", color = "Steel Blue")
+    plot!(p1, mean(scen; dims=2), label = "Mean", color = "Black")
     if save
         savefig(p1, savepath*"$fileformat")
         return nothing
@@ -715,7 +716,9 @@ function plot_aggregated_results(results::Dict)
     for bus in idxbus
         scen_pld = scen_pld .+ scen_pld_all[bus].*hcat(fill(load_nodes[:,bus],nsim)...)
     end
-    scen_pld /= nbus
+    for t=1:nstages
+        scen_pld[t,:] /= sum(load_nodes[t,bus] for bus in idxbus)
+    end
     plt = plotscenarios(scen_pld, title  = "Load Weighted Average Nodal price ",
                 ylabel = "\$/MW",
                 xlabel = "Stages",
