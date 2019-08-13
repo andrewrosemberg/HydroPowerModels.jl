@@ -172,7 +172,7 @@ function plotresults(results::Dict;nc::Int = 3)
     try
     nbus = length(results[:data][1]["powersystem"]["bus"])
     idxbus = collect(1:nbus)
-    scen_pld = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
+    scen_pld = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])/baseMVA
 
     plt =   [plotscenarios(scen_pld[bus], title  = "Nodal price bus $bus",
                 ylabel = "\$/MW",
@@ -709,7 +709,7 @@ function plot_aggregated_results(results::Dict)
     # Nodal price
     idxbus = collect(1:nbus)
     try
-    scen_pld_all = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
+    scen_pld_all = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])/baseMVA
     
     scen_pld = deepcopy(scen_pld_all[idxbus[1]])
     scen_pld .=0
