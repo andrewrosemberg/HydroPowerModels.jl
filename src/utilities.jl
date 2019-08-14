@@ -208,7 +208,7 @@ function water_energy_res!(data::Dict,res::Int)
         water_val_spill += water_energy_res!(data,j)
     end
 
-    data["hydro"]["Hydrogenerators"][res]["water_energy"] += water_val_spill == 0 ? water_val_turn : (water_val_turn+water_val_spill)/2
+    data["hydro"]["Hydrogenerators"][res]["water_energy"] += water_val_turn >= water_val_spill ? water_val_turn : water_val_spill
     
     return data["hydro"]["Hydrogenerators"][res]["water_energy"]
 end
