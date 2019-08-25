@@ -528,9 +528,11 @@ version = "0.5.2"
 
 [[PowerModels]]
 deps = ["InfrastructureModels", "JSON", "JuMP", "LinearAlgebra", "MathOptInterface", "Memento", "SparseArrays"]
-git-tree-sha1 = "1e3deea188e92d904bcffd4992d8e309786b9257"
+git-tree-sha1 = "0fb07e99f3603953d5beed4d6e03e20538ea9d73"
+repo-rev = "master"
+repo-url = "https://github.com/andrewrosemberg/PowerModels.jl.git"
 uuid = "c36e90e8-916a-50a6-bd94-075b64ef4655"
-version = "0.12.2"
+version = "0.12.4"
 
 [[Printf]]
 deps = ["Unicode"]

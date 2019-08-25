@@ -38,6 +38,3 @@ LightGraphs = "093fc24a-ae57-5d10-9952-331d41423f4d"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 Reel = "71555da5-176e-5e73-a222-aebc6c6e4f2f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[targets]
-test = ["Test", "GLPK", "ECOS"]
