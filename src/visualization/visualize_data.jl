@@ -282,17 +282,17 @@ function plotresults(results::Dict;nc::Int = 3)
     plt_total[nplots+1:nplots+length(plt)] = plt
     nplots +=length(plt) 
     if mod(nplots,nc) > 0 && floor(Int,nplots/nc) > 0
-        l = @layout [ grid(floor(Int,nplots/nc),nc);  grid(1,mod(nplots,nc))]
+        l = @layout [ Plots.grid(floor(Int,nplots/nc),nc);  Plots.grid(1,mod(nplots,nc))]
         nlines = floor(Int,nplots/nc)+1
-        l.heights = grid(2,1,heights=[floor(Int,nplots/nc)/nlines;1/nlines]).heights
+        l.heights = Plots.grid(2,1,heights=[floor(Int,nplots/nc)/nlines;1/nlines]).heights
     elseif floor(Int,nplots/nc) > 0
-        l = @layout grid(floor(Int,nplots/nc),nc)
+        l = @layout Plots.grid(floor(Int,nplots/nc),nc)
         nlines = floor(Int,nplots/nc)
-        l.heights = grid(nlines,1,heights=[1/nlines for n = 1:nlines]).heights
+        l.heights = Plots.grid(nlines,1,heights=[1/nlines for n = 1:nlines]).heights
     else
-        l = @layout grid(1,mod(nplots,nc))
+        l = @layout Plots.grid(1,mod(nplots,nc))
         nlines = 1
-        l.heights = grid(1,1,heights=[1]).heights
+        l.heights = Plots.grid(1,1,heights=[1]).heights
     end    
 
     return plot(plt_total[1:nplots]...,layout=l,size = (nc*400,400*ceil(Int,nplots/nc)),legend=false)
