@@ -104,7 +104,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; buil
 
         # hydro balance
         variable_inflow(sp, data)
-        rainfall_noises(sp, data, cidx(t,data["hydro"]["size_inflow"][1]))
+        rainfall_noises(sp, data, params, cidx(t,data["hydro"]["size_inflow"][1]))
         constraint_hydro_balance(sp, data, params)
 
         # hydro_generation
