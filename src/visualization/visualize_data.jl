@@ -656,7 +656,7 @@ function plot_grid_dispatched(results::Dict;seed=1111,quant::Float64=0.5,size_fi
 end
 
 """
-    HydroPowerModels.plot_aggregated_results(results::Dict)
+    HydroPowerModels.plot_aggregated_results(results::Dict;nc::Int=3)
 
 Plot Aggregated Results. Figures are of aggregated quantities, but the methods used to aggregate were chosen in order to help analysis. For example: The final nodal price is an average of nodal prices weighted by the contribution of local loads to the total demand; Reservoir volume was grouped weighted by the amount of energy that could be produced by the stored water (as was the inflow of water). 
 
@@ -664,7 +664,7 @@ Paremeter:
 -   results: Simulation results.
 
 """
-function plot_aggregated_results(results::Dict)
+function plot_aggregated_results(results::Dict;nc::Int=3)
     plt_total = Array{Plots.Plot}(undef,20)
     nplots = 0
     nsim = length(results[:simulations])
