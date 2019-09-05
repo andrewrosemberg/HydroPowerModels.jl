@@ -861,7 +861,7 @@ function plot_aggregated_results(results::Dict;nc::Int=3)
         l.heights = Plots.grid(1,1,heights=[1]).heights
     end
 
-    return plot(plt_total[1:nplots]...,layout=l,size = (4*400, 500*ceil(Int,nplots/3)),legend=false)
+    return plot(plt_total[1:nplots]...,layout=l,size = (4*400, 500*ceil(Int,nplots/nc)),legend=false)
 end
 
 """
