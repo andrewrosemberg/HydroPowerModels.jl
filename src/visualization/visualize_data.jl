@@ -847,7 +847,21 @@ function plot_aggregated_results(results::Dict;nc::Int=3)
     plt_total[nplots+1] = plt
     nplots += 1
 
-    return plot(plt_total[1:nplots]...,nc=nc,size = (4*400, 500*ceil(Int,nplots/3)),legend=false)
+    if mod(nplots,nc) > 0 && floor(Int,nplots/nc) > 0
+        l = @layout [ Plots.grid(floor(Int,nplots/nc),nc);  Plots.grid(1,mod(nplots,nc))]
+        nlines = floor(Int,nplots/nc)+1
+        l.heights = Plots.grid(2,1,heights=[floor(Int,nplots/nc)/nlines;1/nlines]).heights
+    elseif floor(Int,nplots/nc) > 0
+        l = @layout Plots.grid(floor(Int,nplots/nc),nc)
+        nlines = floor(Int,nplots/nc)
+        l.heights = Plots.grid(nlines,1,heights=[1/nlines for n = 1:nlines]).heights
+    else
+        l = @layout Plots.grid(1,mod(nplots,nc))
+        nlines = 1
+        l.heights = Plots.grid(1,1,heights=[1]).heights
+    end
+
+    return plot(plt_total[1:nplots]...,layout=l,size = (4*400, 500*ceil(Int,nplots/3)),legend=false)
 end
 
 """
