@@ -847,7 +847,7 @@ function plot_aggregated_results(results::Dict;nc::Int=3)
     plt_total[nplots+1] = plt
     nplots += 1
 
-    return plot(plt_total[1:nplots]...,nc=3,size = (4*400, 500*ceil(Int,nplots/3)),legend=false)
+    return plot(plt_total[1:nplots]...,nc=nc,size = (4*400, 500*ceil(Int,nplots/3)),legend=false)
 end
 
 """
