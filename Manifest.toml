@@ -305,9 +305,9 @@ version = "0.1.1"
 
 [[InfrastructureModels]]
 deps = ["JuMP", "Memento"]
-git-tree-sha1 = "d380c59122887b4794e72bf92e9cf2a664654f18"
+git-tree-sha1 = "4739474cbd631b821dba4253c05150f1d1880d22"
 uuid = "2030c09a-7f63-5d83-885d-db604e0e9cc0"
-version = "0.2.2"
+version = "0.3.2"
 
 [[IniFile]]
 deps = ["Test"]
@@ -527,11 +527,9 @@ version = "0.5.2"
 
 [[PowerModels]]
 deps = ["InfrastructureModels", "JSON", "JuMP", "LinearAlgebra", "MathOptInterface", "Memento", "SparseArrays"]
-git-tree-sha1 = "6a48912f7496460bbc0cb0bd5cc90f4cb6cc4116"
-repo-rev = "master"
-repo-url = "https://github.com/andrewrosemberg/PowerModels.jl.git"
+git-tree-sha1 = "b269795e423417007b32876695f296a12dfd59ac"
 uuid = "c36e90e8-916a-50a6-bd94-075b64ef4655"
-version = "0.12.4"
+version = "0.12.5"
 
 [[Printf]]
 deps = ["Unicode"]
