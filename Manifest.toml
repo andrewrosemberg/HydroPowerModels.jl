@@ -595,7 +595,7 @@ version = "0.12.0"
 
 [[SDDP]]
 deps = ["Distributed", "Documenter", "GLPK", "JSON", "JuMP", "Literate", "MathOptFormat", "Printf", "Random", "RecipesBase", "Reexport", "Statistics", "TimerOutputs"]
-git-tree-sha1 = "a8c8fcea47e4653fe2d73073e6185c390fa6ca0e"
+git-tree-sha1 = "1f0cef105f0862412fabec0765619407b5f63e02"
 repo-rev = "forw_diff_back"
 repo-url = "https://github.com/andrewrosemberg/SDDP.jl.git"
 uuid = "f4570300-c277-11e8-125c-4912f86ce65d"
