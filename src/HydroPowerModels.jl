@@ -33,7 +33,7 @@ Required parameters are:
 -   alldata is a vector of dicts with information of the problem's stages. 
 -   param is a dict containing solution parameters.
 """
-function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; build_model::Function=HydroPowerModels.build_opf_powermodels, discount_factor::Float64=1.1)
+function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; build_model::Function=HydroPowerModels.build_opf_powermodels, discount_factor::Float64=1.0)
     # verbose
     if !params["verbose"]
         PowerModels.silence()
