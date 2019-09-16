@@ -107,6 +107,7 @@ function quantile_scen(scen::Array{Float64,2},quants::Array{Float64};output_dict
     if output_dict
         output = Dict()
         for col = 1:length(quants)
+            quant = quants[col]
             output["$(quant*100)%"] = quantiles[:,col]
         end
         return output
