@@ -45,4 +45,4 @@ results = HydroPowerModels.simulate(m, 1);
 @test isapprox(results[:simulations][1][1][:powersystem]["solution"]["gen"]["1"]["pg"],0.25, atol=1e-2)
 
 # solution reservoirs
-@test isapprox(results[:simulations][1][1][:reservoirs][:spill][1],0.450, atol=1e-2)
+@test isapprox(results[:simulations][1][1][:reservoirs][:spill][1],0.090, atol=1e-2)

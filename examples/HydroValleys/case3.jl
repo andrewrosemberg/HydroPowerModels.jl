@@ -72,7 +72,7 @@ results
 # ## Testing Results
 using Test
 # Bound
-@test isapprox(SDDP.calculate_bound(m.policygraph), 15297.53846353836, atol=1)
+@test isapprox(SDDP.calculate_bound(m.policygraph), 11298.218756240378, atol=1)
 # Number of Simulations
 @test length(results[:simulations]) == 100
 
