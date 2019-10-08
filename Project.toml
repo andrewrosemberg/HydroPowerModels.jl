@@ -22,7 +22,7 @@ SDDP = "f4570300-c277-11e8-125c-4912f86ce65d"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
-JuMP = "~0.19"
+JuMP = "~0.20"
 julia = "~1.0"
 
 [extras]
