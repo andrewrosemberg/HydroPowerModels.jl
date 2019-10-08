@@ -1,5 +1,5 @@
 """rainfall noises"""
-function rainfall_noises(sp, data::Dict, t::Int)    
+function rainfall_noises(sp, data::Dict, params::Dict, t::Int)    
         SDDP.parameterize(sp, collect(1:size(data["hydro"]["scenario_probabilities"],2)), data["hydro"]["scenario_probabilities"][cidx(t,data["hydro"]["size_inflow"][1]),:]) do ω
             # if JuMP.MathOptInterface.get(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp)[end]) == nothing
             #     JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
@@ -9,7 +9,7 @@ function rainfall_noises(sp, data::Dict, t::Int)
                 JuMP.MathOptInterface.set(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp)[theta], sp.ext[:lower_bound])
             end
             for i in 1:data["hydro"]["nHyd"]
-                JuMP.fix(sp[:inflow][i], data["hydro"]["Hydrogenerators"][i]["inflow"][t,ω]; force=true)
+                JuMP.fix(sp[:inflow][i], data["hydro"]["Hydrogenerators"][i]["inflow"][t,ω]*(0.0036*params["stage_hours"]); force=true)
             end        
         end
     return nothing
@@ -17,7 +17,7 @@ end
 
 """creates hydro balance constraint"""
 function constraint_hydro_balance(sp, data::Dict, params::Dict)    
-    @constraint(sp, hydro_balance[i=1:data["hydro"]["nHyd"]],   sp[:reservoir][i].out == sp[:reservoir][i].in + (sp[:inflow][i] - sp[:outflow][i])*(0.0036*params["stage_hours"]) - sp[:spill][i] + 
+    @constraint(sp, hydro_balance[i=1:data["hydro"]["nHyd"]],   sp[:reservoir][i].out == sp[:reservoir][i].in + sp[:inflow][i] - (sp[:outflow][i])*(0.0036*params["stage_hours"]) - sp[:spill][i] + 
                                                     sum(sp[:spill][j] for j in data["hydro"]["Hydrogenerators"][i]["upstrem_hydros_spill"]) +
                                                     sum(sp[:outflow][j] for j in data["hydro"]["Hydrogenerators"][i]["upstrem_hydros_turn"])*(0.0036*params["stage_hours"])
     )
