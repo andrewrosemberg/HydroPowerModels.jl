@@ -18,11 +18,10 @@ codecov: true
 # codecov: true
 # coveralls: true
 
-# # script:
-# #     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-# #     - julia --project -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
-# #     - julia --project -e 'Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
-# #     - julia --project -e 'Pkg.test("HydroPowerModels"; coverage=true)'
+script:
+    # - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+    - julia --project -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
+    - julia --project -e 'using Pkg; Pkg.test("HydroPowerModels"; coverage=true)'
 
 # after_success:
 #   - julia --project -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
