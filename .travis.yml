@@ -43,5 +43,4 @@ jobs:
         - julia --project=docs --color=yes docs/make.jl
 
 after_success:
-  - julia --project -e 'using Pkg; Pkg.instantiate();
-        using Coverage; Codecov.submit(Codecov.process_folder())'
+  - julia --project -e 'import Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
