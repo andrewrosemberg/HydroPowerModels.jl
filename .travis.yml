@@ -3,26 +3,31 @@ os:
     - linux
 julia:
     - 1.0
-matrix:
-    allow_failures:
-        - julia: nightly
+# matrix:
+#     allow_failures:
+#         - julia: nightly
 notifications:
     email: false
-sudo: false
-dist: trusty
+# sudo: false
+# dist: trusty
+branches:
+  only:
+    - master
 codecov: true
-coveralls: true
 
-# script:
-#     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-#     - julia --project -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
-#     - julia --project -e 'Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
-#     - julia --project -e 'Pkg.test("HydroPowerModels"; coverage=true)'
+# codecov: true
+# coveralls: true
 
-after_success:
-  - julia --project -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
-  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())';
-#  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())';
+# # script:
+# #     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+# #     - julia --project -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
+# #     - julia --project -e 'Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
+# #     - julia --project -e 'Pkg.test("HydroPowerModels"; coverage=true)'
+
+# after_success:
+#   - julia --project -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
+#   - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())';
+# #  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())';
 
 jobs:
   include:
