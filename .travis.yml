@@ -16,7 +16,6 @@ branches:
 stages:
   - name: test
   - name: docs
-codecov: true
 
 # codecov: true
 # coveralls: true
@@ -43,4 +42,5 @@ jobs:
         - julia --project=docs --color=yes docs/make.jl
 
 after_success:
+  - julia --project=docs -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
   - julia --project -e 'import Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
