@@ -23,7 +23,7 @@ codecov: true
 
 script:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-    - julia --project -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
+    # - julia --project -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
     - julia --project -e 'using Pkg; Pkg.build(); Pkg.test("HydroPowerModels"; coverage=true)'
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
       julia: 1.0
       os: linux
       script:
-        - julia --project -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
+        # - julia --project -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
         - julia --project -e 'using Pkg; Pkg.test("HydroPowerModels"; coverage=true)'
       after_success: skip
     - stage: docs
@@ -43,5 +43,5 @@ jobs:
         - julia --project=docs --color=yes docs/make.jl
 
 after_success:
-  - julia --project=test/coverage -e 'using Pkg; Pkg.instantiate();
+  - julia --project -e 'using Pkg; Pkg.instantiate();
         using Coverage; Codecov.submit(Codecov.process_folder())'
