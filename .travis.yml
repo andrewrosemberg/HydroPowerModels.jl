@@ -11,6 +11,7 @@ notifications:
 sudo: false
 dist: trusty
 codecov: true
+coveralls: true
 
 # script:
 #     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
