@@ -33,7 +33,9 @@ jobs:
       script:
         # - julia --project -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
         - julia --project -e 'using Pkg; Pkg.test("HydroPowerModels"; coverage=true)'
-      after_success: skip
+      after_success:
+        # - julia --project -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
+        - julia --project -e 'import Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
     - stage: docs
       julia: 1.0
       os: linux
@@ -41,6 +43,6 @@ jobs:
         - julia --project=docs -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
         - julia --project=docs --color=yes docs/make.jl
 
-after_success:
-  - julia --project -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
-  - julia --project -e 'import Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+# after_success:
+#   - julia --project -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
+#   - julia --project -e 'import Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
