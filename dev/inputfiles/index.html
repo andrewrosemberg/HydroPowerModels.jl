@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Input Files · HydroPowerModels.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>HydroPowerModels.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../">Home</a></li><li><a class="toctext" href="../getstarted/">Manual</a></li><li><span class="toctext">Examples</span><ul><li><a class="toctext" href="../examples/cases/">-</a></li></ul></li><li><a class="toctext" href="../apireference/">Reference</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href>Input Files</a></li></ul><a class="edit-page" href="https://github.com/andrewrosemberg/HydroPowerModels.jl/blob/master/docs/src/inputfiles.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Input Files</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="Input-Files-1" href="#Input-Files-1">Input Files</a></h1><h2><a class="nav-anchor" id="Network-Description:-&quot;PowerModels.json&quot;-1" href="#Network-Description:-&quot;PowerModels.json&quot;-1">Network Description: &quot;PowerModels.json&quot;</a></h2><p>This is an example of a Network Description file:</p><pre><code class="language-none">{
+  &quot;bus&quot;: {
+    &quot;1&quot;: {
+      &quot;zone&quot;: 1, # [not] loss zone (positive integer).
+      &quot;bus_i&quot;: 1, # bus number (positive integer).
+      &quot;bus_type&quot;: 3, # bus type (1 = PQ, 2 = PV, 3 = ref, 4 = isolated).
+      &quot;vmax&quot;: 1.1, # maximum voltage magnitude (p.u.).
+      &quot;area&quot;: 1, # area number (positive integer).
+      &quot;vmin&quot;: 0.9, # minimum voltage magnitude (p.u.).
+      &quot;index&quot;: 1, # index
+      &quot;va&quot;: 0, # vo#ltage angle (degrees)
+      &quot;vm&quot;: 1, # vo#ltage magnitude (p.u.)
+      &quot;base_kv&quot;: 0 ## base voltage (kV)
+    }#
+  },
+  &quot;source_type&quot;: &quot;matpower&quot;, # source file type which generated this json. (if exists)
+  &quot;name&quot;: &quot;case3&quot;, # case name
+  &quot;dcline&quot;: {}, # [not] DC lines description
+  &quot;source_version&quot;: { # source file version (if exists)
+    &quot;major&quot;: 2,
+    &quot;minor&quot;: 0,
+    &quot;patch&quot;: 0,
+    &quot;prerelease&quot;: [],source file
+    &quot;build&quot;: []
+  },
+  &quot;gen&quot;: {
+    &quot;1&quot;: {
+      &quot;ncost&quot;: 2, # Nsource file of terms to interpolate in cost funcion.  
+      &quot;qc1max&quot;: 0, # Maximum reactive power output at PC1 (MVAr).
+      &quot;pg&quot;: 0, # Active Generation (Not Used by PowerModels,but expected).
+      &quot;model&quot;: 2, # Cost model, 1 = piecewise linear, 2 = polynomial.
+      &quot;shutdown&quot;: 0, # Shutdown Cost.
+      &quot;startup&quot;: 0, # Startup Cost.
+      &quot;qc2max&quot;: 0, # Maximum reactive power output at PC2 (MVAr).
+      &quot;ramp_agc&quot;: 0, # [not]
+      &quot;qg&quot;: 0, # Reactive Generation (Not Used by PowerModels,but expected).
+      &quot;gen_bus&quot;: 2, # Bus Of Generator
+      &quot;pmax&quot;: 1, # Maximum Real Power Generation (u.u) (Will be multi by mbase).
+      &quot;ramp_10&quot;: 0, # [not]
+      &quot;vg&quot;: 1, # Voltage magnitude setpoint (p.u.).
+      &quot;mbase&quot;: 100, # (MVA) Total MVA base of machine.
+      &quot;pc2&quot;: 0, # Upper real power output of PQ capability curve (MW).
+      &quot;index&quot;: 1, # Index
+      &quot;cost&quot;: [ # (dol/MW) Cost terms
+        18, # linear factor.
+        0 # intercept.
+      ],
+      &quot;qmax&quot;: 100, # Maximun Reacitive Power Generation
+      &quot;gen_status&quot;: 1, # Status Generator (On 1, OFF 0).
+      &quot;qmin&quot;: -100, # Minimum Reactive Power Generation
+      &quot;qc1min&quot;: 0, # Minimum reactive power output at PC1 (MVAr).
+      &quot;qc2min&quot;: 0, # Minimum reactive power output at PC2 (MVAr).
+      &quot;pc1&quot;: 0, # Lower real power output of PQ capability curve (MW).
+      &quot;ramp_q&quot;: 0, # [not]
+      &quot;ramp_30&quot;: 0, # [not]
+      &quot;pmin&quot;: 0, # Minimum Real Power Generation (u.u) (Will be multi by mbase).
+      &quot;apf&quot;: 0 # [not] Area participation factor.
+    }
+  },
+  &quot;branch&quot;: {
+    &quot;1&quot;: {
+      &quot;br_r&quot;: 0.065, # Resistance (p.u.).
+      &quot;rate_a&quot;: 1, #  MVA rating A (long term rating), set to 0 for unlimited.
+      &quot;shift&quot;: 0, #  Transformer phase shift angle (degrees), positive ⇒ delay.
+      &quot;br_x&quot;: 1, #  Reactance (p.u.).
+      &quot;g_to&quot;: 0, # [not]
+      &quot;g_fr&quot;: 0, # [not]
+      &quot;b_fr&quot;: 0.225,
+      &quot;f_bus&quot;: 1, # “from” bus number.
+      &quot;br_status&quot;: 1, # Initial branch status, 1 = in-service, 0 = out-of-service.
+      &quot;t_bus&quot;: 3, # “to” bus number.
+      &quot;b_to&quot;: 0.225,
+      &quot;index&quot;: 1, # Index.
+      &quot;angmin&quot;: -1.0472, # minimum angle difference, θf − θt (rad).
+      &quot;angmax&quot;: 1.0472, # maximum angle difference, θf − θt (rad).
+      &quot;transformer&quot;: false, # Bool to indicate if it is transformer.
+      &quot;tap&quot;: 1 #  transformer off nominal turns ratio.
+    }
+  },
+  &quot;storage&quot;: {}, # [not] storages descriptions
+  &quot;baseMVA&quot;: 100,
+  &quot;per_unit&quot;: true,
+  &quot;shunt&quot;: {}, # [not]
+  &quot;load&quot;: {
+    &quot;1&quot;: {
+      &quot;load_bus&quot;: 3, # load&#39;s bus number.
+      &quot;status&quot;: 1, # Initial load status, 1 = in-service, 0 = out-of-service.
+      &quot;qd&quot;: 0, # reactive power demand.
+      &quot;pd&quot;: 1, # (MW) real power demand.
+      &quot;index&quot;: 1 # index.
+    }
+  }
+}
+</code></pre><h2><a class="nav-anchor" id="Hydro-Generators-Description:-&quot;hydro.json&quot;-1" href="#Hydro-Generators-Description:-&quot;hydro.json&quot;-1">Hydro Generators Description: &quot;hydro.json&quot;</a></h2><p>This is an example of a Hydro Description file:</p><pre><code class="language-none">{
+    &quot;Hydrogenerators&quot;:[
+        {   
+            &quot;index&quot;: 1, # Index of Hydrogenerators.
+            &quot;index_grid&quot;: 3, # Index of generator in network.
+            &quot;name&quot;: &quot;&quot;, # Name.
+            &quot;max_volume&quot;:10, # (Hm3) Maximun Volume of Reservoir.
+            &quot;min_volume&quot;:0, # (Hm3) Minimun Volume of Reservoir.
+            &quot;max_turn&quot;: 100 # (m3/s) Maximun Outflow of Reservoir.
+            &quot;min_turn&quot;: 0 # (m3/s) Minimun Outflow of Reservoir.
+            &quot;initial_volume&quot;:0, # (Hm3) Initial Volume of Reservoir.
+            &quot;production_factor&quot;:1, # (MW/ (m3/s)) Production Factor.
+            &quot;spill_cost&quot;:0, # (dol/Hm3) Cost of Spillage.
+            &quot;downstream_turn&quot;: [], # Hydro Generators downstream of turn.
+            &quot;downstream_spill&quot;: [] # Hydro Generators downstream of spillage.
+        }
+    ]
+}
+</code></pre><h2><a class="nav-anchor" id="Inflows:-&quot;inflows.csv&quot;-1" href="#Inflows:-&quot;inflows.csv&quot;-1">Inflows: &quot;inflows.csv&quot;</a></h2><p>Inflows are expected in (m3/s) in a csv file representing a matrix, where rows are the stages and columns are the scenarious.</p><footer><hr/></footer></article></body></html>
