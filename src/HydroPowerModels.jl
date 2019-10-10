@@ -76,7 +76,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; buil
         gatherusefulinfo!(data)
 
         # build eletric grid model using PowerModels
-        pm = build_model(sp,data,params)
+        pm = build_opf_powermodels(sp,data,params)
         
         #if isforward # NOT YET IMPLEMENTED
             #pm = PowerModels.build_model(data["powersystem"], params["model_constructor_grid_forward"], 
@@ -105,7 +105,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; buil
 
         # hydro balance
         variable_inflow(sp, data)
-        rainfall_noises(sp, data, cidx(t,data["hydro"]["size_inflow"][1]))
+        rainfall_noises(sp, data, params, cidx(t,data["hydro"]["size_inflow"][1]))
         constraint_hydro_balance(sp, data, params)
 
         # hydro_generation

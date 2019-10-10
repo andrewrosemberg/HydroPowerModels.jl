@@ -3,24 +3,46 @@ os:
     - linux
 julia:
     - 1.0
-matrix:
-    allow_failures:
-        - julia: nightly
+# matrix:
+#     allow_failures:
+#         - julia: nightly
 notifications:
     email: false
-sudo: false
-dist: trusty
-codecov: true
+# sudo: false
+# dist: trusty
+branches:
+  only:
+    - master
+stages:
+  - name: test
+  - name: docs
 
-after_success:
-  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())';
-#  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())';
+# codecov: true
+# coveralls: true
+
+script:
+    - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+    # - julia --project -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
+    - julia --project -e 'using Pkg; Pkg.build(); Pkg.test("HydroPowerModels"; coverage=true)'
 
 jobs:
   include:
-    - stage: "Documentation"
+    - stage: test
+      julia: 1.0
+      os: linux
+      script:
+        # - julia --project -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("HydroPowerModels")'
+        - julia --project -e 'using Pkg; Pkg.test("HydroPowerModels"; coverage=true)'
+      after_success:
+        # - julia --project -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
+        - julia --project -e 'import Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+    - stage: docs
       julia: 1.0
       os: linux
       script:
         - julia --project=docs -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
         - julia --project=docs --color=yes docs/make.jl
+
+# after_success:
+#   - julia --project -e 'using Pkg; Pkg.instantiate(); Pkg.add(PackageSpec(path=pwd()))'
+#   - julia --project -e 'import Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'

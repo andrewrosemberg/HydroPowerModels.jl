@@ -52,7 +52,7 @@ m = hydrothermaloperation(alldata, params);
 # ## Train
 #+ results =  "hidden"
 start_time = time()
-HydroPowerModels.train(m,iteration_limit = 100,stopping_rules= [SDDP.Statistical(num_replications = 20,iteration_period=20)]);
+HydroPowerModels.train(m,iteration_limit = 100,stopping_rules= [SDDP.Statistical(num_replications = 50,iteration_period=50)]);
 end_time = time() - start_time
 
 # Termination Status and solve time (s)
@@ -72,7 +72,7 @@ results
 # ## Testing Results
 using Test
 # Bound
-@test isapprox(SDDP.calculate_bound(m.policygraph), 15297.53846353836, atol=1)
+@test isapprox(SDDP.calculate_bound(m.policygraph), 11298.218756240378, atol=10)
 # Number of Simulations
 @test length(results[:simulations]) == 100
 

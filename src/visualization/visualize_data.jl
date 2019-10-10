@@ -50,6 +50,7 @@ function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
     end
     plot!(p1, maximum(scen; dims=2), label = "Max and Min", color = "Steel Blue")
     plot!(p1, minimum(scen; dims=2), label = "", color = "Steel Blue")
+    plot!(p1, mean(scen; dims=2), label = "Mean", color = "Black")
     if save
         savefig(p1, savepath*"$fileformat")
         return nothing
@@ -94,8 +95,8 @@ function plotresults(results::Dict;nc::Int = 3)
     nplots +=length(plt) 
 
     # Thermal Reactive Generation
-    if results[:params]["model_constructor_grid"] == PowerModels.ACPPowerModel
-        scen_qgen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["qg"] for i=1:100, j=1:results[:params]["stages"]]'.*baseMVA for gen =1:ngen]
+    if results[:params]["model_constructor_grid_forward"] == PowerModels.ACPPowerModel
+        scen_qgen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["qg"] for i=1:nsim, j=1:results[:params]["stages"]]'.*baseMVA for gen =1:ngen]
         plt =   [plotscenarios(scen_qgen[gen], title  = "Thermal Reactive Generation $gen",
                 ylabel = "MW",
                 xlabel = "Stages",
@@ -132,8 +133,8 @@ function plotresults(results::Dict;nc::Int = 3)
 
     # Branch Reactive flow
 
-    if results[:params]["model_constructor_grid"] == PowerModels.ACPPowerModel
-        scen_branch_qf = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["qf"] for i=1:100, j=1:results[:params]["stages"]]'.*baseMVA for brc =1:nbrc]
+    if results[:params]["model_constructor_grid_forward"] == PowerModels.ACPPowerModel
+        scen_branch_qf = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["qf"] for i=1:nsim, j=1:results[:params]["stages"]]'.*baseMVA for brc =1:nbrc]
         plt =   [plotscenarios(scen_branch_qf[brc], title  = "Branch Reactive Flow $brc",
                 ylabel = "MW",
                 xlabel = "Stages",
@@ -171,7 +172,7 @@ function plotresults(results::Dict;nc::Int = 3)
     try
     nbus = length(results[:data][1]["powersystem"]["bus"])
     idxbus = collect(1:nbus)
-    scen_pld = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
+    scen_pld = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])/baseMVA
 
     plt =   [plotscenarios(scen_pld[bus], title  = "Nodal price bus $bus",
                 ylabel = "\$/MW",
@@ -281,17 +282,17 @@ function plotresults(results::Dict;nc::Int = 3)
     plt_total[nplots+1:nplots+length(plt)] = plt
     nplots +=length(plt) 
     if mod(nplots,nc) > 0 && floor(Int,nplots/nc) > 0
-        l = @layout [ grid(floor(Int,nplots/nc),nc);  grid(1,mod(nplots,nc))]
+        l = @layout [ Plots.grid(floor(Int,nplots/nc),nc);  Plots.grid(1,mod(nplots,nc))]
         nlines = floor(Int,nplots/nc)+1
-        l.heights = grid(2,1,heights=[floor(Int,nplots/nc)/nlines;1/nlines]).heights
+        l.heights = Plots.grid(2,1,heights=[floor(Int,nplots/nc)/nlines;1/nlines]).heights
     elseif floor(Int,nplots/nc) > 0
-        l = @layout grid(floor(Int,nplots/nc),nc)
+        l = @layout Plots.grid(floor(Int,nplots/nc),nc)
         nlines = floor(Int,nplots/nc)
-        l.heights = grid(nlines,1,heights=[1/nlines for n = 1:nlines]).heights
+        l.heights = Plots.grid(nlines,1,heights=[1/nlines for n = 1:nlines]).heights
     else
-        l = @layout grid(1,mod(nplots,nc))
+        l = @layout Plots.grid(1,mod(nplots,nc))
         nlines = 1
-        l.heights = grid(1,1,heights=[1]).heights
+        l.heights = Plots.grid(1,1,heights=[1]).heights
     end    
 
     return plot(plt_total[1:nplots]...,layout=l,size = (nc*400,400*ceil(Int,nplots/nc)),legend=false)
@@ -655,7 +656,7 @@ function plot_grid_dispatched(results::Dict;seed=1111,quant::Float64=0.5,size_fi
 end
 
 """
-    HydroPowerModels.plot_aggregated_results(results::Dict)
+    HydroPowerModels.plot_aggregated_results(results::Dict;nc::Int=3)
 
 Plot Aggregated Results. Figures are of aggregated quantities, but the methods used to aggregate were chosen in order to help analysis. For example: The final nodal price is an average of nodal prices weighted by the contribution of local loads to the total demand; Reservoir volume was grouped weighted by the amount of energy that could be produced by the stored water (as was the inflow of water). 
 
@@ -663,7 +664,7 @@ Paremeter:
 -   results: Simulation results.
 
 """
-function plot_aggregated_results(results::Dict)
+function plot_aggregated_results(results::Dict;nc::Int=3)
     plt_total = Array{Plots.Plot}(undef,20)
     nplots = 0
     nsim = length(results[:simulations])
@@ -708,14 +709,16 @@ function plot_aggregated_results(results::Dict)
     # Nodal price
     idxbus = collect(1:nbus)
     try
-    scen_pld_all = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
+    scen_pld_all = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])/baseMVA
     
     scen_pld = deepcopy(scen_pld_all[idxbus[1]])
     scen_pld .=0
     for bus in idxbus
         scen_pld = scen_pld .+ scen_pld_all[bus].*hcat(fill(load_nodes[:,bus],nsim)...)
     end
-    scen_pld /= nbus
+    for t=1:nstages
+        scen_pld[t,:] /= sum(load_nodes[t,bus] for bus in idxbus)
+    end
     plt = plotscenarios(scen_pld, title  = "Load Weighted Average Nodal price ",
                 ylabel = "\$/MW",
                 xlabel = "Stages",
@@ -844,7 +847,21 @@ function plot_aggregated_results(results::Dict)
     plt_total[nplots+1] = plt
     nplots += 1
 
-    return plot(plt_total[1:nplots]...,nc=3,size = (4*400, 500*ceil(Int,nplots/3)),legend=false)
+    if mod(nplots,nc) > 0 && floor(Int,nplots/nc) > 0
+        l = @layout [ Plots.grid(floor(Int,nplots/nc),nc);  Plots.grid(1,mod(nplots,nc))]
+        nlines = floor(Int,nplots/nc)+1
+        l.heights = Plots.grid(2,1,heights=[floor(Int,nplots/nc)/nlines;1/nlines]).heights
+    elseif floor(Int,nplots/nc) > 0
+        l = @layout Plots.grid(floor(Int,nplots/nc),nc)
+        nlines = floor(Int,nplots/nc)
+        l.heights = Plots.grid(nlines,1,heights=[1/nlines for n = 1:nlines]).heights
+    else
+        l = @layout Plots.grid(1,mod(nplots,nc))
+        nlines = 1
+        l.heights = Plots.grid(1,1,heights=[1]).heights
+    end
+
+     return plot(plt_total[1:nplots]...,layout=l,size = (4*400, 500*ceil(Int,nplots/nc)),legend=false)
 end
 
 """
