@@ -336,7 +336,7 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
 
     # Voltage angle first nitem bus
     
-    if results[:params]["model_constructor_grid"] != PowerModels.GenericPowerModel{PowerModels.SOCWRForm}
+    if results[:params]["model_constructor_grid"] != PowerModels.AbstractPowerModel{PowerModels.SOCWRForm}
 
         dcp_stats["va"] = Dict()
 

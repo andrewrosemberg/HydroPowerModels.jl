@@ -59,12 +59,12 @@ function build_sol_reservoirs(sp::JuMP.Model)
 end
 
 ""
-function get_solution(pm::GenericPowerModel, sol::Dict{String,<:Any})
+function get_solution(pm::AbstractPowerModel, sol::Dict{String,<:Any})
     PowerModels.solution_opf!(pm, sol)
     add_kcl_deficit(sol, pm)
 end
 
 ""
-function add_kcl_deficit(sol, pm::GenericPowerModel)
+function add_kcl_deficit(sol, pm::AbstractPowerModel)
     PowerModels.add_setpoint!(sol, pm, "bus", "deficit", :deficit; status_name="bus_type", inactive_status_value = 4)
 end

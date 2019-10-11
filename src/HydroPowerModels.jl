@@ -89,7 +89,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; buil
         # create reference to variables
         createvarrefs!(sp,pm)
 
-        # save GenericPowerModel and Data
+        # save AbstractPowerModel and Data
         sp.ext[:pm] = pm
         sp.ext[:data] = data
 
