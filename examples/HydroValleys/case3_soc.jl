@@ -28,7 +28,7 @@ if !@isdefined plot_bool
     plot_bool = true
 end
 using Random
-seed = 1221
+seed = 1111
 
 #' ## Load Case Specifications
 
@@ -75,7 +75,7 @@ results = HydroPowerModels.simulate(m, 100);
 using Test
 #' Bound
 #+ results =  "hidden"
-@test isapprox(SDDP.calculate_bound(m.policygraph), 13279.088, atol=1)
+@test isapprox(SDDP.calculate_bound(m.policygraph), 11637.76, atol=10)
 #' Number of Simulations
 #+ results =  "hidden"
 @test length(results[:simulations]) == 100
