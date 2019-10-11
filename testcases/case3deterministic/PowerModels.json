@@ -197,6 +197,7 @@
     "baseMVA": 100,
     "per_unit": true,
     "shunt": {},
+    "switch": {},
     "load": {
         "1": {
             "load_bus": 3,
