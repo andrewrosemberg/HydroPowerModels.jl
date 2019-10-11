@@ -111,9 +111,9 @@ version = "0.2.0"
 
 [[Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
-git-tree-sha1 = "84aa74986c5b9b898b0d1acaf3258741ee64754f"
+git-tree-sha1 = "ed2c4abadf84c53d9e58510b5fc48912c2336fbb"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
-version = "2.1.0"
+version = "2.2.0"
 
 [[Compose]]
 deps = ["Base64", "Colors", "DataStructures", "Dates", "IterTools", "JSON", "LinearAlgebra", "Measures", "Printf", "Random", "Requires", "Test", "UUIDs"]
@@ -298,9 +298,9 @@ version = "0.2.1"
 
 [[Highlights]]
 deps = ["DocStringExtensions", "InteractiveUtils", "REPL"]
-git-tree-sha1 = "2fa66a8c9343124ad7bf79ef3804f6965ee7c71d"
+git-tree-sha1 = "6c5e4cd87b1437c76bf267cf54c769a5493061b5"
 uuid = "eafb193a-b7ab-5a9e-9068-77385905fa72"
-version = "0.4.3"
+version = "0.4.4"
 
 [[Homebrew]]
 deps = ["BinDeps", "InteractiveUtils", "JSON", "Libdl", "Test", "Unicode"]
@@ -456,9 +456,9 @@ version = "0.2.2"
 
 [[MathOptInterface]]
 deps = ["BenchmarkTools", "LinearAlgebra", "OrderedCollections", "SparseArrays", "Test", "Unicode"]
-git-tree-sha1 = "e94145d7746c13732a1ad1d1d334f8e9afab8e7c"
+git-tree-sha1 = "7088ff9a77e8ecd773cc788787ad027cfb627170"
 uuid = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
-version = "0.9.4"
+version = "0.9.5"
 
 [[MathProgBase]]
 deps = ["Compat"]
@@ -532,10 +532,10 @@ deps = ["Dates", "LibGit2", "Markdown", "Printf", "REPL", "Random", "SHA", "UUID
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
 [[PlotThemes]]
-deps = ["PlotUtils", "Requires", "Test"]
-git-tree-sha1 = "f3afd2d58e1f6ac9be2cea46e4a9083ccc1d990b"
+deps = ["PlotUtils", "Requires", "Statistics"]
+git-tree-sha1 = "d2f3a41081a72815f5c59eacdc8046237a7cbe12"
 uuid = "ccf2f8ad-2431-5c83-bf29-c5338b663b6a"
-version = "0.3.0"
+version = "0.4.0"
 
 [[PlotUtils]]
 deps = ["Colors", "Dates", "Printf", "Random", "Reexport"]
@@ -612,12 +612,12 @@ uuid = "6038ab10-8711-5258-84ad-4b1120ba62dc"
 version = "0.12.0"
 
 [[SDDP]]
-deps = ["Documenter", "GLPK", "HTTP", "JSON", "JuMP", "LinearAlgebra", "Literate", "MathOptFormat", "Printf", "Random", "RecipesBase", "Reexport", "Statistics", "TimerOutputs"]
-git-tree-sha1 = "07f6582298164e4de43617db072daf4d5e257e10"
+deps = ["HTTP", "JSON", "JuMP", "LinearAlgebra", "MathOptFormat", "Printf", "Random", "RecipesBase", "Reexport", "Statistics", "TimerOutputs"]
+git-tree-sha1 = "a3ca061ec0eda5bdba81faa779093d1e055764a7"
 repo-rev = "master"
 repo-url = "https://github.com/odow/SDDP.jl.git"
 uuid = "f4570300-c277-11e8-125c-4912f86ce65d"
-version = "0.0.0"
+version = "0.1.0"
 
 [[SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
