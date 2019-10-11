@@ -26,14 +26,14 @@ function constraint_hydro_balance(sp, data::Dict, params::Dict)
 end
 
 """creates energy constraints which bind the discharge with the active energy injected to the grid"""
-function constraint_hydro_generation(sp, data::Dict, pm::GenericPowerModel)
+function constraint_hydro_generation(sp, data::Dict, pm::AbstractPowerModel)
     @constraint(sp, turbine_energy[i=1:data["hydro"]["nHyd"]; data["hydro"]["Hydrogenerators"][i]["index_grid"] != nothing], PowerModels.var(pm, 0, 1, :pg)[data["hydro"]["Hydrogenerators"][i]["i_grid"]]*data["powersystem"]["baseMVA"] == sp[:outflow][i]*data["hydro"]["Hydrogenerators"][i]["production_factor"]
     )
     return nothing
 end
 
 """add deficit variables"""
-function constraint_mod_deficit(sp, data::Dict, pm::GenericPowerModel)
+function constraint_mod_deficit(sp, data::Dict, pm::AbstractPowerModel)
     for i=1:length(PowerModels.con(pm, 0, 1, :kcl_p))
         set_coefficient(PowerModels.con(pm, 0, 1, :kcl_p)[i], sp[:deficit][i], -1)
     end
