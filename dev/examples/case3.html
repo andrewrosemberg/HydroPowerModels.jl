@@ -761,10 +761,6 @@ div.title {text-align: center;}
 </pre>
 
 
-<pre class="julia-error">
-ERROR: KeyError: key :switch not found
-</pre>
-
 
 <h2>Train</h2>
 <ul>
@@ -779,8 +775,72 @@ ERROR: KeyError: key :switch not found
 </pre>
 
 
-<pre class="julia-error">
-ERROR: UndefVarError: m not defined
+<pre class="output">
+-------------------------------------------------------
+         SDDP.jl &#40;c&#41; Oscar Dowson, 2017-19
+
+Numerical stability report
+  Non-zero Matrix range     &#91;4e-03, 1e&#43;02&#93;
+  Non-zero Objective range  &#91;1e&#43;00, 1e&#43;05&#93;
+  Non-zero Bounds range     &#91;3e-01, 8e&#43;01&#93;
+  Non-zero RHS range        &#91;1e&#43;00, 1e&#43;00&#93;
+No problems detected
+
+ Iteration    Simulation       Bound         Time &#40;s&#41;
+        1    1.209515e&#43;04   6.256809e&#43;03   2.849684e&#43;01
+        2    1.342782e&#43;04   7.653369e&#43;03   2.903413e&#43;01
+        3    1.000139e&#43;04   1.120565e&#43;04   2.903770e&#43;01
+        4    1.464954e&#43;04   1.120675e&#43;04   2.904085e&#43;01
+        5    1.000000e&#43;04   1.121710e&#43;04   2.904405e&#43;01
+        6    1.200000e&#43;04   1.121737e&#43;04   2.904740e&#43;01
+        7    8.952632e&#43;03   1.122650e&#43;04   2.905086e&#43;01
+        8    1.143390e&#43;04   1.122659e&#43;04   2.905435e&#43;01
+        9    1.205263e&#43;04   1.128416e&#43;04   2.905775e&#43;01
+       10    1.240000e&#43;04   1.129263e&#43;04   2.906092e&#43;01
+       11    1.130000e&#43;04   1.129576e&#43;04   2.906470e&#43;01
+       12    8.700000e&#43;03   1.129582e&#43;04   2.906833e&#43;01
+       13    1.000000e&#43;04   1.129585e&#43;04   2.907197e&#43;01
+       14    1.130000e&#43;04   1.129795e&#43;04   2.907532e&#43;01
+       15    1.270002e&#43;04   1.129911e&#43;04   2.907876e&#43;01
+       16    1.045263e&#43;04   1.129911e&#43;04   2.908251e&#43;01
+       17    1.145402e&#43;04   1.129949e&#43;04   2.908644e&#43;01
+       18    1.210000e&#43;04   1.129952e&#43;04   2.909039e&#43;01
+       19    1.125263e&#43;04   1.129952e&#43;04   2.909429e&#43;01
+       20    1.020000e&#43;04   1.129952e&#43;04   2.909815e&#43;01
+       21    1.105402e&#43;04   1.129960e&#43;04   2.910191e&#43;01
+       22    1.160000e&#43;04   1.129963e&#43;04   2.910606e&#43;01
+       23    9.400000e&#43;03   1.129964e&#43;04   2.910996e&#43;01
+       24    1.095263e&#43;04   1.129969e&#43;04   2.911375e&#43;01
+       25    1.180000e&#43;04   1.129969e&#43;04   2.911767e&#43;01
+       26    1.145263e&#43;04   1.129969e&#43;04   2.914886e&#43;01
+       27    1.260139e&#43;04   1.129969e&#43;04   2.915306e&#43;01
+       28    1.130000e&#43;04   1.129973e&#43;04   2.915710e&#43;01
+       29    1.070000e&#43;04   1.129973e&#43;04   2.916066e&#43;01
+       30    1.110514e&#43;04   1.129975e&#43;04   2.916455e&#43;01
+       31    8.900436e&#43;03   1.129975e&#43;04   2.916840e&#43;01
+       32    9.500000e&#43;03   1.129975e&#43;04   2.917212e&#43;01
+       33    1.160000e&#43;04   1.129975e&#43;04   2.917581e&#43;01
+       34    1.140236e&#43;04   1.129975e&#43;04   2.917947e&#43;01
+       35    1.320791e&#43;04   1.129975e&#43;04   2.918326e&#43;01
+       36    1.340236e&#43;04   1.129975e&#43;04   2.918692e&#43;01
+       37    1.274737e&#43;04   1.129981e&#43;04   2.919134e&#43;01
+       38    1.215263e&#43;04   1.129981e&#43;04   2.919580e&#43;01
+       39    1.070000e&#43;04   1.129982e&#43;04   2.919987e&#43;01
+       40    1.040000e&#43;04   1.129982e&#43;04   2.920403e&#43;01
+       41    1.200000e&#43;04   1.129982e&#43;04   2.920808e&#43;01
+       42    1.164737e&#43;04   1.129982e&#43;04   2.921228e&#43;01
+       43    1.220000e&#43;04   1.129982e&#43;04   2.921626e&#43;01
+       44    1.200000e&#43;04   1.129982e&#43;04   2.922055e&#43;01
+       45    1.301329e&#43;04   1.129982e&#43;04   2.922521e&#43;01
+       46    1.145263e&#43;04   1.129982e&#43;04   2.922941e&#43;01
+       47    1.280278e&#43;04   1.129982e&#43;04   2.923384e&#43;01
+       48    1.110000e&#43;04   1.129982e&#43;04   2.923839e&#43;01
+       49    1.350278e&#43;04   1.129982e&#43;04   2.924279e&#43;01
+Simulated policy value: &#91; 1.115012e&#43;04,  1.182244e&#43;04&#93;
+       50    1.271329e&#43;04   1.129983e&#43;04   2.924719e&#43;01
+
+Terminating training with status: statistical
+-------------------------------------------------------
 </pre>
 
 
@@ -791,7 +851,7 @@ ERROR: UndefVarError: m not defined
 
 
 <pre class="output">
-0.12899112701416016
+49.99636197090149
 </pre>
 
 
@@ -803,8 +863,8 @@ ERROR: UndefVarError: m not defined
 </pre>
 
 
-<pre class="julia-error">
-ERROR: UndefVarError: m not defined
+<pre class="output">
+&#40;:statistical, 49.99636197090149&#41;
 </pre>
 
 
@@ -818,10 +878,7 @@ ERROR: UndefVarError: m not defined
 </pre>
 
 
-<pre class="julia-error">
-ERROR: UndefVarError: m not defined
-</pre>
-
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAGACAIAAADK+EpIAAAABmJLR0QA/wD/AP+gvaeTAAAgAElEQVR4nO3da3gUVZ7H8dPd6c6tEy4JaYRENogIyiKCAsssPuAYwEGMoAZiwBFhlKDjDDuaEQVGmWEQJA7sAILIwwKKBDXeEA1Bx4U87nBRyAreCdFEgZgEcul00t1VtS/KyWaSEBrSSXOqvp8XPt2nb/8ci/r1qTp12qJpmgAAQDbWUBcAAMDFIMAAAFIiwAAAUgoLdQEwr5SUlGYt3bt379u37y9/+csBAwaEpKRmUlJSEhMTN23aFJR3mzlzZmlpaX5+vn7X6/UKIRwOR1DevFXNPqJZAYDsCDCEksPhuOaaa/TbPp/v9OnThw4d+vjjj//yl780thvVAw880NFx0gkfAYQQAYZQSkhIWL58eeNdVVVff/31devWbdy48dlnnw1hYR1h7dq1Ji8ACC7OgeESYrVap0yZ4nQ6v/nmm1DXEnyRkZGRkZFmLgAILkZguLSoqur3+51OZ2OLpmm7d+/Oz88vKipyOBzJyclTpky54YYb9EdbPa/TtFG/nZeX9+qrr7799tsVFRUJCQkpKSlpaWl2u73xJd98881LL710/Pjx8vLynj17jh07Ni0trY06S0tLH3jggd69e69Zs6bxfbKzs997770//OEP//7v/97yJU2rajz/p9/QG/fv3//WW28dP368rq7u8ssvnzBhwi233GKz2Rpfu3v37i1btrz22mt33333tGnTioqKtm3bduLEiVOnTkVERPTq1WvChAm/+MUvLBZLqx/RrK8C6di2++3o0aOvvfba119/XVlZ2aVLl759+951111Dhgxp+38xECwEGC4hXq9306ZN9fX1U6dObWxcvnz5nj17IiMjr7nmGq/XW1hYeOjQoXvvvTcjIyPwd964cePu3btvuOEGTdP27t37X//1X9XV1ZmZmfqju3btWrVqlaqqvXv3vv7660+ePLlly5ZPPvmkjTdMTEy877771q1b9/LLL99zzz1CiE8++eS99967+eabW02vZubMmfPyyy9XVVXNmTNHb3n++edfeeWVmJiYgQMHWiyWzz77bNWqVQcOHPjDH/6gZ5he54svvhgVFRUVFbVnz55ly5YJIZKTk//t3/6tpqamsLDwiy++qKuru+uuu1r9iGYC6dg2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"  />
 
 <h2>Simulation</h2>
 
@@ -829,23 +886,22 @@ ERROR: UndefVarError: m not defined
 <pre class='hljl'>
 <span class='hljl-k'>import</span><span class='hljl-t'> </span><span class='hljl-n'>Random</span><span class='hljl-t'>
 </span><span class='hljl-n'>Random</span><span class='hljl-oB'>.</span><span class='hljl-nf'>seed!</span><span class='hljl-p'>(</span><span class='hljl-n'>seed</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>results</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>simulate</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span><span class='hljl-p'>);</span>
+</span><span class='hljl-n'>results</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>simulate</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span><span class='hljl-p'>);</span><span class='hljl-t'>
+</span><span class='hljl-n'>results</span>
 </pre>
 
 
-<pre class="julia-error">
-ERROR: UndefVarError: m not defined
-</pre>
-
-
-
-<pre class='hljl'>
-<span class='hljl-n'>results</span>
-</pre>
-
-
-<pre class="julia-error">
-ERROR: UndefVarError: results not defined
+<pre class="output">
+Dict&#123;Symbol,Any&#125; with 5 entries:
+  :solve_time  &#61;&gt; 5.49939
+  :params      &#61;&gt; Dict&#123;Any,Any&#125;&#40;&quot;optimizer&quot;&#61;&gt;OptimizerFactory&#40;Optimizer, &#40;&#41;
+, Ba…
+  :machine     &#61;&gt; Dict&#40;:cpu&#61;&gt;&quot;Intel&#40;R&#41; Xeon&#40;R&#41; CPU @ 2.30GHz&quot;,:memory&#61;&gt;&quot;7.2
+9784…
+  :data        &#61;&gt; Dict&#123;Any,Any&#125;&#91;Dict&#40;&quot;powersystem&quot;&#61;&gt;Dict&#123;String,Any&#125;&#40;&quot;cost_
+defi…
+  :simulations &#61;&gt; Array&#123;Dict&#123;Symbol,Any&#125;,1&#125;&#91;&#91;Dict&#40;:bellman_term&#61;&gt;10858.6,:n
+oise…
 </pre>
 
 
@@ -867,51 +923,7 @@ ERROR: UndefVarError: results not defined
 
 
 <pre class="output">
-Error During Test at none:1
-  Test threw exception
-  Expression: isapprox&#40;SDDP.calculate_bound&#40;m.policygraph&#41;, 11298.218756240
-378, atol&#61;10&#41;
-  UndefVarError: m not defined
-  Stacktrace:
-   &#91;1&#93; top-level scope at none:0
-   &#91;2&#93; eval at ./boot.jl:319 &#91;inlined&#93;
-   &#91;3&#93; capture_output&#40;::Expr, ::Module, ::Bool, ::Bool, ::Bool, ::Bool&#41; at 
-/home/travis/.julia/packages/Weave/UOxmI/src/run.jl:230
-   &#91;4&#93; run_code&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/travi
-s/.julia/packages/Weave/UOxmI/src/run.jl:208
-   &#91;5&#93; eval_chunk&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/tra
-vis/.julia/packages/Weave/UOxmI/src/run.jl:289
-   &#91;6&#93; run_chunk&#40;::Weave.CodeChunk, ::Weave.WeaveDoc, ::Weave.Report, ::Mod
-ule&#41; at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:130
-   &#91;7&#93; #run#34&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Strin
-g, ::Nothing, ::String, ::Symbol, ::Bool, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; 
-at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:94
-   &#91;8&#93; &#40;::getfield&#40;Base, Symbol&#40;&quot;#kw##run&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:doctype, :mod,
- :out_path, :args, :fig_path, :fig_ext, :cache_path, :cache, :throw_errors&#41;
-,Tuple&#123;String,Symbol,String,Dict&#123;Symbol,String&#125;,String,Nothing,String,Symbo
-l,Bool&#125;&#125;, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; at ./none:0
-   &#91;9&#93; #weave#16&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Sym
-bol, ::String, ::Nothing, ::String, ::Symbol, ::Bool, ::Nothing, ::Nothing,
- ::Nothing, ::Array&#123;String,1&#125;, ::String, ::typeof&#40;weave&#41;, ::String&#41; at /hom
-e/travis/.julia/packages/Weave/UOxmI/src/Weave.jl:121
-   &#91;10&#93; &#40;::getfield&#40;Weave, Symbol&#40;&quot;#kw##weave&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:out_path, 
-:doctype, :args&#41;,Tuple&#123;String,String,Dict&#123;Symbol,String&#125;&#125;&#125;, ::typeof&#40;weave&#41;
-, ::String&#41; at ./none:0
-   &#91;11&#93; top-level scope at none:0
-   &#91;12&#93; include at ./boot.jl:317 &#91;inlined&#93;
-   &#91;13&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
-   &#91;14&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
-   &#91;15&#93; include&#40;::String&#41; at ./client.jl:392
-   &#91;16&#93; top-level scope at none:0
-   &#91;17&#93; include at ./boot.jl:317 &#91;inlined&#93;
-   &#91;18&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
-   &#91;19&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
-   &#91;20&#93; exec_options&#40;::Base.JLOptions&#41; at ./client.jl:266
-   &#91;21&#93; _start&#40;&#41; at ./client.jl:425
-</pre>
-
-<pre class="julia-error">
-ERROR: Test.FallbackTestSetException&#40;&quot;There was an error during testing&quot;&#41;
+Test Passed
 </pre>
 
 
@@ -924,50 +936,7 @@ ERROR: Test.FallbackTestSetException&#40;&quot;There was an error during testing
 
 
 <pre class="output">
-Error During Test at none:1
-  Test threw exception
-  Expression: length&#40;results&#91;:simulations&#93;&#41; &#61;&#61; 100
-  UndefVarError: results not defined
-  Stacktrace:
-   &#91;1&#93; top-level scope at none:0
-   &#91;2&#93; eval at ./boot.jl:319 &#91;inlined&#93;
-   &#91;3&#93; capture_output&#40;::Expr, ::Module, ::Bool, ::Bool, ::Bool, ::Bool&#41; at 
-/home/travis/.julia/packages/Weave/UOxmI/src/run.jl:230
-   &#91;4&#93; run_code&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/travi
-s/.julia/packages/Weave/UOxmI/src/run.jl:208
-   &#91;5&#93; eval_chunk&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/tra
-vis/.julia/packages/Weave/UOxmI/src/run.jl:289
-   &#91;6&#93; run_chunk&#40;::Weave.CodeChunk, ::Weave.WeaveDoc, ::Weave.Report, ::Mod
-ule&#41; at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:130
-   &#91;7&#93; #run#34&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Strin
-g, ::Nothing, ::String, ::Symbol, ::Bool, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; 
-at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:94
-   &#91;8&#93; &#40;::getfield&#40;Base, Symbol&#40;&quot;#kw##run&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:doctype, :mod,
- :out_path, :args, :fig_path, :fig_ext, :cache_path, :cache, :throw_errors&#41;
-,Tuple&#123;String,Symbol,String,Dict&#123;Symbol,String&#125;,String,Nothing,String,Symbo
-l,Bool&#125;&#125;, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; at ./none:0
-   &#91;9&#93; #weave#16&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Sym
-bol, ::String, ::Nothing, ::String, ::Symbol, ::Bool, ::Nothing, ::Nothing,
- ::Nothing, ::Array&#123;String,1&#125;, ::String, ::typeof&#40;weave&#41;, ::String&#41; at /hom
-e/travis/.julia/packages/Weave/UOxmI/src/Weave.jl:121
-   &#91;10&#93; &#40;::getfield&#40;Weave, Symbol&#40;&quot;#kw##weave&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:out_path, 
-:doctype, :args&#41;,Tuple&#123;String,String,Dict&#123;Symbol,String&#125;&#125;&#125;, ::typeof&#40;weave&#41;
-, ::String&#41; at ./none:0
-   &#91;11&#93; top-level scope at none:0
-   &#91;12&#93; include at ./boot.jl:317 &#91;inlined&#93;
-   &#91;13&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
-   &#91;14&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
-   &#91;15&#93; include&#40;::String&#41; at ./client.jl:392
-   &#91;16&#93; top-level scope at none:0
-   &#91;17&#93; include at ./boot.jl:317 &#91;inlined&#93;
-   &#91;18&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
-   &#91;19&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
-   &#91;20&#93; exec_options&#40;::Base.JLOptions&#41; at ./client.jl:266
-   &#91;21&#93; _start&#40;&#41; at ./client.jl:425
-</pre>
-
-<pre class="julia-error">
-ERROR: Test.FallbackTestSetException&#40;&quot;There was an error during testing&quot;&#41;
+Test Passed
 </pre>
 
 
@@ -982,7 +951,7 @@ ERROR: Test.FallbackTestSetException&#40;&quot;There was an error during testing
 
 
 <pre class="julia-error">
-ERROR: UndefVarError: results not defined
+ERROR: Cannot convert Tuple&#123;Array&#123;Float64,2&#125;,Array&#123;Float64,2&#125;&#125; to series data for plotting
 </pre>
 
 
@@ -1011,6 +980,7 @@ Table Counts
   shunt: 0
   gen: 3
   storage: 0
+  switch: 0
   branch: 3
   dcline: 0
 
@@ -1101,7 +1071,7 @@ Table: branch
 
 
 <pre class="julia-error">
-ERROR: UndefVarError: results not defined
+ERROR: Cannot convert Tuple&#123;Array&#123;Float64,2&#125;,Array&#123;Float64,2&#125;&#125; to series data for plotting
 </pre>
 
 
