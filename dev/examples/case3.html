@@ -3,7 +3,7 @@
 <HEAD>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  
+  <title>Example Case 3 - Year Planning</title>
   
 
   <script type="text/x-mathjax-config">
@@ -656,39 +656,47 @@ div.title {text-align: center;}
         <div class = "col-md-12 twelve columns">
 
           <div class="title">
-            
-            
-            
+            <h1 class="title">Example Case 3 - Year Planning</h1>
+            <h5>Andrew Rosemberg</h5>
+            <h5>15th Feb 2019</h5>
           </div>
 
           
+<h1>Introduction</h1>
+
+<p>This an example of the HydroPowerModels package for solving a simple stochastic case with the following specifications:</p>
+<ul>
+<li><p>3 Buses</p>
+</li>
+<li><p>3 Lines</p>
+</li>
+<li><p>2 Generators</p>
+</li>
+<li><p>1 Reservoir and Hydrogenerator</p>
+</li>
+<li><p>3 Scenarios</p>
+</li>
+<li><p>12 Stages</p>
+</li>
+</ul>
+
+<h1>Case</h1>
+
+<h2>Importing package and optimizer</h2>
+
+
 <pre class='hljl'>
-<span class='hljl-cs'># ---</span><span class='hljl-t'>
-</span><span class='hljl-cs'># title : Example Case 3 - Year Planning</span><span class='hljl-t'>
-</span><span class='hljl-cs'># author : Andrew Rosemberg</span><span class='hljl-t'>
-</span><span class='hljl-cs'># date : 15th Feb 2019</span><span class='hljl-t'>
-</span><span class='hljl-cs'># ---</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># # Introduction</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># This an example of the HydroPowerModels package for solving a simple stochastic case with the following specifications:</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#    - 3 Buses</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#    - 3 Lines</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#    - 2 Generators</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#    - 1 Reservoir and Hydrogenerator</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#    - 3 Scenarios</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#    - 12 Stages</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># # Case</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># ## Importing package and optimizer</span><span class='hljl-t'>
-</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>GLPK</span><span class='hljl-t'>
-</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># ## Initialization</span>
+<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>GLPK</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>HydroPowerModels</span>
 </pre>
 
 
+
+<h2>Initialization</h2>
+<ul>
+<li><p>results &#61;  &quot;hidden&quot;</p>
+</li>
+</ul>
 
 
 <pre class='hljl'>
@@ -696,38 +704,73 @@ div.title {text-align: center;}
     </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
 </span><span class='hljl-k'>end</span><span class='hljl-t'>
 </span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Random</span><span class='hljl-t'>
-</span><span class='hljl-n'>seed</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>1221</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># ## Load Case Specifications</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># Data</span><span class='hljl-t'>
-</span><span class='hljl-n'>alldata</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>parse_folder</span><span class='hljl-p'>(</span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-n'>WEAVE_ARGS</span><span class='hljl-p'>[</span><span class='hljl-sc'>:testcases_dir</span><span class='hljl-p'>],</span><span class='hljl-s'>&quot;case3&quot;</span><span class='hljl-p'>));</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># Plot power grid graph</span><span class='hljl-t'>
-</span><span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
-    </span><span class='hljl-n'>Random</span><span class='hljl-oB'>.</span><span class='hljl-nf'>seed!</span><span class='hljl-p'>(</span><span class='hljl-n'>seed</span><span class='hljl-p'>)</span><span class='hljl-t'>
-    </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>plot_grid</span><span class='hljl-p'>(</span><span class='hljl-n'>alldata</span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>],</span><span class='hljl-n'>node_label</span><span class='hljl-oB'>=</span><span class='hljl-kc'>false</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-k'>end</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># Parameters</span><span class='hljl-t'>
-</span><span class='hljl-n'>params</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>create_param</span><span class='hljl-p'>(</span><span class='hljl-t'>  </span><span class='hljl-n'>stages</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>12</span><span class='hljl-p'>,</span><span class='hljl-t'> 
-                        </span><span class='hljl-n'>model_constructor_grid</span><span class='hljl-t'>  </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>DCPPowerModel</span><span class='hljl-p'>,</span><span class='hljl-t'>
-                        </span><span class='hljl-n'>post_method</span><span class='hljl-t'>             </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>PowerModels</span><span class='hljl-oB'>.</span><span class='hljl-n'>post_opf</span><span class='hljl-p'>,</span><span class='hljl-t'>
-                        </span><span class='hljl-n'>optimizer</span><span class='hljl-t'>               </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>with_optimizer</span><span class='hljl-p'>(</span><span class='hljl-n'>GLPK</span><span class='hljl-oB'>.</span><span class='hljl-n'>Optimizer</span><span class='hljl-p'>));</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># ## Build Model</span>
+</span><span class='hljl-n'>seed</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>1221</span>
 </pre>
 
 
+<pre class="output">
+1221
+</pre>
+
+
+<h2>Load Case Specifications</h2>
+
+<p>Data</p>
 
 
 <pre class='hljl'>
-<span class='hljl-n'>m</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>hydrothermaloperation</span><span class='hljl-p'>(</span><span class='hljl-n'>alldata</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>params</span><span class='hljl-p'>);</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># ## Train</span>
+<span class='hljl-n'>alldata</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>parse_folder</span><span class='hljl-p'>(</span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-n'>WEAVE_ARGS</span><span class='hljl-p'>[</span><span class='hljl-sc'>:testcases_dir</span><span class='hljl-p'>],</span><span class='hljl-s'>&quot;case3&quot;</span><span class='hljl-p'>));</span>
 </pre>
 
 
+
+<p>Plot power grid graph</p>
+
+
+<pre class='hljl'>
+<span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
+    </span><span class='hljl-n'>Random</span><span class='hljl-oB'>.</span><span class='hljl-nf'>seed!</span><span class='hljl-p'>(</span><span class='hljl-n'>seed</span><span class='hljl-p'>)</span><span class='hljl-t'>
+    </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>plot_grid</span><span class='hljl-p'>(</span><span class='hljl-n'>alldata</span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>],</span><span class='hljl-n'>node_label</span><span class='hljl-oB'>=</span><span class='hljl-kc'>false</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-k'>end</span>
+</pre>
+
+
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhcAAAF6CAYAAACqW3pRAAAABmJLR0QA/wD/AP+gvaeTAAAgAElEQVR4nO3de5zcVX3/8ff5zmY3gYS7SILcL7nMzixCRIkoQpFWQCq2rMpdAVstoOIFq0Bb67W2P0ULFlABy81YKwKKghK5CJaGJDvfmSWwCgoihFuATdjrfD+/P2aTzs7ed2e+57szr+fjMX/M2Z05nwlk897v+Z7zkQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgKpzvAgAA9cmkPSW9WdJSSbtJ2kFSv6SXJD0mqUPSA0561VuRAAAg2UzaxaRPm1QwySbx6DXpZpNOMCnwXT8AAEgIk+ab9BWTNk0yVIz2yJt0nO/PAgAAPDPpCJOemEGoqHzcZNL2vj8XAADwwKRzTRqsYrDY8ugyaX/fnw8AAMTIpM/UIFSUP54xaYnvzwkAAGJg0lk1DhZbHr836bW+Py8AAKghkw4yqSemcGEm/cLYSQIAQH0yKWXSmhiDxZbH3/j+7AAAoAZM+qCHYGEmvWDSdr4/PwAAqCKTmkz6nadwYSZ92vefAQAAqCKTjvUYLMykx422FbMCN8gAACbrvZ7n31vSGz3XgEkgXAAAJuso3wVIOtp3AZgY4QIAMCGTdlfp4dsbfBeAiREuAACTcaDvAoYkpQ6Mg3ABAJiMXXwXMCQpdWAchAsAwGTM813AkG19F4CJES4AAJPR47uAIZt9F4CJES4AAJPxnO8ChjzvuwBMjHABAJiMLt8FDHnUdwGYGOECADAhJz2l0sO3B30XgIkRLgAAk/VL3wVI+oXvAgAAQJWY9A56i2AyuHIBAJisOyQ95nH+/3CSeZwfAABUm0lne7pq8bxJC3x/fgAAUGUmBSb9j4dw8UHfnx0AANSISW0m9cQYLO4wlvEBAKhvJr3fpCimmzh39f15AQBADEz6dI2DxdMmLfb9OQEAQEzWrFnzmqcvvPDlKJWqRbB4xKT9fH9GAAAQo1wu94MwDO2xa6+1/oULqxksbjRpO9+fD9PHYSQAgCnL5XIfdM5dseV50NOjXb/+9ed3ueGGuZLmT/NtQ0mfctLPqlIkvCFcAACmJAzD/SSt1fBzJ/okHdqayTwl6WxJp0pqncTb9Uq6XdJ3Jf2EQ7LqA+ECADBpq1atatp5553vc869seJLH8lkMt8oHzDpdZIOl7RE0kJJO6oUQl6S9DtJHZJ+46Se2leOOBEuAACTFobh5yV9tmL4ztbW1j93znHVAZI4lAQAMEn5fP7Nkj5dMfx8KpU6g2CBcoQLAMCECoXCfDO7RlKqfNzMPrxs2bKn/VSFpCJcAAAmFEXRZZL2rxj+djab/YGPepBshAsAwLjCMHy3pNMrhh+bM2fOBT7qQfIRLgAAY1q3bt3ukq6qGB6MouiUJUuWdPuoCclHuAAAjMrMgqampmsl7VQx/s9tbW2/8VQWZoEm3wUAAJIpn89fIOnPKob/t7+//0s+6sHswTkXAIARCoVCOoqi1ZLmlg1vTqVSr1+2bFmXr7owO7AsAgAYpqurqyWKohs0PFjIzM4lWGAyCBcAgGF6e3v/RVK2YvhH2Wz2Gg/lYBYiXAAAtgrD8O2SzisfM7M/NTU1neOpJMxCs+SGTttZ0oGStlepC9+rkroldUmOk+EAoAoeeeSRXfr7+6/V8PvxTNLZS5cufcFTWZiFEhoubJ6kEyUdJ+ltkhaN870vSrpH0s8krZTcxtrXBwD1Z2Bg4HKVupdu5Zz7WiaTud1TSZilErZbxBZJ+riksyVtN4036JN0o6QvS+6RalYGAPUsn8+fbWbDDssys8KmTZvesGLFClqiY0oSEi6sWdInVGrju00V3rAo6TJJF0vulSq8HwDUrVwut69zbp1Ky85b9Ek6NJPJ5DyVhVksATd02l6S7pb0BVUnWEilrn3nSwolO6xK7wkAdWfVqlVNzrnrNTxYyDn3aYIFpstzuLAVktZIelONJthT0irJ2mv0/gAwq73mNa+5WCN/Bt+ZTqcv9VEP6oPHcGFHSLpTFWfW10CLpBslO6PG8wDArBKG4Qoz+0zF8EZJZznnzEdNqA+ewoVlJP1Y1VsGmUgg6duSHRvTfACQaIVCYb6kazRy1+DfZjKZJ+OvCPXEQ7iw+ZJWqnRmRZyaJF0v2T4xzwsAiWNm35R0QMXwdzOZzEof9aC++Lhy8W+SlniYV5J2kPRdyRKySwYA4heG4YlmdmbF8GNz5879mI96UH9iDhd2qEpnWPj0Nknv81wDAHixfv36RZKuqhgeNLNTDzjgALbuoyrivnLxTx7mHM3nJEvo6aQAUBtm5gYHB78taeeKL30hm80+4KMm1KcY/6G3jKQ/j2++ce2n0vHiANAwwjD8mJm9o2J4dV9f3xe8FIS6FedVhDOVmBNBJUlsTQXQMAqFQto59/mK4c3FYvGU5cuXD3gpCnUrxn/s7Q8qHWqVFAOSduF4cAD1rqurq6W3t/dBSdmKL52VyWS+66Mm1LeYrlzYfkpWsJCkOZLe4rsIAKi1np6eL2tksLiZYIFaiWtZ5A0xzTNVSa0LAKoiDMO3O+c+Uj5mZn9qbm4+x1dNqH9xhYvFMc0zVUmtCwBmLJfL7SjpOxq+BG6Szlm8ePHzfqpCI4grXOwW0zxTldS6AGDGnHP/IWmP8jEzuzSbzf7UU0loEHGFi21jmmeqtvNdAADUQhiGH5BU2RG6c9OmTZWNyoCqiytcRDHNM1VF3wUAQLXlcrl9JX29YrjPOXfyihUrenzUhMYSV7jYFNM8U9XtuwAAqKZVq1Y1Oeeuk7SgfNzMPtPa2trhqSw0mLjCRVLb9z7huwAAqKZddtnlIkmHVQzfk8lkKq9kADUTV7hYH9M8U/WI7wIAoFrCMFwuqfKeipeCIDjNOZfU5WnUobjCxQMqbX9KlD32GFzjuwYAqIaOjo5tnXPXq3RAYLm/TafTXKVFrGIKF+5ZSWE8c01OU5P1/vjHj96cz+dX5nK5o33XAwAzEQTBN8zswPIx59w1mUzm+75qQuOKs3FZov4Hf+tbu7vnzInmmdlJzrk7wzB8OJfLXbhmzZrX+K4NAKYil8u9S9IHKoYfb2lp+cho3w/UWpyNy3aX9Jik5vjmHNs11zyuQw7ZPNqX+pxzt0RRdGUmk/mlcy5xyzkAsMX69esXDQwM5CTtXDYcmdlR2Wz2bl91obHFeOXCPSXpuvjmG9uiRQNPjBEsJKlly9WMfD7fFYbh369fv35RnPUBwGSYmRsYGLhKw4OFnHNfIFjApxivXEiS7SmpU35P7DRJb8nlwl7n3OmSTpO04wSviSTdZWZX9vf337x8+fKBmlcJABPI5/MfNbOvVQw/1NfXdxg/p+BTzOFCkuxTkr4S/7xbfVdyZ2158vjjj8/t7u5+p3Pug5L+TBP/mTztnPuemV2VyWR+V9NKAWAMhUJhWRRFqyXNKxveHEXRIW1tbWyzh1c+wkUg6WeS3h7/3OqStFxyr4z2xVwutyQIgjPN7AOSJrqx0yTdb2bf6+/vv2758uWvVrtYABhNV1dXS29v7/9Iaisfd86d09ra+m1PZQFbeQgXkmSvkXSfpAMn+s4qelHS4ZJ7eKJvLBQKzcVi8S+Hlk3eISk1wUtecs6tdM59K51Or6tGsQAwlnw+/29mdkH5mHPux62tre/yVRNQzlO4kCTbW9IqSXvHMNnLkt4huQem+sKOjo7XOedOcc59SNJek3jJQ2Z2ZXNz841LliyhdwmAqsrlckc45+7S8Bvyn5WUzWQyGzyVBQzjMVxIki2SdLukbA0n+aOk4ySXm8mbmFkQhuFRQRB80MzepZGn4FXqcc7dFkXRldls9hczmRsAJGnt2rU7NDU1dUjas2zYJL0zk8n8xFNZwAiew4Uk2TaSviHprIm+cxpul3SG5J6r5psWCoXdisXiGc65syXtP4mXPGxm17a0tHxn8eLFz1ezFgCNIwzDmyS9p2L4m5lM5nwf9QBjSUC42MKOVilkLK3Cmz0l6VOSbpRqewhWLpc7ZOhqxqmStpng2zmgC8C05HK5M51zV1cMd3Z3dy9fsWJFj5eigDEkKFxIQztJ2iWdr5EtgyejU9Llkr4jud5qVjaR1atXb9/c3PyeoXszDprES550zt3gnLucpkIAxtPR0bFPEATrJG1XNtwXBMGbuIkcSZSwcFHODpB0nKQjJWVUupmy8kTRpyQVJN0t6XbJrY21xDGUXc14n6QFE3w7B3QBGJOZBfl8/i5JR1R86ZOZTOZffdQETCTB4aKSzVUptc+X1CPpZckl+myJigO6JtN5lQO6AAyTy+Uuds59rnzMOXdvZ2fnke3t7UVfdQHjmUXhYnab4gFdkaQHOKALaGy5XO4Q59wDGr477aUgCNpYTkWSES5i1tXV1dLT03PCFI4bf8k5t1LS5a2trR21rxBAEnR0dGybSqXWmNmwwwadc+9rbW29yVddwGQQLjya7gFdqVTqhnQ6vanW9QHwJwzDqySdXTH8n5lM5nQf9QBTQbhIgGkc0NUt6WYz+x4HdAH1J5fL/aVz7uaK4SfNrC2bzW70UhQwBYSLhOns7Fw4ODh4unPuHEn7TeIlHNAF1JGOjo5dgyDISXpt2XBkZkdls9m7fdUFTAXhIsE4oAtoLGbm8vn8rSptwy/3hUwmc5GPmoDpIFzMAmvXrt0hlUq1c0AXUN/CMDxf0qUVw2uCIDgsnU73+6gJmA7CxSwzxQO6ipJWmdmVL7zwwo+OPPLIwRhKBDANhUJhWRRFqyXNKxt+NYqig9va2h7xVRcwHYSLWer++++fN3/+/OM5oAuY/bq6ulp6e3t/o4ork2b2t9ls9gpPZQHTRrioA9M9oGvTpk3/ScMjwL8wDL8q6RPlY86529Pp9HHcP4XZiHBRRzigC5h9Ojo63hIEwSpJqbLhZyVlM5nMBk9lATNCuKhTYRjuYWYnO+c+LGnPSbyEA7qAmK1du3aHpqamDg3/O2qSTshkMrd5KguYMcJFneOALiC5wjC8UdJ7y8fM7LJsNnuup5KAqiBcNBAO6AKSI5/Pn25m11YMP9zX17ecZoWY7QgXDcjMXGdn55vN7DQO6ALiF4bhHpI6JO1YNjzgnHtza2vr/3oqC6gawkWDm8YBXV2SbgiC4Lsc0AVMnZkF+Xz+LklHlI875y5sbW39F09lAVVFuMBWZQd0nSxp/gTfnrQDuvaTlFbpxrhth8Y2S/q9pIKkx/2UBQwXhuFnJX2+fMw5d29nZ+eR7e3tRU9lAVVFuMAI0z2gK4qiK7PZ7GO1rq/MmySdIemdknaf4HuflHSLpO9JerDGdQGj6ujoODgIggckNZcNv5xKpdqWLVv2B191AdVGuMC4wjBc6pw7w8zOkrTLBN8e1wFdb1PpN783T/P190j6rKT7qlUQMJHVq1dv09LSskbS4vJx59zJra2tN3oqC6gJwgUmJSEHdG0n6ZuSTpvE/BMxSd+V9FFJnOuByUpJOlSl+yXaJO0jaQeVtnhvlPS0pIdVCq6/kvTKlhfm8/krzOyDFe93fSaTObX2ZQPxIlxgyjwd0LVE0q2S9p/m68eyXtLxkui3gvG8VtL5Ki3DTbQEt0WvpJslXZrL5XZ0zv1Ew3/m/tHMstlsdmN1SwX8I1xg2mI8oOsgSXdq4mWZ6dqg0r0l+Rq9P2aveZI+I+njGt6tdEoOO+ywvosuuqhlzz23ZvHIOXd0a2vrqirUCCQO4QJVUcMDuvaVdL9KvznW0lOSVkhiey22aJP0fVXcIzFdLS0tuvDCC3XSSSdJ0pcymcxnqvG+QBIRLlBVZhZ0dnauqNIBXS0qBYuDa1bwcA9Keouk/pjmQ3IdL2mlZnC1Ysw3Pv7454466qi9LrjgAjoSo24RLlAzZQd0fVil3wIn0iXpBknfyWQyT0r6gkqXpON0iaR/jnlOJMtfSvovSU01nONaSe9X6cZioO4QLhCLXC53mHPubEntmviAroGHH374rvb29iM1/DyAOPSodBn8yZjnRTK8QdLdqsEVi1F8TtI/xDAPELvAdwFoDNls9oFMJnPWnDlzFjnnzpA03g2dc6666qqs4g8WUukflU96mBf+bSfpJsUTLCTpIklvj2kuIFZcuYA3Yx3QtWnTJh1++OH9xWLRR7iQSseG7ybOv2g0X5f0kZjn/IOkZZLogoq6wpULeJPJZB5ubW399Ny5c19nZu0qXc2w22+//VWPwUIq9SY5weP8iN9+kv7Ow7x7eZoXABpHoVDYf4899rhXpRvdfD6uqfVnRaJ8S/7+X3tapZ1RAIAaekL+w0VXzT8lkmKepJfk9/+3E2v+KYEY1XKrFTAd20p6ne8iJO1z2GGHzbviiisWbhloamrqGRwc7N3yfMGCBT377LNP7+gvxyzyF5K291zDSZJ+5LkGoGoIF0ia1yoZNxqnWltbFzvn1m4ZKBaLcu7/Stu0aZPCMBzttb0qbWmd9nPn3NbnZjbhczPb+tw5N+x5EAS9URSN+TyVSvUWi8VRnzc3N/f29/dv/VqdBqojfRcg6SjfBQDVRLhA0kx0omdsnnvuuR2m+dK5Q49pM7MpPS8PPZXPzWzc51EUjfl8YGBgrEBlKi0lbH2ZpJfHeV5UWYdQSUXn3NbnURQNBkHQXfZ8IAiCTeXPNXz3Tr9Ku3pGfZ5KpfqKxeLWHRhm1uece7Xs673FYrHHzDa0tbW9Xv69VtJCle6/AGY9wgWSJjFHby9cuLDou4YEc5J2rBjbeSpvUB6QnHMTPp+KysBU+fqyr79Lk+uFE4f9RbhAnWArKpImMe2n0+n05om/C7OZc25QI0OSL0mpA5gxrlwgaZ5T6XL7dJckqmXDm970ptDM9pOkVCo1t1gsbj25MQiCuVEUlT+fF0XR3HGebxNFUUv5cw3ffrityk4kNbNtnXPlZ33MN7M5ZV9f4Jzb+vfXObfAzMr/Pm8nKTXOc2hruJgz4TfGY0ZLaUCSEC6QROskvc13DcuXLx+Q9JjnOmrq/vvvnzd//vyt/6g1NzfP6+/v3/o8lUrNKxaLoz6fKFA55+aZ2bDnzrmtz81swuca/g/uVJ8PC2yjcc4NqHQ65oLxvi8OhxxyyLxrrrkmJ+lhMyukUqnOKIoKfX19vx36fxGYNQgXSKK75D9c/NLz/LFYsWJFj4bvVEnMslS1FAqF5mKxuO2W56lUqqVYLG4jSS+//PLTKt3n4D1cHHnkkdtLykjKOOcURZEkqaWlZTAMwyckdTrnCpI6oygqLFiwoFCHO3dQJ5Kw5Q+odKCkRzzObyrdXFfXVy2w1S2S3um5hujuu+++ZKeddvr8FF4zqNKBc8NCx6ZNmzqHQiPgDeECSXWfpDd7mvuXko72NDfi9/eSvui5hjX5fD5nZmdW4b0IHfCOcIGkOk7SbZ7mPloNsiwCSdLrJa3xXMOXwjBcpdJy4BLnXKuZ7avqLl0PSvqtpIJzrtPMCpIeDoJgfTqdTswW8EZn39O2atIbZVos0z5y2l6le4l6ZXpOTo/LqVPdWu3+Rom9F4dwgST7qaR3xDznzzzMCf9CSa0e588O1bDV6tWr5zQ3N+8RBEE6iqJlzrm0Su3ZW1XdRmejXuno7+9/ePny5bSCj4Fdrx0lvXfocZgmt4Nps6RVcrpBTbrZtStRV6UIF0iy/VX6jTKum+1eUum32N/HNB+S40OSLvc09ypN4fjvcUJHWtXdzjosdERR9Fgqlers6elZQ+ioDvtPLVRKn5LpHJV2N03XszJ9Xc36pmsfdpKtN4QLJN17JN2o2v+/Gkl6t6Qf13geJNNclW4i3tPD3G+TdPdM3yTG0CGVdtgUJHVu2TY7ODi4tq2tjYPnJsH+UYEO0HmSPqfSGTTV8kdJH3Gn6L+r+J7TQrjAbPBxSf9a4znOk/TvNZ4DyXaiFPsP5Zskva+WE6xatapp55133pPQkQy2UrtpQNdJ+rMaTvMdbdL57m/k7QoT4QKzxbmSLlX1j6wvqnRJ/Koqvy9mmc7OzoUf/ehHC3fccUdcx3D/UaVluOdjmm+YcULHMpUOJKumEaFD0rp0Op2IS/hxsZu0n4r6ueLpZ/O/mqPjXLuei2GuEQgXmE2OlnSdSh0kZ2zXXXfVueeee9Mll1xS098ckXwdHR2LgyC4o6enZ88PfOADyufztZ5ys0r3WTxY64mmitBRG3aTlqqouyW9JsZpCxrUEe4MvRDjnJIIF5h9dlLpTIKzNM1tek1NTTrppJN03nnnacGCBf3FYjFz0EEHPVrVKjFrdHR0HBwEwe2SdpWkjRs36pxzztEjj9TsHLdXVVqCuaNWE9TCOKFjqaRtqjxdXYUOu06vk9MDkl7nYfrfaI6Oins3CeECs9W+kj6q0nr1LpN8zbP777//vZdddtlfLVq0qHz8tkwm4/uERniQy+Xe6py7RdL25eOvvPLKxmOPPbbr5ZdfPrTKUz6j0o3DD1T5fb3xHTpSqVTHkiVLuqs8T9XYKjXpT1ol6XBvRThd5U7WB+OdEpjd5kh6k6QjVLpBbW9J84e+1q3SttK8Snfj/4+kwTAMf6jSD/itzOy4bDb703hKRhKEYXicpB9o5KX+J6IoOqatra1L0qclXazq3Pj4E5WuuG2ownslXmXoCIJgXzNLq3SfScOEDrtBl8j0T77rkNOJ7mTdHN90QIMpFAp7RlH0sIb/gPvt3LlzWw844IA+X3UhPrlc7mTn3DUaeVjReknHZDKZJ8vG9pP0z5LaNb229eskXSLp1mm8ti6tX79+UX9//zLnXNo5t2wodBykmZ31MBqvoWPoBs68qr8rZzqeUFHL3OmKZecO4QINKZ/Pf87MLq4Y/mQmk6n1lld4ls/nP2xm39TInUcPDQwMvOPggw8e6+76fSSdptJVr6zG//n5tEonzF6n0lUzm1nVjSHu0OGce8zMOs2sMDg42DHOf/tpset1naRTqvmeM+L0KXeyvhrPVEADuv/+++ctWLDgYUl7lQ13p1KpxcuWLXvaV12orVwud6Fz7sujfOnuuXPnnnDAAQe8Msm32lml9uj7SNpRpSsgL0l6SqWrH7+tRr0oGSN0tOn/lkCrZaOGTiSdaeiw72kfpfSoqtsfZqY2qF97u/ert9YTES7QsPL5/HvN7MaK4aszmcwHvBSEmjEzl8/nv6rSgWyVbuvu7m6nY+js4zN0mFmura3t2bFeYNfrnyVdVOU6Zs50kjtV/1XraQgXaGhhGP5KpZtBt7AgCA5Lp9P/46kkVNnKlStTS5cuvVLSaKHx+r6+vvcvX748sd0lMXU+Q4dzLsxkMhvsej2m0pWtpLnZnaITaz0J4QINrVAoHBRF0WoNv1HvodbW1kOdc5GvulAdXV1dLb29vddL+qvKr5nZZZlM5nz+OzcGM3O5XG7vIAi2bJddOhQ6lqrKoWO35648fpenv3lbNd+zirq1STvXul074QINLwzDb0n62/Ix59yZra2t13oqCVVQKBTmR1H035LeXvk159xXWltbP+2hLCTQGFc6sppeR+bi4o43njvHvfqtKpdZPaZD3an631pOQbhAwysUCjtFUfSoSjfpbbGhr69v8fLly1/2VRemb+i/6U9UOgOlnJnZJ7LZ7P/zURdml2mGjq7WXOZWSRfEU+U0mM50p6qmvzwl6S5WwIt0Ov1iGIb/JOkbZcOvbW5u/oykCz2VhWnq7OxcWCwWf67Sbo5yRTM7J5vNXu2jLsw+S5Ys+ZOkP0n6Rfn4ltAhad+yE0nbVOobUlA8jcmmz2n/2k8BYMtNf2tU+q1ki/4oirJtbW01azKB6srlcvs65+5U6Xj4cn2STs5kMnG3VEcDKRQKe0pqXrYu/W0Nv1E8af7dnaLzajlBtdtXA7NSe3t7MQiCj1UMNwdB8I1RX4DE6ejoaJV0r0YGi01mdjzBArWWTqefSKfTv1X1jzevtmrvmhmBcAEMSafTd0n6YcXwMblc7lgf9WDycrncW4MguM85t6jiSy8GQXB0Npv9xagvBGrB1f6QqhkxvVrrKQgXwHAfk4b/xXPOXdrV1dXiqR5MIAzD45xzP1NFZ1OVGpCt4MwSxM6U9BvBJ3sS7bQRLoAymUzmSedcZX+R/Xt7e8/3UhDGlcvlTpb0I43sbLo+CIK3cL8MPPm97wIm8FitJyBcABVeeeWVL0v6Q8XwxZ2dnQt91IPR5fP5Dzvn/lMjO5s+NDAw8NZ0Ov2Ej7oAOT3su4RxmdbXegrCBVBhqMdE5RbUBVEUfdFHPRgpl8tdaGaXaeTPsHvmzp17VLW7WwJTdJ/vAsbRqxatrvUkhAtgFJlM5vuSflU+ZmZnFAqFN/qpCFLpCOcwDP91jM6mt3V3d//FFDqbArXxPoWSNvguYwz3unbVvEkf4QIYQxAE50oaLBtyURRdZmb8vfFg5cqVqXw+/22N3tn0+r6+vnfT2RRJ4JxM0k2+6xiVxVMXPySBMaTT6YKkqyqGDwnD8HQf9TSyrq6ulqVLl35fo3Q2NbPLWltbT6ezKRIl0tWSzHcZFbql2rdblwgXwLiCILhI0gvlY865L69evbpy2yNqpFAozO/t7b1Vo3Q2dc59JZvNnktnUySNO00dkn7mu45hTJe5U2u/DVUiXADjSqfTL5rZP1YMv7alpeWzPuppNEMNyO7UyM6mZmYfp7MpEu5iSUXfRQx5UYH+La7JCBfABNavX/8tSbmK4Y90dHQs9lFPo+js7FwYRdGvNLKzadHMzqKzKZLOnaKHZLrCdx2SJKfPuJP1fFzTES6ACbS3txedcx+tGG4OguCbXgpqALlcbt9isXivRnY27ZPUTmdTzBqRPiXzfu7FT/U+XRnnhIQLYBJaW1tXmVnljVBvD8PwOC8F1bGyBmSVbatpQIZZx52uzZLeoxiO3B7D7zSo04d2sMSGcAFMknPuAmlEwx/6jlRRR0fHW2hAhnrjTlUo6V1S7A3NNiilP72mAtoAABD8SURBVHdnDL8pPQ6EC2CSxug7sl9fX99HvBRUZ8IwPC4Igp+rogGZmf0piqIjaECG2cydolVy+gsptqZmv1ekI9x79buY5huGcAFMwSuvvPJl59zvy8fM7KL169dX/qaNKRivAVkqlTqsra0t76EsoKrcybpbRR0u1by3x12ao8PcafLWuI9wAUzBihUresxsRN+R/v5++o5MUxiGHxqjAdkaGpCh3rjTldccvUHSv6v621Q3y3Sh5ugY165nqvzeU+J8Tg7MVmEYrpL0trIhC4Lgrel0OskNixInl8tdOEafkHv6+vpOWL58eVyXkIHY2Y16vSJ9TtJxmtm/xwOSrlNR/+hOVyLCOOECmIZCoZCOomidpKay4YdaW1sP5bTIiZmZy+fzX9XofUJu6+7ubqdPCBqFXaeMnN6v0q6SqSyxPiKnGzSoa5ISKrYgXADTFIbh5ZI+VD5mZh/gDIbxrVy5MrV06dIrNUqfEOfcDb29vWfSJwSNym5QWpHeokCLZdpPTgtkWiDpJUkvy+m3itQpp1+5U/QH3/WOhXABTNPQ0dSPSNqlbPjZvr6+A7mcP7qurq6W3t7e6zVKnxAzuyyTyZzPlR9g9uOGTmCa0un0i865f6wY3rWlpeUiH/UkHQ3IgMZBuABmoLOz8z8kdVQM03ekAg3IgMZCuABmoL29vRgEwbnSsKN159B35P+M14BM0tk0IAPqD+ECmKF0On2fc260viPHeykoQSZqQJbJZL7roSwANUa4AKrAzD4uaXPF8Ncbue8IDciAxkW4AKogk8k8KWlE35Genp7KVu0NgQZkQGMjXABV0t3d/ZXKviPOuYbrO0IDMgCEC6BKVqxY0RNF0acqhucPDAx8yUtBHuTz+fdp9AZkj9CADGgcHKIFVFkYhndJOrJsqCH6joRh+CGVmjFV/tKyJoqid7S1tT3roSwAHnDlAqiyIAjOkzRYNuSiKLrUzOr271sul7tQ0uUa+TPlnr6+vqMIFkBjqdsfdoAv6XS6IOnKiuGD8/n8mR7KqSkzc2EY/usYnU1v6+7u/guOQgcaD+ECqAEzu0jS8xXDX1q9evX2o33/bLRy5cpUPp+/SqN0NnXO3dDX1/duOpsCjYlwAdRANpvd6Jz7h4rhXVtaWi72UlCVdXV1tSxduvT7ks6q/JqZXZZOp0+jsynQuAgXQI10dnZeoZF9R87P5XJLfNRTLR0dHdvSgAzAeAgXQI2M1XfEOTdr+44UCoWdgiD4hWhABmAchAughsboO3J0Pp9/p5eCZoAGZAAmi3AB1NhofUfM7Guzqe8IDcgATAXhAqixob4jX60Y3q+np+djPuqZKhqQAZgqwgUQg+7u7n8Zpe/IZ5Ped4QGZACmg3ABxGDFihU9zrlPVgzPHxgYGO3wqUQYqwGZpKdpQAZgPPQWAWIUhuEdGr7TwqIoOqKtre1eXzWNJp/Pv8/MrpU0p+JLjwRBcEw6nX7CR10AZgeuXAAxCoLgY6roOxIEwdeT1HckDMMPmdl1Ghks1kRR9FaCBYCJJOYHGtAI0ul0wcyuqBg+OJ/Pv99LQRVoQAagGggXQPwu1si+I19cu3btDj6KkbY2IPsqDcgAVAPhAohZNpvdKOmSiuFd58yZ46XvSFkDsk9Ufo0GZACmgxs6AQ9WrlyZWrp06UOS2sqGB6Moen1bW1s+rjq6urpaent7r9cofUIkXd7a2noefUIATBVXLgAPxug70hQEwdfiqmGiBmSZTObvCBYApoNwAXiSTqfvk/SDiuGjC4XCCbWemwZkAGqJcAF4FEXRiL4jURR97fHHH59bqzlpQAag1rjnAvAsl8td4pz7p/IxM/v7bDa7ZefGUkmHS1oiaQ9J26l0VsbLkh6XFEq6W9Izk5hrX+fcHRrZJ6RP0sn0CQFQDU2+CwAa3aZNm7663Xbbvd/M9t4y9vzzz1+0yy67vOb5558/UdI+k3yrByRdI+l7knorvzjUgOznkir7hGwysxPpEwKgWrhyASRAoVD46yiKfrB582Z961vf0k033aS+vr7pvt0zkv5B0rclRUPv/8Yoin4qaaeK730xCIJj6RMCoJoIF0BCXHrppQ9+8YtffMOGDRuq9Zb3STo5DMOspJWStqn4+tNRFB0T59ZXAI2BcAEkw99J+oaqfJN1c3PzpquvvnpuNputXAKlARmAmkn5LgCAPinpa6pB2C8Wi8233357cMghh2jhwoVbhtcMDAz8WVtb29PVng8AAPh3mkr3RVgtHwsWLLBbbrnFwjC8e/Xq1dvH9ukAAECslql0xkVNg8WWx+677/7KWWedVXlDJwAAqBNO0q8VU7Aoe3w+jg8HAADid7LiDxam0vkXe8bw+QAAQIycSqdq+ggXptKuFAAAUEcOl79gYZJekjSv5p8SQMOicRkQv/d4nn97SX/uuQYAdYxwAcTvaN8FSDrKdwEA6hfhAojXtpIW+y5C0nLfBQCoX4QLIF4HKBnH7h/ouwAA9YtwAcQrKYdY7Sj+/gOoEX64APFKyi6NQFKL7yIA1CfCBRCvV30XMKSo0oFaAFB1hAsgXs/6LmDI8yqdeQEAVUe4AOL1O5WuGvj2qO8CANQvwgUQr15JOd9FSPqN7wIA1C/CBRC/O30XIOkXvgsAAADVc5D89hbZIKmp5p8SQMPiygUQv3WSHvA4/1WSBj3ODwAAauBY+blq8bKkXWL4fAAAwINbFX+4+FgsnwwAAHjxOknPKb5gcY+41wIAgLp3jKR+1T5YPCFpUUyfCQAAeHaypAHVLlhskJSO7dMAAIBEOEFSt6ofLB6VtH+MnwMAACTIEklrVL1gcb2k7WL9BAAAIHFSks7dZpttXtL0Q8UaSW+PvXIAGJLyXQCAYUzSg7/+9a+P3WuvvfbavHmznnnmGZnZRK/rlvRDSZ+QdKFKDdIAwAvnuwAAwxUKhd2iKPqjhsL/5s2bdeONN15+6aWXPqrS9tXtJEWSXpT0e0mhpNXi1E0ACUG4ABIml8ud65z7ZtlQVCwW9zzooIOe8lYUAEwBvUWAhHHOnVTx/NcECwCzCeECSJBCobCbpDeXj5nZDzyVAwDTQrgAEiSKopM0/EbraM6cOT/0VQ8ATAfhAkiQyiURSfctWbLkT16KAYBpIlwACVEoFHYzsxXlYyyJAJiNCBdAQoy2JNLc3PzfvuoBgOkiXAAJMcqSyL0siQCYjQgXQAIMLYkM2yXinGNJBMCsRLgAEiCKonYN//sYNTU1/chXPQAwE4QLIBlYEgFQNwgXgGednZ0LJQ3bJcKSCIDZjHABeFYsFlkSAVBXCBeAf5VLIvewJAJgNiNcAB4NLYkcVj7GkgiA2Y5wAXg0xpLIzb7qAYBqIFwAfrEkAqDuEC4AT9atW7e7WBIBUIcIF4AnTU1NJ6liSSQIAnaJAJj1CBeAJ2ZWuSRy97Jly572UgwAVBHhAvCgo6PjdZLeVDHMkgiAukC4ADxIpVJ/rYolkVQqxS4RAHWBcAF4ULkkYma/YkkEQL0gXAAxG1oSYZcIgLpFuABi5pw7SZIrGypKYpcIgLpBuABiNhQutjKzuzOZzAZf9QBAtREugBiNtkuEJREA9YZwAcTIOdeuiiWRKIr+21c9AFALhAsgRpVLIs65X7W1tT3rqx4AqAXCBRCTMAz3kPTG8rEoilgSAVB3CBdATIbOthi2JGJm7BIBUHcIF0BMKpdEJK1iSQRAPSJcADEYbUnEzFgSAVCXCBdAPEbsEjEzeokAqEuECyAGo7RXZ0kEQN1q8l0AUO+GlkQOLR9jSQRAPePKBVB7LIkAaCiEC6DGRlkSuYslEQD1jGURoIZGWxKhlwiAeseVC6C23qPhSyKDxWLxx76KAYA4EC6A2mKXCICGQ7gAamRoSeQN5WMsiQBoBIQLoHbeq4olkf7+fnaJAKh7hAugdkbsEjn44IOf81IJAMSIcAHUwNq1a/eWtLx8jCURAI2CcAHUQFNTU2V79cH+/n52iQBoCIQLoDYql0R+yZIIgEZBuACqbLQlEUksiQBoGIQLoMrmzJlT2UtkcGBg4BZf9QBA3AgXQJWN0kuEJREADYVwAVRRR0fHPpIOqRhmSQRAQyFcAFXknKtcEhloamri4CwADYVwAVSRc27YkoiZ/XLp0qUv+KoHAHwgXABVMrQkcnD5GAdnAWhEhAugSsZYEuHgLAANh3ABVAlLIgBQQrgAqoAlEQD4P4QLoAqcc+9RxZJIEATsEgHQkAgXQBVULok4536RTqdf9FUPAPhEuABmKJfL7Svp9eVjURSxJAKgYREugJkbsUsklUqxSwRAwyJcADNUuSQi6U6WRAA0MsIFMANDSyLDdomYGUsiABoa4QKYgaFdIuUGUqkU7dUBNDTCBTADo7RXZ0kEQMMjXADTlMvl9nXODdslwpIIABAugGlzzr23YoglEQAQ4QKYicolkTtYEgEAwgUwLWEY7ifpoPIxeokAQAnhApieEbtEnHO3eqkEABKGcAFMT+WSyM9ZEgGAEsIFMEWdnZ0HiCURABgT4QKYomKx2F4x1B9FEUsiADCEcAFM3YhdItlsdqOXSgAggQgXwBSsW7fuQElt5WMsiQDAcIQLYApSqVTlVQuWRACgAuECmJoRu0RYEgGA4QgXwCSNtiQiiSURAKjQ5LsAwDcrheyMpDdIOlDS7pK2lZSStFnSM5Ie/dOttx608fjjZU1b/9r09fX10UsEAACUmPQWk64y6TmTbDKP4jbb2MvHHGO//8Y3LL92LfdaAAAAyaR3mvTgZAPFmEFj/vwNJp1tpSscAACg0Zi0t0k/mWmoGOXxkEnLfX8+AAAQI5PebdLGGgSLLY8+ky4wyfn+rAAAoMZMOt+kYg2DRfnjGuNGaQAA6pdJn4kpVJQ/bjC2eQMAUH+GbraMO1hseXzd9+cHAABVZFLWpFc9hgsz6RTffw4AAKAKTGo26WHPwcJMesmkRb7/PAAAwAyZn/ssxrz/wvefBwAAmAGTtrfabjmd6iMy6WDffy4AECfuaEe9+bCkHXwXUcZJ+qTvIgAgThz4g7phpf+fuyTt57uWCv2SFjnpBd+FAEAcuHKBevJGJS9YSFKzpBN9FwEAcSFcoJ683XcB4zjadwEAEBfCBerJ4b4LGMcRvgsAgLgQLlBPlvkuYBy7mbST7yIAIA6EC9QFk1ok7e67jgns67sAAIgD4QL1Yjslf/fT9r4LAIA4EC5QL+b5LmAStvFdAADEgXCBetHju4BJeNV3AQAQB8IF6sUrksx3ERN4yXcBABAHwgXqgpP6JD3lu44JPOa7AACIA+EC9aTTdwHjeNpJG30XAQBxIFygntzru4Bx3OO7AACIC+EC9eRO3wWMI8m1AUBVJf1cAGBKTHpE0oG+66jQL2mhk170XQgAxIErF6g3V/suYBQ/JFgAADBLmbSdSRtNsoQ8IpOyvv9cACBOXLlAXXGl8y6+7LuOMtc7Kee7CAAAMAMmNZtUSMBVi40m7eb7zwMAAFSBSRmTXvUcLk72/ecAAACqyKT3D93z4CNY/Jvvzw8AAGrApL/3ECyuN+5nAgCgfpl0nknFmILF1SY1+f7MAACgxkw6waQXahgq+kw63/fnBAAAMTJpT5NuqUGweNCk1/v+fAAAwBOT3mHSA1UIFY+adCb3VwAAAEmSSStM+g+TnplCoHjZpBtNOt6klO/PAABJROMyNDwr/T1ISzpUpaZnu0taoFJ46Jb0jKRHJa2TtNpJg55KBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjeX/AyRYHHaag2XWAAAAAElFTkSuQmCC"  />
+
+<p>Parameters</p>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>params</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>create_param</span><span class='hljl-p'>(</span><span class='hljl-t'>  </span><span class='hljl-n'>stages</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>12</span><span class='hljl-p'>,</span><span class='hljl-t'> 
+                        </span><span class='hljl-n'>model_constructor_grid</span><span class='hljl-t'>  </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>DCPPowerModel</span><span class='hljl-p'>,</span><span class='hljl-t'>
+                        </span><span class='hljl-n'>post_method</span><span class='hljl-t'>             </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>PowerModels</span><span class='hljl-oB'>.</span><span class='hljl-n'>post_opf</span><span class='hljl-p'>,</span><span class='hljl-t'>
+                        </span><span class='hljl-n'>optimizer</span><span class='hljl-t'>               </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>with_optimizer</span><span class='hljl-p'>(</span><span class='hljl-n'>GLPK</span><span class='hljl-oB'>.</span><span class='hljl-n'>Optimizer</span><span class='hljl-p'>));</span>
+</pre>
+
+
+
+<h2>Build Model</h2>
+<ul>
+<li><p>results &#61;  &quot;hidden&quot;</p>
+</li>
+</ul>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>m</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>hydrothermaloperation</span><span class='hljl-p'>(</span><span class='hljl-n'>alldata</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>params</span><span class='hljl-p'>);</span>
+</pre>
+
+
+<pre class="julia-error">
+ERROR: KeyError: key :switch not found
+</pre>
+
+
+<h2>Train</h2>
+<ul>
+<li><p>results &#61;  &quot;hidden&quot;</p>
+</li>
+</ul>
 
 
 <pre class='hljl'>
@@ -736,63 +779,330 @@ div.title {text-align: center;}
 </pre>
 
 
-
-
-<pre class='hljl'>
-<span class='hljl-n'>end_time</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>time</span><span class='hljl-p'>()</span><span class='hljl-t'> </span><span class='hljl-oB'>-</span><span class='hljl-t'> </span><span class='hljl-n'>start_time</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># Termination Status and solve time (s)</span><span class='hljl-t'>
-</span><span class='hljl-p'>(</span><span class='hljl-n'>SDDP</span><span class='hljl-oB'>.</span><span class='hljl-nf'>termination_status</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-oB'>.</span><span class='hljl-n'>policygraph</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>end_time</span><span class='hljl-p'>)</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># Bounds</span><span class='hljl-t'>
-</span><span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
-    </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>plot_bound</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-k'>end</span><span class='hljl-t'>
-
-</span><span class='hljl-cs'># ## Simulation</span><span class='hljl-t'>
-</span><span class='hljl-k'>import</span><span class='hljl-t'> </span><span class='hljl-n'>Random</span><span class='hljl-t'>
-</span><span class='hljl-n'>Random</span><span class='hljl-oB'>.</span><span class='hljl-nf'>seed!</span><span class='hljl-p'>(</span><span class='hljl-n'>seed</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>results</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>simulate</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span><span class='hljl-p'>);</span><span class='hljl-t'>
-</span><span class='hljl-n'>results</span>
+<pre class="julia-error">
+ERROR: UndefVarError: m not defined
 </pre>
 
 
 
+<pre class='hljl'>
+<span class='hljl-n'>end_time</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>time</span><span class='hljl-p'>()</span><span class='hljl-t'> </span><span class='hljl-oB'>-</span><span class='hljl-t'> </span><span class='hljl-n'>start_time</span>
+</pre>
+
+
+<pre class="output">
+0.12899112701416016
+</pre>
+
+
+<p>Termination Status and solve time &#40;s&#41;</p>
+
 
 <pre class='hljl'>
-<span class='hljl-cs'># ## Testing Results</span><span class='hljl-t'>
-</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Test</span><span class='hljl-t'>
-</span><span class='hljl-cs'># Bound</span><span class='hljl-t'>
-</span><span class='hljl-nd'>@test</span><span class='hljl-t'> </span><span class='hljl-nf'>isapprox</span><span class='hljl-p'>(</span><span class='hljl-n'>SDDP</span><span class='hljl-oB'>.</span><span class='hljl-nf'>calculate_bound</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-oB'>.</span><span class='hljl-n'>policygraph</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-nfB'>11298.218756240378</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>atol</span><span class='hljl-oB'>=</span><span class='hljl-ni'>10</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-cs'># Number of Simulations</span><span class='hljl-t'>
-</span><span class='hljl-nd'>@test</span><span class='hljl-t'> </span><span class='hljl-nf'>length</span><span class='hljl-p'>(</span><span class='hljl-n'>results</span><span class='hljl-p'>[</span><span class='hljl-sc'>:simulations</span><span class='hljl-p'>])</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span><span class='hljl-t'>
+<span class='hljl-p'>(</span><span class='hljl-n'>SDDP</span><span class='hljl-oB'>.</span><span class='hljl-nf'>termination_status</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-oB'>.</span><span class='hljl-n'>policygraph</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>end_time</span><span class='hljl-p'>)</span>
+</pre>
 
-</span><span class='hljl-cs'># ## Plot Aggregated Results</span><span class='hljl-t'>
-</span><span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
+
+<pre class="julia-error">
+ERROR: UndefVarError: m not defined
+</pre>
+
+
+<p>Bounds</p>
+
+
+<pre class='hljl'>
+<span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
+    </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>plot_bound</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-k'>end</span>
+</pre>
+
+
+<pre class="julia-error">
+ERROR: UndefVarError: m not defined
+</pre>
+
+
+<h2>Simulation</h2>
+
+
+<pre class='hljl'>
+<span class='hljl-k'>import</span><span class='hljl-t'> </span><span class='hljl-n'>Random</span><span class='hljl-t'>
+</span><span class='hljl-n'>Random</span><span class='hljl-oB'>.</span><span class='hljl-nf'>seed!</span><span class='hljl-p'>(</span><span class='hljl-n'>seed</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>results</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>simulate</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span><span class='hljl-p'>);</span>
+</pre>
+
+
+<pre class="julia-error">
+ERROR: UndefVarError: m not defined
+</pre>
+
+
+
+<pre class='hljl'>
+<span class='hljl-n'>results</span>
+</pre>
+
+
+<pre class="julia-error">
+ERROR: UndefVarError: results not defined
+</pre>
+
+
+<h2>Testing Results</h2>
+
+
+<pre class='hljl'>
+<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Test</span>
+</pre>
+
+
+
+<p>Bound</p>
+
+
+<pre class='hljl'>
+<span class='hljl-nd'>@test</span><span class='hljl-t'> </span><span class='hljl-nf'>isapprox</span><span class='hljl-p'>(</span><span class='hljl-n'>SDDP</span><span class='hljl-oB'>.</span><span class='hljl-nf'>calculate_bound</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-oB'>.</span><span class='hljl-n'>policygraph</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-nfB'>11298.218756240378</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>atol</span><span class='hljl-oB'>=</span><span class='hljl-ni'>10</span><span class='hljl-p'>)</span>
+</pre>
+
+
+<pre class="output">
+Error During Test at none:1
+  Test threw exception
+  Expression: isapprox&#40;SDDP.calculate_bound&#40;m.policygraph&#41;, 11298.218756240
+378, atol&#61;10&#41;
+  UndefVarError: m not defined
+  Stacktrace:
+   &#91;1&#93; top-level scope at none:0
+   &#91;2&#93; eval at ./boot.jl:319 &#91;inlined&#93;
+   &#91;3&#93; capture_output&#40;::Expr, ::Module, ::Bool, ::Bool, ::Bool, ::Bool&#41; at 
+/home/travis/.julia/packages/Weave/UOxmI/src/run.jl:230
+   &#91;4&#93; run_code&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/travi
+s/.julia/packages/Weave/UOxmI/src/run.jl:208
+   &#91;5&#93; eval_chunk&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/tra
+vis/.julia/packages/Weave/UOxmI/src/run.jl:289
+   &#91;6&#93; run_chunk&#40;::Weave.CodeChunk, ::Weave.WeaveDoc, ::Weave.Report, ::Mod
+ule&#41; at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:130
+   &#91;7&#93; #run#34&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Strin
+g, ::Nothing, ::String, ::Symbol, ::Bool, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; 
+at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:94
+   &#91;8&#93; &#40;::getfield&#40;Base, Symbol&#40;&quot;#kw##run&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:doctype, :mod,
+ :out_path, :args, :fig_path, :fig_ext, :cache_path, :cache, :throw_errors&#41;
+,Tuple&#123;String,Symbol,String,Dict&#123;Symbol,String&#125;,String,Nothing,String,Symbo
+l,Bool&#125;&#125;, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; at ./none:0
+   &#91;9&#93; #weave#16&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Sym
+bol, ::String, ::Nothing, ::String, ::Symbol, ::Bool, ::Nothing, ::Nothing,
+ ::Nothing, ::Array&#123;String,1&#125;, ::String, ::typeof&#40;weave&#41;, ::String&#41; at /hom
+e/travis/.julia/packages/Weave/UOxmI/src/Weave.jl:121
+   &#91;10&#93; &#40;::getfield&#40;Weave, Symbol&#40;&quot;#kw##weave&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:out_path, 
+:doctype, :args&#41;,Tuple&#123;String,String,Dict&#123;Symbol,String&#125;&#125;&#125;, ::typeof&#40;weave&#41;
+, ::String&#41; at ./none:0
+   &#91;11&#93; top-level scope at none:0
+   &#91;12&#93; include at ./boot.jl:317 &#91;inlined&#93;
+   &#91;13&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
+   &#91;14&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
+   &#91;15&#93; include&#40;::String&#41; at ./client.jl:392
+   &#91;16&#93; top-level scope at none:0
+   &#91;17&#93; include at ./boot.jl:317 &#91;inlined&#93;
+   &#91;18&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
+   &#91;19&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
+   &#91;20&#93; exec_options&#40;::Base.JLOptions&#41; at ./client.jl:266
+   &#91;21&#93; _start&#40;&#41; at ./client.jl:425
+</pre>
+
+<pre class="julia-error">
+ERROR: Test.FallbackTestSetException&#40;&quot;There was an error during testing&quot;&#41;
+</pre>
+
+
+<p>Number of Simulations</p>
+
+
+<pre class='hljl'>
+<span class='hljl-nd'>@test</span><span class='hljl-t'> </span><span class='hljl-nf'>length</span><span class='hljl-p'>(</span><span class='hljl-n'>results</span><span class='hljl-p'>[</span><span class='hljl-sc'>:simulations</span><span class='hljl-p'>])</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span>
+</pre>
+
+
+<pre class="output">
+Error During Test at none:1
+  Test threw exception
+  Expression: length&#40;results&#91;:simulations&#93;&#41; &#61;&#61; 100
+  UndefVarError: results not defined
+  Stacktrace:
+   &#91;1&#93; top-level scope at none:0
+   &#91;2&#93; eval at ./boot.jl:319 &#91;inlined&#93;
+   &#91;3&#93; capture_output&#40;::Expr, ::Module, ::Bool, ::Bool, ::Bool, ::Bool&#41; at 
+/home/travis/.julia/packages/Weave/UOxmI/src/run.jl:230
+   &#91;4&#93; run_code&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/travi
+s/.julia/packages/Weave/UOxmI/src/run.jl:208
+   &#91;5&#93; eval_chunk&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/tra
+vis/.julia/packages/Weave/UOxmI/src/run.jl:289
+   &#91;6&#93; run_chunk&#40;::Weave.CodeChunk, ::Weave.WeaveDoc, ::Weave.Report, ::Mod
+ule&#41; at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:130
+   &#91;7&#93; #run#34&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Strin
+g, ::Nothing, ::String, ::Symbol, ::Bool, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; 
+at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:94
+   &#91;8&#93; &#40;::getfield&#40;Base, Symbol&#40;&quot;#kw##run&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:doctype, :mod,
+ :out_path, :args, :fig_path, :fig_ext, :cache_path, :cache, :throw_errors&#41;
+,Tuple&#123;String,Symbol,String,Dict&#123;Symbol,String&#125;,String,Nothing,String,Symbo
+l,Bool&#125;&#125;, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; at ./none:0
+   &#91;9&#93; #weave#16&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Sym
+bol, ::String, ::Nothing, ::String, ::Symbol, ::Bool, ::Nothing, ::Nothing,
+ ::Nothing, ::Array&#123;String,1&#125;, ::String, ::typeof&#40;weave&#41;, ::String&#41; at /hom
+e/travis/.julia/packages/Weave/UOxmI/src/Weave.jl:121
+   &#91;10&#93; &#40;::getfield&#40;Weave, Symbol&#40;&quot;#kw##weave&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:out_path, 
+:doctype, :args&#41;,Tuple&#123;String,String,Dict&#123;Symbol,String&#125;&#125;&#125;, ::typeof&#40;weave&#41;
+, ::String&#41; at ./none:0
+   &#91;11&#93; top-level scope at none:0
+   &#91;12&#93; include at ./boot.jl:317 &#91;inlined&#93;
+   &#91;13&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
+   &#91;14&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
+   &#91;15&#93; include&#40;::String&#41; at ./client.jl:392
+   &#91;16&#93; top-level scope at none:0
+   &#91;17&#93; include at ./boot.jl:317 &#91;inlined&#93;
+   &#91;18&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
+   &#91;19&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
+   &#91;20&#93; exec_options&#40;::Base.JLOptions&#41; at ./client.jl:266
+   &#91;21&#93; _start&#40;&#41; at ./client.jl:425
+</pre>
+
+<pre class="julia-error">
+ERROR: Test.FallbackTestSetException&#40;&quot;There was an error during testing&quot;&#41;
+</pre>
+
+
+<h2>Plot Aggregated Results</h2>
+
+
+<pre class='hljl'>
+<span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
     </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>plot_aggregated_results</span><span class='hljl-p'>(</span><span class='hljl-n'>results</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-k'>end</span>
 </pre>
 
 
+<pre class="julia-error">
+ERROR: UndefVarError: results not defined
+</pre>
+
+
+<h1>Annex 1: Case Summary</h1>
 
 
 <pre class='hljl'>
-<span class='hljl-cs'># # Annex 1: Case Summary</span><span class='hljl-t'>
-</span><span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
+<span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
     </span><span class='hljl-n'>PowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>print_summary</span><span class='hljl-p'>(</span><span class='hljl-n'>alldata</span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>][</span><span class='hljl-s'>&quot;powersystem&quot;</span><span class='hljl-p'>])</span><span class='hljl-t'>
 </span><span class='hljl-k'>end</span>
 </pre>
 
 
+<pre class="output">
+Metadata
+  baseMVA: 100
+  cost_deficit: 1000
+  name: case3
+  per_unit: true
+  source_type: matpower
+  source_version: 2
+
+Table Counts
+  bus: 3
+  load: 3
+  shunt: 0
+  gen: 3
+  storage: 0
+  branch: 3
+  dcline: 0
+
+
+Table: bus
+         bus_i, bus_type
+      1:     1,        3
+      2:     2,        2
+      3:     3,        2
+
+  default values:
+    base_kv: 0
+    vm: 1
+    va: 0
+    vmin: 0.900
+    vmax: 1.100
+    area: 1
+    zone: 1
+
+
+Table: load
+         load_bus, pd,    qd
+      1:        3,  1,     0
+      2:        1,  0, 0.000
+      3:        2,  0, 0.000
+
+  default values:
+    status: 1
+
+
+Table: gen
+         gen_bus,  pmax, ncost,  cost
+      1:       2,     1,     2, &#91;&#40;2&#41;&#93;
+      2:       3, 0.500,     2, &#91;&#40;2&#41;&#93;
+      3:       1, 0.800,     0, &#91;&#40;0&#41;&#93;
+
+  default values:
+    pg: 0
+    qg: 0
+    vg: 1
+    mbase: 100
+    pmin: 0
+    qmin: -100
+    qmax: 100
+    gen_status: 1
+    model: 2
+    startup: 0
+    shutdown: 0
+    apf: 0
+    pc1: 0
+    pc2: 0
+    qc1max: 0
+    qc1min: 0
+    qc2max: 0
+    qc2min: 0
+    ramp_10: 0
+    ramp_30: 0
+    ramp_agc: 0
+    ramp_q: 0
+
+
+Table: branch
+         f_bus, t_bus,  br_r,  br_x,  b_fr,  b_to, rate_a
+      1:     1,     3, 0.065,     1, 0.225, 0.225,      1
+      2:     3,     2, 0.025, 0.500, 0.350, 0.350,  0.650
+      3:     1,     2, 0.042,     1, 0.150, 0.150,  0.250
+
+  default values:
+    g_fr: 0
+    g_to: 0
+    tap: 1
+    shift: 0
+    br_status: 1
+    angmax: 1.047
+    angmin: -1.047
+    transformer: false
+</pre>
+
+
+<h1>Annex 2: Plot Results</h1>
 
 
 <pre class='hljl'>
-<span class='hljl-cs'># # Annex 2: Plot Results</span><span class='hljl-t'>
-</span><span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
+<span class='hljl-k'>if</span><span class='hljl-t'> </span><span class='hljl-n'>plot_bool</span><span class='hljl-t'> </span><span class='hljl-oB'>==</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-t'>
     </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>plotresults</span><span class='hljl-p'>(</span><span class='hljl-n'>results</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-k'>end</span>
 </pre>
 
+
+<pre class="julia-error">
+ERROR: UndefVarError: results not defined
+</pre>
 
 
 
@@ -801,7 +1111,7 @@ div.title {text-align: center;}
           <div class="footer"><p>
           Published from <a href="case3.jl">case3.jl</a> using
           <a href="http://github.com/mpastell/Weave.jl">Weave.jl</a>
-           on 2019-10-10.
+           on 2019-10-11.
           <p></div>
 
 
