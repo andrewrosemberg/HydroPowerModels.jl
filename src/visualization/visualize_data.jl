@@ -552,108 +552,108 @@ function plot_hydro_grid(data::Dict;path=nothing,size_fig = [12cm, 12cm],node_la
     end
 end
 
-""" Plot Grid Stage Dispatched Power"""
-function plot_grid_dispatched_stage(results::Dict,t::Int;quant::Float64=0.5,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+# """ Plot Grid Stage Dispatched Power"""
+# function plot_grid_dispatched_stage(results::Dict,t::Int;quant::Float64=0.5,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
 
-    data = results[:data][1]
+#     data = results[:data][1]
 
-    nbus = length(data["powersystem"]["bus"])
+#     nbus = length(data["powersystem"]["bus"])
 
-    nNodes = nbus
+#     nNodes = nbus
 
-    g = Graph(nbus)
+#     g = Graph(nbus)
 
-    for brc in values(data["powersystem"]["branch"])
-        add_edge!(g, brc["f_bus"], brc["t_bus"])
-    end
+#     for brc in values(data["powersystem"]["branch"])
+#         add_edge!(g, brc["f_bus"], brc["t_bus"])
+#     end
 
-    # nodes gen
-    thermal_nodes = fill(0.0,nbus)
-    hydro_nodes = fill(0.0,nbus)
+#     # nodes gen
+#     thermal_nodes = fill(0.0,nbus)
+#     hydro_nodes = fill(0.0,nbus)
 
-    idxhyd = idx_hydro(data)
+#     idxhyd = idx_hydro(data)
 
-    for i in 1:length(data["powersystem"]["gen"])
-        bus_i = data["powersystem"]["gen"]["$i"]["gen_bus"]
-        if i in idxhyd
-            hydro_nodes[bus_i] += Statistics.quantile([results[:simulations][s][t][:powersystem]["solution"]["gen"]["$i"]["pg"] for s in 1:length(results[:simulations])], quant)*data["powersystem"]["gen"]["$i"]["mbase"]
-        else
-            thermal_nodes[bus_i] += Statistics.quantile([results[:simulations][s][t][:powersystem]["solution"]["gen"]["$i"]["pg"] for s in 1:length(results[:simulations])], quant)*data["powersystem"]["gen"]["$i"]["mbase"]
-        end
-    end
+#     for i in 1:length(data["powersystem"]["gen"])
+#         bus_i = data["powersystem"]["gen"]["$i"]["gen_bus"]
+#         if i in idxhyd
+#             hydro_nodes[bus_i] += Statistics.quantile([results[:simulations][s][t][:powersystem]["solution"]["gen"]["$i"]["pg"] for s in 1:length(results[:simulations])], quant)*data["powersystem"]["gen"]["$i"]["mbase"]
+#         else
+#             thermal_nodes[bus_i] += Statistics.quantile([results[:simulations][s][t][:powersystem]["solution"]["gen"]["$i"]["pg"] for s in 1:length(results[:simulations])], quant)*data["powersystem"]["gen"]["$i"]["mbase"]
+#         end
+#     end
 
-    # nodes loads
-    load_nodes = fill(0.0,nbus)
+#     # nodes loads
+#     load_nodes = fill(0.0,nbus)
 
-    for i in 1:length(data["powersystem"]["load"])
-        bus_i = data["powersystem"]["load"]["$i"]["load_bus"]
-        load_nodes[bus_i] += data["powersystem"]["load"]["$i"]["pd"]*data["powersystem"]["baseMVA"]
-    end
+#     for i in 1:length(data["powersystem"]["load"])
+#         bus_i = data["powersystem"]["load"]["$i"]["load_bus"]
+#         load_nodes[bus_i] += data["powersystem"]["load"]["$i"]["pd"]*data["powersystem"]["baseMVA"]
+#     end
 
-    # number of nodes
-    num_nodes = nbus+ sum(load_nodes .> 0)+sum(hydro_nodes .> 0)+sum(thermal_nodes .> 0)
+#     # number of nodes
+#     num_nodes = nbus+ sum(load_nodes .> 0)+sum(hydro_nodes .> 0)+sum(thermal_nodes .> 0)
     
-    # node size
-    nodesize = fill(0.1,num_nodes)
+#     # node size
+#     nodesize = fill(0.1,num_nodes)
 
-    # nodes membership (3: Hydro, 2: Thermal)
-    membership = fill(1,num_nodes)
+#     # nodes membership (3: Hydro, 2: Thermal)
+#     membership = fill(1,num_nodes)
 
-    # node label
-    if node_label
-        nodelabel = [1:nbus;fill("",sum(hydro_nodes .> 0));fill("",sum(thermal_nodes .> 0));fill("",sum(load_nodes .> 0))]
-    else
-        nodelabel = nothing
-    end
-    # create nodes
-    for bus_i in 1:length(data["powersystem"]["bus"])
-        if hydro_nodes[bus_i] > 0
-            add_vertex!(g)
-            nNodes +=1
-            add_edge!(g, nNodes, bus_i)
-            membership[nNodes] = 3
-            nodesize[nNodes] = log(hydro_nodes[bus_i])
-        end
+#     # node label
+#     if node_label
+#         nodelabel = [1:nbus;fill("",sum(hydro_nodes .> 0));fill("",sum(thermal_nodes .> 0));fill("",sum(load_nodes .> 0))]
+#     else
+#         nodelabel = nothing
+#     end
+#     # create nodes
+#     for bus_i in 1:length(data["powersystem"]["bus"])
+#         if hydro_nodes[bus_i] > 0
+#             add_vertex!(g)
+#             nNodes +=1
+#             add_edge!(g, nNodes, bus_i)
+#             membership[nNodes] = 3
+#             nodesize[nNodes] = log(hydro_nodes[bus_i])
+#         end
 
-        if thermal_nodes[bus_i] > 0
-            add_vertex!(g)
-            nNodes +=1
-            add_edge!(g, nNodes, bus_i)
-            membership[nNodes] = 2
-            nodesize[nNodes] = log(thermal_nodes[bus_i])
-        end
+#         if thermal_nodes[bus_i] > 0
+#             add_vertex!(g)
+#             nNodes +=1
+#             add_edge!(g, nNodes, bus_i)
+#             membership[nNodes] = 2
+#             nodesize[nNodes] = log(thermal_nodes[bus_i])
+#         end
 
-        if load_nodes[bus_i] > 0
-            add_vertex!(g)
-            nNodes +=1
-            add_edge!(g, nNodes, bus_i)
-            membership[nNodes] = 4
-            nodesize[nNodes] = log(load_nodes[bus_i])
-        end
+#         if load_nodes[bus_i] > 0
+#             add_vertex!(g)
+#             nNodes +=1
+#             add_edge!(g, nNodes, bus_i)
+#             membership[nNodes] = 4
+#             nodesize[nNodes] = log(load_nodes[bus_i])
+#         end
 
-    end
+#     end
 
-    for n in 1:num_nodes
-        nodesize[n] = nodesize[n] == 0 ? unique(sort(nodesize))[2] : nodesize[n]
-    end
+#     for n in 1:num_nodes
+#         nodesize[n] = nodesize[n] == 0 ? unique(sort(nodesize))[2] : nodesize[n]
+#     end
     
-    nodecolor = ["black", "red", "blue", "orange"]
+#     nodecolor = ["black", "red", "blue", "orange"]
 
-    # membership color
-    nodefillc = nodecolor[Int64.(membership)]
+#     # membership color
+#     nodefillc = nodecolor[Int64.(membership)]
 
 
-    gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist)
-end
+#     gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist)
+# end
 
-""" Plot Grid Dispatched Power"""
-function plot_grid_dispatched(results::Dict;seed=1111,quant::Float64=0.5,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
-    duration=length(results[:simulations][1])
-    roll(fps=1, duration=duration) do t, dt
-        Random.seed!(seed)
-        plot_grid_dispatched_stage(results,Int64(t+1);quant=quant,size_fig = size_fig,node_label=node_label,nodelabeldist=nodelabeldist)
-    end
-end
+# """ Plot Grid Dispatched Power"""
+# function plot_grid_dispatched(results::Dict;seed=1111,quant::Float64=0.5,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+#     duration=length(results[:simulations][1])
+#     roll(fps=1, duration=duration) do t, dt
+#         Random.seed!(seed)
+#         plot_grid_dispatched_stage(results,Int64(t+1);quant=quant,size_fig = size_fig,node_label=node_label,nodelabeldist=nodelabeldist)
+#     end
+# end
 
 """
     HydroPowerModels.plot_aggregated_results(results::Dict;nc::Int=3)
