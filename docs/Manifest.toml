@@ -56,10 +56,12 @@ uuid = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 version = "0.5.13"
 
 [[Cairo]]
-deps = ["BinaryProvider", "Colors", "Graphics", "Libdl"]
-git-tree-sha1 = "a922fa72801a7dd49a4164441f247af758bbc71e"
+deps = ["BinDeps", "Colors", "Compat", "Graphics", "Homebrew", "Libdl", "Pkg", "WinRPM"]
+git-tree-sha1 = "e577cb41e7e2641f4b97f1b6dbcb9a69c9288330"
+repo-rev = "3d781a79f0ce9d40fac85c7586cb733f2a4beb17"
+repo-url = "https://github.com/JuliaGraphics/Cairo.jl.git"
 uuid = "159f3aea-2a34-519c-b102-8c37f9878175"
-version = "0.7.0"
+version = "0.6.0"
 
 [[Calculus]]
 deps = ["Compat"]
