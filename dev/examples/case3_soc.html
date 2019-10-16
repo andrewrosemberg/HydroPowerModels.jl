@@ -738,7 +738,7 @@ div.title {text-align: center;}
 <span class='hljl-n'>params</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>create_param</span><span class='hljl-p'>(</span><span class='hljl-t'>  </span><span class='hljl-n'>stages</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>12</span><span class='hljl-p'>,</span><span class='hljl-t'> 
                         </span><span class='hljl-n'>model_constructor_grid</span><span class='hljl-t'>  </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>SOCWRConicPowerModel</span><span class='hljl-p'>,</span><span class='hljl-t'>
                         </span><span class='hljl-n'>post_method</span><span class='hljl-t'>             </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>PowerModels</span><span class='hljl-oB'>.</span><span class='hljl-n'>post_opf</span><span class='hljl-p'>,</span><span class='hljl-t'>
-                        </span><span class='hljl-n'>optimizer</span><span class='hljl-t'>               </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>with_optimizer</span><span class='hljl-p'>(</span><span class='hljl-n'>ECOS</span><span class='hljl-oB'>.</span><span class='hljl-n'>Optimizer</span><span class='hljl-p'>))</span>
+                        </span><span class='hljl-n'>optimizer</span><span class='hljl-t'>               </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>with_optimizer</span><span class='hljl-p'>(</span><span class='hljl-n'>ECOS</span><span class='hljl-oB'>.</span><span class='hljl-n'>Optimizer</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>atol</span><span class='hljl-oB'>=</span><span class='hljl-nfB'>1e-10</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>rtol</span><span class='hljl-oB'>=</span><span class='hljl-nfB'>1e-10</span><span class='hljl-p'>))</span>
 </pre>
 
 
@@ -797,7 +797,7 @@ true…
 
 
 <pre class="output">
-&#40;:model_not_solved, 35.515721797943115&#41;
+&#40;:model_not_solved, 34.10504508018494&#41;
 </pre>
 
 
@@ -995,7 +995,7 @@ ERROR: UndefVarError: results not defined
           <div class="footer"><p>
           Published from <a href="case3_soc.jl">case3_soc.jl</a> using
           <a href="http://github.com/mpastell/Weave.jl">Weave.jl</a>
-           on 2019-10-14.
+           on 2019-10-16.
           <p></div>
 
 
