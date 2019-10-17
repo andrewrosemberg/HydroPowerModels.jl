@@ -54,13 +54,13 @@ Simulation results are found in the simulations array inside the dictionary, whi
 
 ```julia
 results[:simulations][10][1][:objective]
-results[:simulations][10][1][:noise]
+results[:simulations][10][1][:noise_term]
 ```
 
 The ```:powersystem``` field contains detailed information about the grid solution returned by the PowerModels package, like generation and bus informations (inside the subitem "solution") and status ("OPTIMAL", "INFEASIBLE",...) of the solution execution. For example, the status of the solution execution and the active generation of the 2th generator on the jth stage and ith simulation can be inspect by:
 
 ```julia
-results[:simulations][1][2][:powersystem]["status"]
+results[:simulations][1][2][:powersystem]["termination_status"]
 
 results[:simulations][i][j][:powersystem]["solution"]["gen"]["2"]["pg"]
 ```

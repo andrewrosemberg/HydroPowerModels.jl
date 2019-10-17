@@ -1,8 +1,12 @@
 # Input Files
 
+HydroPowerModels.jl uses case description files to specify cases. The following subsections intend to give a brief description of those files.
+
 ## Network Description: "PowerModels.json" 
 
-This is an example of a Network Description file:
+Network description follows the standards of [PowerModels.jl](https://lanl-ansi.github.io/PowerModels.jl/stable/network-data/), but some extra information is required. Thus, we use a JSON file containing the information required by PowerModels.jl, with the [MATPOWER notation](https://matpower.org/docs/MATPOWER-manual-6.0b1.pdf), and introduced some keys to add the extra information we required (as the "cost of deficit").
+
+This following is an example of a Network Description file:
 
 ```
 {
@@ -15,8 +19,8 @@ This is an example of a Network Description file:
       "area": 1, # area number (positive integer).
       "vmin": 0.9, # minimum voltage magnitude (p.u.).
       "index": 1, # index
-      "va": 0, # vo#ltage angle (degrees)
-      "vm": 1, # vo#ltage magnitude (p.u.)
+      "va": 0, # voltage angle (degrees)
+      "vm": 1, # voltage magnitude (p.u.)
       "base_kv": 0 ## base voltage (kV)
     }#
   },
@@ -27,12 +31,12 @@ This is an example of a Network Description file:
     "major": 2,
     "minor": 0,
     "patch": 0,
-    "prerelease": [],source file
+    "prerelease": [],
     "build": []
   },
   "gen": {
     "1": {
-      "ncost": 2, # Nsource file of terms to interpolate in cost funcion.  
+      "ncost": 2, # Number of terms to interpolate in cost funcion.  
       "qc1max": 0, # Maximum reactive power output at PC1 (MVAr).
       "pg": 0, # Active Generation (Not Used by PowerModels,but expected).
       "model": 2, # Cost model, 1 = piecewise linear, 2 = polynomial.
@@ -48,7 +52,7 @@ This is an example of a Network Description file:
       "mbase": 100, # (MVA) Total MVA base of machine.
       "pc2": 0, # Upper real power output of PQ capability curve (MW).
       "index": 1, # Index
-      "cost": [ # (dol/MW) Cost terms
+      "cost": [ # (dol/(MW/MVA)) Cost terms
         18, # linear factor.
         0 # intercept.
       ],
@@ -88,6 +92,8 @@ This is an example of a Network Description file:
   "baseMVA": 100,
   "per_unit": true,
   "shunt": {}, # [not]
+  "switch": {}, # [not]
+  "cost_deficit": 1000, # cost of deficit in (dol/MW)
   "load": {
     "1": {
       "load_bus": 3, # load's bus number.
