@@ -50,9 +50,16 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; buil
     end
 
     # Model Definition
-    policygraph = SDDP.LinearPolicyGraph(
+    # graph definition
+    graph = SDDP.LinearGraph(0)
+    SDDP.add_node(graph, 1)
+    SDDP.add_edge(graph, 0 => 1, 1.0)
+    for t in 2:params["stages"]
+        SDDP.add_node(graph, t)
+        SDDP.add_edge(graph, t-1 => t, discount_factor)
+    end
+    policygraph = SDDP.PolicyGraph(graph,
                     sense       = :Min,
-                    stages      = params["stages"],
                     optimizer   = params["optimizer"],
                     optimizer_forward = params["optimizer_forward"],
                     optimizer_backward = params["optimizer_backward"],
@@ -121,7 +128,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; buil
         add_deficit_cost(sp, data)
         
         # Stage objective
-        set_objective(sp, data, t, discount_factor)
+        set_objective(sp, data)
 
         # # variable primal start
         # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
