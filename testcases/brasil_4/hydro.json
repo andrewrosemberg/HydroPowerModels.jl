@@ -1,0 +1,56 @@
+{
+    "Hydrogenerators": [
+        {
+            "spill_cost": 0,
+            "max_turn": 45829.1,
+            "index_grid": 96,
+            "downstream_spill": [],
+            "min_volume": 0,
+            "production_factor": 1,
+            "index": 1,
+            "min_turn": 0,
+            "initial_volume": 429.94368,
+            "max_volume": 722.58336,
+            "downstream_turn": []
+        },
+        {
+            "spill_cost": 0,
+            "max_turn": 13381.8,
+            "index_grid": 97,
+            "downstream_spill": [],
+            "min_volume": 0,
+            "production_factor": 1,
+            "index": 2,
+            "min_turn": 0,
+            "initial_volume": 41.52636,
+            "max_volume": 70.62192,
+            "downstream_turn": []
+        },
+        {
+            "spill_cost": 0,
+            "max_turn": 9780.9,
+            "index_grid": 98,
+            "downstream_spill": [],
+            "min_volume": 0,
+            "production_factor": 1,
+            "index": 3,
+            "min_turn": 0,
+            "initial_volume": 106.37352,
+            "max_volume": 186.50196,
+            "downstream_turn": []
+        },
+        {
+            "spill_cost": 0,
+            "max_turn": 7740.2,
+            "index_grid": 99,
+            "downstream_spill": [],
+            "min_volume": 0,
+            "production_factor": 1,
+            "index": 4,
+            "min_turn": 0,
+            "initial_volume": 23.937839999999998,
+            "max_volume": 45.647639999999996,
+            "downstream_turn": []
+        }
+    ]
+}
