@@ -20,8 +20,6 @@ A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Opti
 **If you are struggling to figure out how to use something, raise a Github issue!**
 
 **Network Data Formats**
-* Matpower ".m" files
-* PTI ".raw" files (PSS(R)E v33 specfication)
 * PowerModels ".json" files
 
 **Resevoir Data Formats**
@@ -34,5 +32,6 @@ A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Opti
 * Solution method is handled by [SDDP.jl](https://github.com/odow/SDDP.jl).
 
 **Presentations**
-* JuMP-Dev 2019 (Santiago, Chile) https://youtu.be/H6LmhGJ2kc8
-* JuliaCon 2019 (Baltimore, United States) https://www.youtube.com/watch?v=bnKX2uATrzA&t=41s
+* JuMP-Dev 2019 (Santiago, Chile) [video](https://youtu.be/H6LmhGJ2kc8)
+* JuliaCon 2019 (Baltimore, United States) [video](https://www.youtube.com/watch?v=bnKX2uATrzA&t=41s)
+* Julia Meeting Rio (Rio de Janeiro, Brasil) (Portuguese) [video](https://www.youtube.com/watch?v=lSdYwE_7B8k&list=PLTMduyIx3GGvMw9mgIBqZGA6rtpIKNL7B&index=5&t=0s) [pdf](https://jugrio.github.io/pdfs/HydroPowerModels.pdf)

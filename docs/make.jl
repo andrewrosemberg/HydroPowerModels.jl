@@ -17,6 +17,7 @@ makedocs(
     pages = [
         "Home"      => "index.md",
         "Manual"    => "getstarted.md",
+        "Case data" => "inputfiles.md"
         "Examples"  => EXAMPLES,
         "Reference" => "apireference.md"
     ]
