@@ -33,7 +33,9 @@ Required parameters are:
 -   alldata is a vector of dicts with information of the problem's stages. 
 -   param is a dict containing solution parameters.
 """
-function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; build_model::Function=HydroPowerModels.build_opf_powermodels)
+function hydrothermaloperation( alldata::Array{Dict{Any,Any}}, params::Dict; 
+                                build_model::Function=HydroPowerModels.build_opf_powermodels,
+                                build_graph::Function=HydroPowerModels.build_graph)
     # verbose
     if !params["verbose"]
         PowerModels.silence()
@@ -50,9 +52,9 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; buil
     end
 
     # Model Definition
-    policygraph = SDDP.LinearPolicyGraph(
+    graph = build_graph(params)
+    policygraph = SDDP.PolicyGraph(graph,
                     sense       = :Min,
-                    stages      = params["stages"],
                     optimizer   = params["optimizer"],
                     #optimizer_forward = params["optimizer_forward"],
                     #optimizer_backward = params["optimizer_backward"],
