@@ -105,10 +105,12 @@ function create_param(;stages::Int = 1,
                     optimizer_forward = optimizer_backward,
                     setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)),
                     verbose = false,
-                    stage_hours = 1)
+                    stage_hours = 1,
+                    discount_factor::Float64=1.0)
     params = Dict()
     params["stages"] = stages
     params["stage_hours"] = stage_hours
+    params["discount_factor"] = discount_factor
     params["model_constructor_grid"] = model_constructor_grid
     params["model_constructor_grid_backward"] = model_constructor_grid_backward
     params["model_constructor_grid_forward"] = model_constructor_grid_forward
