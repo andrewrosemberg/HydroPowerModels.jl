@@ -11,12 +11,14 @@ Plots a set of scenarios.
 
 Parameters:
 -   scen        : Scenarios matrix (Stages x Scenarious).
+-   quants      : Lower Quantiles to plot (their simmetric will be taken into account)
 -   save        : Bool to indicate if figure is to be saved.
 -   savepath    : Path save figure.
 -   fileformat  : Figure file format.
 -   kwargs      : Aditional keyword arguments for plot function.
 """
-function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
+function plotscenarios(scen::Array{Float64,2}; quants=collect(0.05:0.1:0.25),
+        savepath::String ="",
         save::Bool = false, fileformat::String = "png", kwargs...)
 
     med_scen = Statistics.median(scen;dims=2)
@@ -44,7 +46,7 @@ function plotscenarios(scen::Array{Float64,2}; savepath::String ="",
                 xticks = (collect(1:Int(floor(nstag/4)):nstag), [string(i) for  i in collect(1:Int(floor(nstag/4)):nstag)]),
                 label = "Median";
                 kwargs...)
-    for q=0.05:0.1:0.25
+    for q in quants
         plot!(p1, med_scen, ribbon=(med_scen-quantile_scen(scen,q),quantile_scen(scen,1-q)-med_scen), 
                             color = "gray", label = "")
     end
