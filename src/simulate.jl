@@ -9,8 +9,7 @@
 #############################################################################
 
 """simulate function"""
-function simulate(hydromodel::HydroPowerModel;
-    number_replications::Int = 1,
+function simulate(hydromodel::HydroPowerModel, number_replications::Int = 1;
     sampling_scheme = SDDP.InSampleMonteCarlo(  max_depth = hydromodel.params["stages"],
                                                 terminate_on_dummy_leaf = false),
     kwargs...)
