@@ -9,12 +9,16 @@
 #############################################################################
 
 """simulate function"""
-function simulate(hydromodel::HydroPowerModel,number_replications::Int = 1;kwargs...)
+function simulate(  hydromodel::HydroPowerModel,number_replications::Int = 1;
+                    sampling_scheme = SDDP.InSampleMonteCarlo(  max_depth = hydromodel.params["stages"],
+                                                                terminate_on_dummy_leaf = false),
+                    kwargs...)
     solution = Dict{Symbol, Any}()
     
     start_time = time()
     solution[:simulations] = SDDP.simulate( hydromodel.policygraph, 
                                             number_replications,
+                                            sampling_scheme = sampling_scheme,
                                             custom_recorders = Dict{Symbol, Function}(
                                                 :powersystem => build_sol_powermodels,
                                                 :reservoirs => build_sol_reservoirs,
