@@ -105,7 +105,7 @@ end
 function quantile_scen(scen::Array{Float64,2},quants::Array{Float64};output_dict::Bool=false)
     quantiles = [Statistics.quantile(scen[i, :], quant) for i = 1:size(scen, 1),quant in quants]
     if output_dict
-        output = Dict()
+        output = Dict("mean" => Statistics.mean(scen, dims=2))
         for col = 1:length(quants)
             quant = quants[col]
             output["$(quant*100)%"] = quantiles[:,col]
