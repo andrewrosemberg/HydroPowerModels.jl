@@ -170,10 +170,10 @@ uuid = "163ba53b-c6d8-5494-b064-1a9d43ac40c5"
 version = "0.0.4"
 
 [[DiffRules]]
-deps = ["Random", "Test"]
-git-tree-sha1 = "dc0869fb2f5b23466b32ea799bd82c76480167f7"
+deps = ["NaNMath", "Random", "SpecialFunctions"]
+git-tree-sha1 = "f734b5f6bc9c909027ef99f6d91d5d9e4b111eed"
 uuid = "b552c78f-8df3-52c6-915a-8e097449b14b"
-version = "0.0.10"
+version = "0.1.0"
 
 [[Distributed]]
 deps = ["LinearAlgebra", "Random", "Serialization", "Sockets"]
@@ -223,9 +223,9 @@ version = "0.2.0"
 
 [[ForwardDiff]]
 deps = ["CommonSubexpressions", "DiffResults", "DiffRules", "NaNMath", "Random", "SpecialFunctions", "StaticArrays"]
-git-tree-sha1 = "adf88d6da1f0294058f38295becf8807986bb7d0"
+git-tree-sha1 = "4407e7b76999eca2646abdb68203bd4302476168"
 uuid = "f6369f11-7733-5829-9624-2563aa707210"
-version = "0.10.5"
+version = "0.10.6"
 
 [[Future]]
 deps = ["Random"]
@@ -595,7 +595,7 @@ version = "0.12.0"
 
 [[SDDP]]
 deps = ["Distributed", "Documenter", "GLPK", "JSON", "JuMP", "Literate", "MathOptFormat", "Printf", "Random", "RecipesBase", "Reexport", "Statistics", "TimerOutputs"]
-git-tree-sha1 = "13d132f03d00f293d3bd0c553aa6cffde3cf7aa1"
+git-tree-sha1 = "2822425232ebf423c5a403741b3bb48fbeecccc5"
 repo-rev = "forw_diff_back"
 repo-url = "https://github.com/andrewrosemberg/SDDP.jl.git"
 uuid = "f4570300-c277-11e8-125c-4912f86ce65d"
