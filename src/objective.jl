@@ -16,6 +16,7 @@ end
 """add deficit cost to cost dict"""
 function add_deficit_cost(sp, data::Dict)
     sp.ext[:cost][:deficit_cost] = sum(sp[:deficit])*data["powersystem"]["baseMVA"]*data["powersystem"]["cost_deficit"]
+    sp.ext[:cost][:deficit_q_cost] = sum(sp[:deficit_q])*data["powersystem"]["baseMVA"]*data["powersystem"]["cost_deficit"]
 end
 
 

@@ -30,6 +30,7 @@ end
 """creates deficit variables"""
 function variable_deficit(sp, data::Dict, pm::AbstractPowerModel)
     PowerModels.var(pm, 0, 1)[:deficit] = @variable(sp, deficit[i in collect(1:length(PowerModels.con(pm, 0, 1, :kcl_p)))] >= 0)
+    PowerModels.var(pm, 0, 1)[:deficit_q] = @variable(sp, deficit_q[i in collect(1:length(PowerModels.con(pm, 0, 1, :kcl_q)))] >= 0)
 end
 
 """creates dict of cost variables"""
