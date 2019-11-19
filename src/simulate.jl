@@ -12,11 +12,13 @@
 function simulate(  hydromodel::HydroPowerModel,number_replications::Int = 1;
                     sampling_scheme = SDDP.InSampleMonteCarlo(  max_depth = hydromodel.params["stages"],
                                                                 terminate_on_dummy_leaf = false),
+                                                                f_hook::Function= function f_hook(model) end,
                     kwargs...)
     solution = Dict{Symbol, Any}()
     
     start_time = time()
     model_f = SDDP._subproblem_build!(hydromodel.policygraph, true)  # Build forward problem
+    f_hook(model_f)
     solution[:simulations] = SDDP.simulate( model_f, 
                                             number_replications,
                                             sampling_scheme = sampling_scheme,
