@@ -16,7 +16,8 @@ function simulate(  hydromodel::HydroPowerModel,number_replications::Int = 1;
     solution = Dict{Symbol, Any}()
     
     start_time = time()
-    solution[:simulations] = SDDP.simulate( hydromodel.policygraph, 
+    model_f = SDDP._subproblem_build!(hydromodel.policygraph, true)  # Build forward problem
+    solution[:simulations] = SDDP.simulate( model_f, 
                                             number_replications,
                                             sampling_scheme = sampling_scheme,
                                             custom_recorders = Dict{Symbol, Function}(
