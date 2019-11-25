@@ -56,10 +56,10 @@ uuid = "159f3aea-2a34-519c-b102-8c37f9878175"
 version = "0.6.0"
 
 [[Calculus]]
-deps = ["Compat"]
-git-tree-sha1 = "bd8bbd105ba583a42385bd6dc4a20dad8ab3dc11"
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "f641eb0a4f00c343bbc32346e1217b86f3ce9dad"
 uuid = "49dc2e85-a5d0-5ad3-a950-438e2897f1b9"
-version = "0.5.0"
+version = "0.5.1"
 
 [[CategoricalArrays]]
 deps = ["Compat", "DataAPI", "Future", "JSON", "Missings", "Printf", "Reexport"]
@@ -134,9 +134,9 @@ version = "0.19.4"
 
 [[DataStructures]]
 deps = ["InteractiveUtils", "OrderedCollections"]
-git-tree-sha1 = "1fe8fad5fc84686dcbc674aa255bc867a64f8132"
+git-tree-sha1 = "a1b652fb77ae8ca7ea328fa7ba5aa151036e5c10"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-version = "0.17.5"
+version = "0.17.6"
 
 [[DataValueInterfaces]]
 git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
@@ -174,10 +174,10 @@ uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 version = "0.8.1"
 
 [[Documenter]]
-deps = ["Base64", "DocStringExtensions", "InteractiveUtils", "JSON", "LibGit2", "Logging", "Markdown", "REPL", "Test", "Unicode"]
-git-tree-sha1 = "d45c163c7a3ae293c15361acc52882c0f853f97c"
+deps = ["Base64", "Dates", "DocStringExtensions", "InteractiveUtils", "JSON", "LibGit2", "Logging", "Markdown", "REPL", "Test", "Unicode"]
+git-tree-sha1 = "7f6ad432deb42aa108bc79205ee96d28724b084f"
 uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-version = "0.23.4"
+version = "0.24.1"
 
 [[EzXML]]
 deps = ["BinaryProvider", "Libdl", "Printf"]
@@ -226,10 +226,10 @@ uuid = "60bf3e95-4087-53dc-ae20-288a0d20c6a6"
 version = "0.12.0"
 
 [[GR]]
-deps = ["Base64", "DelimitedFiles", "LinearAlgebra", "Pkg", "Printf", "Random", "Serialization", "Sockets", "Test"]
-git-tree-sha1 = "2b29ed254586324366e43f4283880978e6956d1f"
+deps = ["Base64", "DelimitedFiles", "LinearAlgebra", "Printf", "Random", "Serialization", "Sockets", "Test"]
+git-tree-sha1 = "75a44824d665db9e4d7a91ebb85981cadab13c60"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.42.0"
+version = "0.43.0"
 
 [[GZip]]
 deps = ["Libdl", "Test"]
@@ -326,9 +326,9 @@ uuid = "41ab1584-1d38-5bbf-9106-f11c6c58b48f"
 version = "1.0.0"
 
 [[IterTools]]
-git-tree-sha1 = "2ebe60d7343962966d1779a74a760f13217a6901"
+git-tree-sha1 = "05110a2ab1fc5f932622ffea2a003221f4782c18"
 uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
-version = "1.2.0"
+version = "1.3.0"
 
 [[IteratorInterfaceExtensions]]
 git-tree-sha1 = "a3f24677c21f5bbe9d2a714f95dcd58337fb2856"
@@ -391,9 +391,9 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[Literate]]
 deps = ["Base64", "JSON", "REPL"]
-git-tree-sha1 = "eb9fc04f313ed38de4cba4145c1afc77e29d0a6e"
+git-tree-sha1 = "52baba07d8d83cda31a5891ebf1a9c28250ae566"
 uuid = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
-version = "2.1.0"
+version = "2.1.1"
 
 [[Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
@@ -460,10 +460,9 @@ uuid = "78c3b35d-d492-501b-9361-3d52fe80e533"
 version = "0.7.0"
 
 [[NaNMath]]
-deps = ["Compat"]
-git-tree-sha1 = "ce3b85e484a5d4c71dd5316215069311135fa9f2"
+git-tree-sha1 = "928b8ca9b2791081dc71a51c55347c27c618760f"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
-version = "0.3.2"
+version = "0.3.3"
 
 [[OffsetArrays]]
 git-tree-sha1 = "1af2f79c7eaac3e019a0de41ef63335ff26a0a57"
@@ -484,9 +483,9 @@ version = "0.4.2"
 
 [[Parsers]]
 deps = ["Dates", "Test"]
-git-tree-sha1 = "c56ecb484f286639f161e712b8311f5ab77e8d32"
+git-tree-sha1 = "0139ba59ce9bc680e2925aec5b7db79065d60556"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "0.3.8"
+version = "0.3.10"
 
 [[Pkg]]
 deps = ["Dates", "LibGit2", "Markdown", "Printf", "REPL", "Random", "SHA", "UUIDs"]
@@ -583,7 +582,7 @@ version = "0.12.0"
 
 [[SDDP]]
 deps = ["Distributed", "Documenter", "GLPK", "JSON", "JuMP", "Literate", "MathOptFormat", "Printf", "Random", "RecipesBase", "Reexport", "Statistics", "TimerOutputs"]
-git-tree-sha1 = "edb689f6ba27eca1db41db0614bb40d9694231f3"
+git-tree-sha1 = "cd4e7d8f2252d683f52aae130579b029c01587d2"
 repo-rev = "forw_diff_back"
 repo-url = "https://github.com/andrewrosemberg/SDDP.jl.git"
 uuid = "f4570300-c277-11e8-125c-4912f86ce65d"

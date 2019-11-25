@@ -91,6 +91,7 @@ function hydrothermaloperation(alldata::Array{Dict{Any,Any}}, params::Dict; buil
             pm = PowerModels.build_model(data["powersystem"], params["model_constructor_grid_backward"], 
                params["post_method"], jump_model=sp, setting = params["setting"])
         end
+        sp.ext[:isforward] = isforward
         
         # create reference to variables
         createvarrefs!(sp,pm)
