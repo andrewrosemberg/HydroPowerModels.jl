@@ -33,10 +33,10 @@ end
 
 """add deficit variables"""
 function constraint_mod_deficit(sp, data::Dict, pm::AbstractPowerModel)
-    for i=1:length(PowerModels.con(pm, 0, 1, :kcl_p))
+    for i in keys(PowerModels.con(pm, 0, 1, :kcl_p))
         set_coefficient(PowerModels.con(pm, 0, 1, :kcl_p)[i], sp[:deficit][i], -1)
     end
-    for i=1:length(PowerModels.con(pm, 0, 1, :kcl_q))
+    for i in keys(PowerModels.con(pm, 0, 1, :kcl_q))
         set_coefficient(PowerModels.con(pm, 0, 1, :kcl_q)[i], sp[:deficit_q][i], -1)
     end
 end
