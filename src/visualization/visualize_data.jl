@@ -1,6 +1,6 @@
 using Plots, Plots.PlotMeasures
-import Cairo, Fontconfig
-using LightGraphs, GraphPlot, Compose
+# import Cairo, Fontconfig
+# using LightGraphs, GraphPlot, Compose
 using Random, Reel
 
 """
@@ -69,234 +69,234 @@ Parameters:
 -   nc             : Number of figures per line.
 
 """
-function plotresults(results::Dict;nc::Int = 3)
-    plt_total = Array{Plots.Plot}(undef,10000)
-    nplots = 0
-    nsim = length(results[:simulations])
-    nstages = length(results[:simulations][1])
+# function plotresults(results::Dict;nc::Int = 3)
+#     plt_total = Array{Plots.Plot}(undef,10000)
+#     nplots = 0
+#     nsim = length(results[:simulations])
+#     nstages = length(results[:simulations][1])
 
-    # Thermal Generation
-    ngen = length(results[:data][1]["powersystem"]["gen"])
-    idxhyd = idx_hydro(results[:data][1])
-    idxgen = setdiff(collect(1:ngen),idxhyd)
-    baseMVA =  [results[:simulations][i][j][:powersystem]["solution"]["baseMVA"] for i=1:nsim, j=1:nstages]'
-    scen_gen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["pg"] for i=1:nsim, j=1:nstages]'.*baseMVA for gen =1:ngen]
+#     # Thermal Generation
+#     ngen = length(results[:data][1]["powersystem"]["gen"])
+#     idxhyd = idx_hydro(results[:data][1])
+#     idxgen = setdiff(collect(1:ngen),idxhyd)
+#     baseMVA =  [results[:simulations][i][j][:powersystem]["solution"]["baseMVA"] for i=1:nsim, j=1:nstages]'
+#     scen_gen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["pg"] for i=1:nsim, j=1:nstages]'.*baseMVA for gen =1:ngen]
 
-    plt =   [plotscenarios(scen_gen[gen], title  = "Thermal Generation $gen",
-                ylabel = "MW",
-                xlabel = "Stages",
-                bottom_margin = 10mm,
-                right_margin = 10mm,
-                left_margin = 10mm                
-                )
-            for gen in idxgen
-    ]
-    plt_total[nplots+1:nplots+length(plt)] = plt
-    nplots +=length(plt) 
+#     plt =   [plotscenarios(scen_gen[gen], title  = "Thermal Generation $gen",
+#                 ylabel = "MW",
+#                 xlabel = "Stages",
+#                 bottom_margin = 10mm,
+#                 right_margin = 10mm,
+#                 left_margin = 10mm                
+#                 )
+#             for gen in idxgen
+#     ]
+#     plt_total[nplots+1:nplots+length(plt)] = plt
+#     nplots +=length(plt) 
 
-    # Thermal Reactive Generation
-    if results[:params]["model_constructor_grid_forward"] == PowerModels.ACPPowerModel
-        scen_qgen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["qg"] for i=1:nsim, j=1:results[:params]["stages"]]'.*baseMVA for gen =1:ngen]
-        plt =   [plotscenarios(scen_qgen[gen], title  = "Thermal Reactive Generation $gen",
-                ylabel = "MW",
-                xlabel = "Stages",
-                bottom_margin = 10mm,
-                right_margin = 10mm,
-                left_margin = 10mm                
-                )
-            for gen in idxgen
-        ]
-        plt_total[nplots+1:nplots+length(plt)] = plt
-        nplots +=length(plt) 
-    end
+#     # Thermal Reactive Generation
+#     if results[:params]["model_constructor_grid_forward"] == PowerModels.ACPPowerModel
+#         scen_qgen = [[results[:simulations][i][j][:powersystem]["solution"]["gen"]["$gen"]["qg"] for i=1:nsim, j=1:results[:params]["stages"]]'.*baseMVA for gen =1:ngen]
+#         plt =   [plotscenarios(scen_qgen[gen], title  = "Thermal Reactive Generation $gen",
+#                 ylabel = "MW",
+#                 xlabel = "Stages",
+#                 bottom_margin = 10mm,
+#                 right_margin = 10mm,
+#                 left_margin = 10mm                
+#                 )
+#             for gen in idxgen
+#         ]
+#         plt_total[nplots+1:nplots+length(plt)] = plt
+#         nplots +=length(plt) 
+#     end
 
-    # circuit MVA
-    baseMVA = results[:data][1]["powersystem"]["baseMVA"]
+#     # circuit MVA
+#     baseMVA = results[:data][1]["powersystem"]["baseMVA"]
 
-    # Branch flow
+#     # Branch flow
 
-    nbrc = length(results[:data][1]["powersystem"]["branch"])
-    idxbrc = collect(1:nbrc)
-    scen_branch = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["pf"] for i=1:nsim, j=1:nstages]'.*baseMVA for brc =1:nbrc]
+#     nbrc = length(results[:data][1]["powersystem"]["branch"])
+#     idxbrc = collect(1:nbrc)
+#     scen_branch = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["pf"] for i=1:nsim, j=1:nstages]'.*baseMVA for brc =1:nbrc]
 
-    plt =   [plotscenarios(scen_branch[brc], title  = "Branch Flow $brc",
-                ylabel = "MW",
-                xlabel = "Stages",
-                bottom_margin = 10mm,
-                right_margin = 10mm,
-                left_margin = 10mm                
-                )
-            for brc in idxbrc
-    ]
-    plt_total[nplots+1:nplots+length(plt)] = plt
-    nplots +=length(plt) 
+#     plt =   [plotscenarios(scen_branch[brc], title  = "Branch Flow $brc",
+#                 ylabel = "MW",
+#                 xlabel = "Stages",
+#                 bottom_margin = 10mm,
+#                 right_margin = 10mm,
+#                 left_margin = 10mm                
+#                 )
+#             for brc in idxbrc
+#     ]
+#     plt_total[nplots+1:nplots+length(plt)] = plt
+#     nplots +=length(plt) 
 
-    # Branch Reactive flow
+#     # Branch Reactive flow
 
-    if results[:params]["model_constructor_grid_forward"] == PowerModels.ACPPowerModel
-        scen_branch_qf = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["qf"] for i=1:nsim, j=1:results[:params]["stages"]]'.*baseMVA for brc =1:nbrc]
-        plt =   [plotscenarios(scen_branch_qf[brc], title  = "Branch Reactive Flow $brc",
-                ylabel = "MW",
-                xlabel = "Stages",
-                bottom_margin = 10mm,
-                right_margin = 10mm,
-                left_margin = 10mm                
-                )
-            for brc in idxbrc
-        ]
-        plt_total[nplots+1:nplots+length(plt)] = plt
-        nplots +=length(plt) 
-    end
+#     if results[:params]["model_constructor_grid_forward"] == PowerModels.ACPPowerModel
+#         scen_branch_qf = [[results[:simulations][i][j][:powersystem]["solution"]["branch"]["$brc"]["qf"] for i=1:nsim, j=1:results[:params]["stages"]]'.*baseMVA for brc =1:nbrc]
+#         plt =   [plotscenarios(scen_branch_qf[brc], title  = "Branch Reactive Flow $brc",
+#                 ylabel = "MW",
+#                 xlabel = "Stages",
+#                 bottom_margin = 10mm,
+#                 right_margin = 10mm,
+#                 left_margin = 10mm                
+#                 )
+#             for brc in idxbrc
+#         ]
+#         plt_total[nplots+1:nplots+length(plt)] = plt
+#         nplots +=length(plt) 
+#     end
 
-    # Voltage angle
-    try    
-        nbus = length(results[:data][1]["powersystem"]["bus"])
-        idxbus = collect(1:nbus)
-        scen_va = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["va"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
+#     # Voltage angle
+#     try    
+#         nbus = length(results[:data][1]["powersystem"]["bus"])
+#         idxbus = collect(1:nbus)
+#         scen_va = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["va"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
 
-        plt =   [plotscenarios(scen_va[bus], title  = "Voltage angle $bus",
-                    ylabel = "Radians",
-                    xlabel = "Stages",
-                    bottom_margin = 10mm,
-                    right_margin = 10mm,
-                    left_margin = 10mm               
-                    )
-                for bus in idxbus
-        ]
-        plt_total[nplots+1:nplots+length(plt)] = plt
-        nplots +=length(plt) 
-    catch
-    end
+#         plt =   [plotscenarios(scen_va[bus], title  = "Voltage angle $bus",
+#                     ylabel = "Radians",
+#                     xlabel = "Stages",
+#                     bottom_margin = 10mm,
+#                     right_margin = 10mm,
+#                     left_margin = 10mm               
+#                     )
+#                 for bus in idxbus
+#         ]
+#         plt_total[nplots+1:nplots+length(plt)] = plt
+#         nplots +=length(plt) 
+#     catch
+#     end
 
-    # Nodal price
-    try
-    nbus = length(results[:data][1]["powersystem"]["bus"])
-    idxbus = collect(1:nbus)
-    scen_pld = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])/baseMVA
+#     # Nodal price
+#     try
+#     nbus = length(results[:data][1]["powersystem"]["bus"])
+#     idxbus = collect(1:nbus)
+#     scen_pld = convert(Array{Array{Float64,2},1},[[-results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["lam_kcl_r"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])/baseMVA
 
-    plt =   [plotscenarios(scen_pld[bus], title  = "Nodal price bus $bus",
-                ylabel = "\$/MW",
-                xlabel = "Stages",
-                bottom_margin = 10mm,
-                right_margin = 10mm,
-                left_margin = 10mm               
-                )
-            for bus in idxbus
-    ]
-    plt_total[nplots+1:nplots+length(plt)] = plt
-    nplots +=length(plt) 
-    catch
-    end
-    # Deficit
-    try
-    nbus = length(results[:data][1]["powersystem"]["bus"])
-    idxbus = collect(1:nbus)
-    scen_def = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["deficit"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
+#     plt =   [plotscenarios(scen_pld[bus], title  = "Nodal price bus $bus",
+#                 ylabel = "\$/MW",
+#                 xlabel = "Stages",
+#                 bottom_margin = 10mm,
+#                 right_margin = 10mm,
+#                 left_margin = 10mm               
+#                 )
+#             for bus in idxbus
+#     ]
+#     plt_total[nplots+1:nplots+length(plt)] = plt
+#     nplots +=length(plt) 
+#     catch
+#     end
+#     # Deficit
+#     try
+#     nbus = length(results[:data][1]["powersystem"]["bus"])
+#     idxbus = collect(1:nbus)
+#     scen_def = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:powersystem]["solution"]["bus"]["$bus"]["deficit"] for i=1:nsim, j=1:nstages]' for bus =1:nbus])
 
-    plt =   [plotscenarios(scen_def[bus].*baseMVA, title  = "Deficit bus $bus",
-                ylabel = "MW",
-                xlabel = "Stages",
-                bottom_margin = 10mm,
-                right_margin = 10mm,
-                left_margin = 10mm               
-                )
-            for bus in idxbus
-    ]
-    plt_total[nplots+1:nplots+length(plt)] = plt
-    nplots +=length(plt)
-    catch
-    end
+#     plt =   [plotscenarios(scen_def[bus].*baseMVA, title  = "Deficit bus $bus",
+#                 ylabel = "MW",
+#                 xlabel = "Stages",
+#                 bottom_margin = 10mm,
+#                 right_margin = 10mm,
+#                 left_margin = 10mm               
+#                 )
+#             for bus in idxbus
+#     ]
+#     plt_total[nplots+1:nplots+length(plt)] = plt
+#     nplots +=length(plt)
+#     catch
+#     end
 
-    # Hydro Generation
-    nHyd = results[:data][1]["hydro"]["nHyd"]
+#     # Hydro Generation
+#     nHyd = results[:data][1]["hydro"]["nHyd"]
     
-    plt =   [   plotscenarios(scen_gen[gen], title  = "Hydro Generation $gen",
-                    ylabel = "MW",
-                    xlabel = "Stages",
-                    bottom_margin = 10mm,
-                    right_margin = 10mm,
-                    left_margin = 10mm               
-                    )
-                for gen in idxhyd
-    ]
-    plt_total[nplots+1:nplots+length(plt)] = plt
-    nplots +=length(plt) 
+#     plt =   [   plotscenarios(scen_gen[gen], title  = "Hydro Generation $gen",
+#                     ylabel = "MW",
+#                     xlabel = "Stages",
+#                     bottom_margin = 10mm,
+#                     right_margin = 10mm,
+#                     left_margin = 10mm               
+#                     )
+#                 for gen in idxhyd
+#     ]
+#     plt_total[nplots+1:nplots+length(plt)] = plt
+#     nplots +=length(plt) 
 
-    # Reservoir Outflow
-    scen_turn = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:outflow][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
-    plt =   [   plotscenarios(scen_turn[res], title  = "Reservoir Outflow $res",
-                    ylabel = "m³/s",
-                    xlabel = "Stages",
-                    bottom_margin = 10mm,
-                    right_margin = 10mm,
-                    left_margin = 10mm               
-                    )  
-                for res = 1:nHyd
-    ]
-    plt_total[nplots+1:nplots+length(plt)] = plt
-    nplots +=length(plt) 
+#     # Reservoir Outflow
+#     scen_turn = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:outflow][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+#     plt =   [   plotscenarios(scen_turn[res], title  = "Reservoir Outflow $res",
+#                     ylabel = "m³/s",
+#                     xlabel = "Stages",
+#                     bottom_margin = 10mm,
+#                     right_margin = 10mm,
+#                     left_margin = 10mm               
+#                     )  
+#                 for res = 1:nHyd
+#     ]
+#     plt_total[nplots+1:nplots+length(plt)] = plt
+#     nplots +=length(plt) 
 
-    # Hydro Spill    
-    scen_spill = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:spill][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+#     # Hydro Spill    
+#     scen_spill = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:spill][res] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
 
-    plt =   [   plotscenarios(scen_spill[res], title  = "Hydro Spill $res",
-                    ylabel = "Hm³",
-                    xlabel = "Stages",
-                    bottom_margin = 10mm,
-                    right_margin = 10mm,
-                    left_margin = 10mm               
-                    )  
-                for res = 1:nHyd
-    ]    
-    plt_total[nplots+1:nplots+length(plt)] = plt
-    nplots +=length(plt) 
+#     plt =   [   plotscenarios(scen_spill[res], title  = "Hydro Spill $res",
+#                     ylabel = "Hm³",
+#                     xlabel = "Stages",
+#                     bottom_margin = 10mm,
+#                     right_margin = 10mm,
+#                     left_margin = 10mm               
+#                     )  
+#                 for res = 1:nHyd
+#     ]    
+#     plt_total[nplots+1:nplots+length(plt)] = plt
+#     nplots +=length(plt) 
 
-    # Reservoir Volume
-    scen_voume = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:reservoir][res].out for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+#     # Reservoir Volume
+#     scen_voume = convert(Array{Array{Float64,2},1},[[results[:simulations][i][j][:reservoirs][:reservoir][res].out for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
 
 
-    plt =   [   plotscenarios(scen_voume[res], title  = "Volume Reservoir $res",
-                    ylabel = "Hm³",
-                    xlabel = "Stages",
-                    bottom_margin = 10mm,
-                    right_margin = 10mm,
-                    left_margin = 10mm               
-                    )  
-                for res = 1:nHyd
-    ]    
-    plt_total[nplots+1:nplots+length(plt)] = plt
-    nplots +=length(plt) 
+#     plt =   [   plotscenarios(scen_voume[res], title  = "Volume Reservoir $res",
+#                     ylabel = "Hm³",
+#                     xlabel = "Stages",
+#                     bottom_margin = 10mm,
+#                     right_margin = 10mm,
+#                     left_margin = 10mm               
+#                     )  
+#                 for res = 1:nHyd
+#     ]    
+#     plt_total[nplots+1:nplots+length(plt)] = plt
+#     nplots +=length(plt) 
 
-    # Inflows
-    scen_inflows = convert(Array{Array{Float64,2},1},[[results[:data][1]["hydro"]["Hydrogenerators"][res]["inflow"][cidx(j,results[:data][1]["hydro"]["size_inflow"][1]),results[:simulations][i][j][:noise_term]] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
+#     # Inflows
+#     scen_inflows = convert(Array{Array{Float64,2},1},[[results[:data][1]["hydro"]["Hydrogenerators"][res]["inflow"][cidx(j,results[:data][1]["hydro"]["size_inflow"][1]),results[:simulations][i][j][:noise_term]] for i=1:nsim, j=1:nstages]' for res = 1:results[:data][1]["hydro"]["nHyd"]])
 
-    plt =   [   plotscenarios(scen_inflows[res], title  = "Inflows Reservoir $res",
-                    ylabel = "m³/s",
-                    xlabel = "Stages",
-                    bottom_margin = 10mm,
-                    right_margin = 10mm,
-                    left_margin = 10mm               
-                    )  
-                for res = 1:nHyd
-    ]    
-    plt_total[nplots+1:nplots+length(plt)] = plt
-    nplots +=length(plt) 
-    if mod(nplots,nc) > 0 && floor(Int,nplots/nc) > 0
-        l = @layout [ Plots.grid(floor(Int,nplots/nc),nc);  Plots.grid(1,mod(nplots,nc))]
-        nlines = floor(Int,nplots/nc)+1
-        l.heights = Plots.grid(2,1,heights=[floor(Int,nplots/nc)/nlines;1/nlines]).heights
-    elseif floor(Int,nplots/nc) > 0
-        l = @layout Plots.grid(floor(Int,nplots/nc),nc)
-        nlines = floor(Int,nplots/nc)
-        l.heights = Plots.grid(nlines,1,heights=[1/nlines for n = 1:nlines]).heights
-    else
-        l = @layout Plots.grid(1,mod(nplots,nc))
-        nlines = 1
-        l.heights = Plots.grid(1,1,heights=[1]).heights
-    end    
+#     plt =   [   plotscenarios(scen_inflows[res], title  = "Inflows Reservoir $res",
+#                     ylabel = "m³/s",
+#                     xlabel = "Stages",
+#                     bottom_margin = 10mm,
+#                     right_margin = 10mm,
+#                     left_margin = 10mm               
+#                     )  
+#                 for res = 1:nHyd
+#     ]    
+#     plt_total[nplots+1:nplots+length(plt)] = plt
+#     nplots +=length(plt) 
+#     if mod(nplots,nc) > 0 && floor(Int,nplots/nc) > 0
+#         l = @layout [ Plots.grid(floor(Int,nplots/nc),nc);  Plots.grid(1,mod(nplots,nc))]
+#         nlines = floor(Int,nplots/nc)+1
+#         l.heights = Plots.grid(2,1,heights=[floor(Int,nplots/nc)/nlines;1/nlines]).heights
+#     elseif floor(Int,nplots/nc) > 0
+#         l = @layout Plots.grid(floor(Int,nplots/nc),nc)
+#         nlines = floor(Int,nplots/nc)
+#         l.heights = Plots.grid(nlines,1,heights=[1/nlines for n = 1:nlines]).heights
+#     else
+#         l = @layout Plots.grid(1,mod(nplots,nc))
+#         nlines = 1
+#         l.heights = Plots.grid(1,1,heights=[1]).heights
+#     end    
 
-    return plot(plt_total[1:nplots]...,layout=l,size = (nc*400,400*ceil(Int,nplots/nc)),legend=false)
-end
+#     return plot(plt_total[1:nplots]...,layout=l,size = (nc*400,400*ceil(Int,nplots/nc)),legend=false)
+# end
 
 """Common descriptive statistics"""
 function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Array{Float64}=[0.25;0.5;0.75])
@@ -384,276 +384,276 @@ Paremeters:
 -   node_label   : Plot nodel label on grid.
 -   nodelabeldist: Nodel label distance from node.
 """
-function plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+# function plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
 
-    gatherusefulinfo!(data)
+#     gatherusefulinfo!(data)
 
-    nbus = length(data["powersystem"]["bus"])
+#     nbus = length(data["powersystem"]["bus"])
 
-    nNodes = nbus
+#     nNodes = nbus
 
-    g = Graph(nbus)
+#     g = Graph(nbus)
 
-    for brc in values(data["powersystem"]["branch"])
-        add_edge!(g, brc["f_bus"], brc["t_bus"])
-    end
+#     for brc in values(data["powersystem"]["branch"])
+#         add_edge!(g, brc["f_bus"], brc["t_bus"])
+#     end
 
-    # nodes gen
-    thermal_nodes = fill(0.0,nbus)
-    hydro_nodes = fill(0.0,nbus)
+#     # nodes gen
+#     thermal_nodes = fill(0.0,nbus)
+#     hydro_nodes = fill(0.0,nbus)
 
-    idxhyd = idx_hydro(data)
+#     idxhyd = idx_hydro(data)
 
-    for i in 1:length(data["powersystem"]["gen"])
-        bus_i = data["powersystem"]["gen"]["$i"]["gen_bus"]
-        if i in idxhyd
-            hydro_nodes[bus_i] += data["powersystem"]["gen"]["$i"]["pmax"]*data["powersystem"]["gen"]["$i"]["mbase"]
-        else
-            thermal_nodes[bus_i] += data["powersystem"]["gen"]["$i"]["pmax"]*data["powersystem"]["gen"]["$i"]["mbase"]
-        end
-    end
+#     for i in 1:length(data["powersystem"]["gen"])
+#         bus_i = data["powersystem"]["gen"]["$i"]["gen_bus"]
+#         if i in idxhyd
+#             hydro_nodes[bus_i] += data["powersystem"]["gen"]["$i"]["pmax"]*data["powersystem"]["gen"]["$i"]["mbase"]
+#         else
+#             thermal_nodes[bus_i] += data["powersystem"]["gen"]["$i"]["pmax"]*data["powersystem"]["gen"]["$i"]["mbase"]
+#         end
+#     end
 
-    # nodes loads
-    load_nodes = fill(0.0,nbus)
+#     # nodes loads
+#     load_nodes = fill(0.0,nbus)
 
-    for i in 1:length(data["powersystem"]["load"])
-        bus_i = data["powersystem"]["load"]["$i"]["load_bus"]
-        load_nodes[bus_i] += data["powersystem"]["load"]["$i"]["pd"]*data["powersystem"]["baseMVA"]
-    end
+#     for i in 1:length(data["powersystem"]["load"])
+#         bus_i = data["powersystem"]["load"]["$i"]["load_bus"]
+#         load_nodes[bus_i] += data["powersystem"]["load"]["$i"]["pd"]*data["powersystem"]["baseMVA"]
+#     end
 
-    # number of nodes
-    num_nodes = nbus+ sum(load_nodes .> 0)+sum(hydro_nodes .> 0)+sum(thermal_nodes .> 0)
+#     # number of nodes
+#     num_nodes = nbus+ sum(load_nodes .> 0)+sum(hydro_nodes .> 0)+sum(thermal_nodes .> 0)
     
-    # node size
-    nodesize = fill(0.0,num_nodes)
+#     # node size
+#     nodesize = fill(0.0,num_nodes)
 
-    # nodes membership (3: Hydro, 2: Thermal)
-    membership = fill(1,num_nodes)
+#     # nodes membership (3: Hydro, 2: Thermal)
+#     membership = fill(1,num_nodes)
 
-    # node label
-    if node_label
-        nodelabel = [1:nbus;fill("",sum(hydro_nodes .> 0));fill("",sum(thermal_nodes .> 0));fill("",sum(load_nodes .> 0))]
-    else
-        nodelabel = nothing
-    end
-    # create nodes
-    for bus_i in 1:length(data["powersystem"]["bus"])
-        if hydro_nodes[bus_i] > 0
-            add_vertex!(g)
-            nNodes +=1
-            add_edge!(g, nNodes, bus_i)
-            membership[nNodes] = 3
-            nodesize[nNodes] = log(hydro_nodes[bus_i])
-        end
+#     # node label
+#     if node_label
+#         nodelabel = [1:nbus;fill("",sum(hydro_nodes .> 0));fill("",sum(thermal_nodes .> 0));fill("",sum(load_nodes .> 0))]
+#     else
+#         nodelabel = nothing
+#     end
+#     # create nodes
+#     for bus_i in 1:length(data["powersystem"]["bus"])
+#         if hydro_nodes[bus_i] > 0
+#             add_vertex!(g)
+#             nNodes +=1
+#             add_edge!(g, nNodes, bus_i)
+#             membership[nNodes] = 3
+#             nodesize[nNodes] = log(hydro_nodes[bus_i])
+#         end
 
-        if thermal_nodes[bus_i] > 0
-            add_vertex!(g)
-            nNodes +=1
-            add_edge!(g, nNodes, bus_i)
-            membership[nNodes] = 2
-            nodesize[nNodes] = log(thermal_nodes[bus_i])
-        end
+#         if thermal_nodes[bus_i] > 0
+#             add_vertex!(g)
+#             nNodes +=1
+#             add_edge!(g, nNodes, bus_i)
+#             membership[nNodes] = 2
+#             nodesize[nNodes] = log(thermal_nodes[bus_i])
+#         end
 
-        if load_nodes[bus_i] > 0
-            add_vertex!(g)
-            nNodes +=1
-            add_edge!(g, nNodes, bus_i)
-            membership[nNodes] = 4
-            nodesize[nNodes] = log(load_nodes[bus_i])
-        end
+#         if load_nodes[bus_i] > 0
+#             add_vertex!(g)
+#             nNodes +=1
+#             add_edge!(g, nNodes, bus_i)
+#             membership[nNodes] = 4
+#             nodesize[nNodes] = log(load_nodes[bus_i])
+#         end
 
-    end
+#     end
 
-    for n in 1:num_nodes
-        nodesize[n] = nodesize[n] == 0 ? unique(sort(nodesize))[2] : nodesize[n]
-    end
+#     for n in 1:num_nodes
+#         nodesize[n] = nodesize[n] == 0 ? unique(sort(nodesize))[2] : nodesize[n]
+#     end
     
-    nodecolor = ["black", "red", "blue", "orange"]
+#     nodecolor = ["black", "red", "blue", "orange"]
 
-    # membership color
-    nodefillc = nodecolor[Int64.(membership)]
+#     # membership color
+#     nodefillc = nodecolor[Int64.(membership)]
 
-    if path != nothing
-        draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist))
-    else
-        gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist)
-    end
-end
+#     if path != nothing
+#         draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist))
+#     else
+#         gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist)
+#     end
+# end
 
 """ Plot Hydro Grid installed volume"""
-function plot_hydro_grid(data::Dict;path=nothing,size_fig = [12cm, 12cm],node_label=false,nodelabeldist=8.5)
+# function plot_hydro_grid(data::Dict;path=nothing,size_fig = [12cm, 12cm],node_label=false,nodelabeldist=8.5)
 
-    gatherusefulinfo!(data)
+#     gatherusefulinfo!(data)
 
-    nHyd = data["hydro"]["nHyd"]
+#     nHyd = data["hydro"]["nHyd"]
 
-    nNodes = nHyd
+#     nNodes = nHyd
 
-    g = DiGraph(nNodes)
+#     g = DiGraph(nNodes)
 
-    # nodes bus
-    node2bus = []
+#     # nodes bus
+#     node2bus = []
 
-    # hydro_size
-    hydro_size = fill(0.0,nHyd)
+#     # hydro_size
+#     hydro_size = fill(0.0,nHyd)
 
-    for i=1:nHyd
-        hydro = data["hydro"]["Hydrogenerators"][i]
-        hydro_size[i] = hydro["max_volume"]
+#     for i=1:nHyd
+#         hydro = data["hydro"]["Hydrogenerators"][i]
+#         hydro_size[i] = hydro["max_volume"]
 
-        for hyd in hydro["downstream_turn"]
-            j = findall(x->x["index"]==hyd,data["hydro"]["Hydrogenerators"])
-            if !isempty(j)
-                add_edge!(g, i, j[1])
-            end
-        end
-        for hyd in hydro["downstream_spill"]
-            j = findall(x->x["index"]==hyd,data["hydro"]["Hydrogenerators"])
-            if !isempty(j)
-                add_edge!(g, i, j[1])
-            end
-        end
+#         for hyd in hydro["downstream_turn"]
+#             j = findall(x->x["index"]==hyd,data["hydro"]["Hydrogenerators"])
+#             if !isempty(j)
+#                 add_edge!(g, i, j[1])
+#             end
+#         end
+#         for hyd in hydro["downstream_spill"]
+#             j = findall(x->x["index"]==hyd,data["hydro"]["Hydrogenerators"])
+#             if !isempty(j)
+#                 add_edge!(g, i, j[1])
+#             end
+#         end
         
-        if hydro["index_grid"] != nothing 
-            bus_i = data["powersystem"]["gen"]["$(hydro["i_grid"])"]["gen_bus"]
-            node = findall(x->x==bus_i,node2bus)
-            if isempty(node)
-                append!(node2bus,bus_i)
-                add_vertex!(g)
-                nNodes +=1
-                node = [size(node2bus,1)]
-            end
-            add_edge!(g, i, Int64(nHyd+node[1]))
-        end
-    end
+#         if hydro["index_grid"] != nothing 
+#             bus_i = data["powersystem"]["gen"]["$(hydro["i_grid"])"]["gen_bus"]
+#             node = findall(x->x==bus_i,node2bus)
+#             if isempty(node)
+#                 append!(node2bus,bus_i)
+#                 add_vertex!(g)
+#                 nNodes +=1
+#                 node = [size(node2bus,1)]
+#             end
+#             add_edge!(g, i, Int64(nHyd+node[1]))
+#         end
+#     end
 
-    # node size
-    nodesize = fill(maximum(log.(hydro_size.*1000,1.002))*0.5,nNodes)
+#     # node size
+#     nodesize = fill(maximum(log.(hydro_size.*1000,1.002))*0.5,nNodes)
     
-    nodesize[1:nHyd] = log.(hydro_size.*1000,1.002)
-    nodecolor = ["black", "blue"]
+#     nodesize[1:nHyd] = log.(hydro_size.*1000,1.002)
+#     nodecolor = ["black", "blue"]
 
-    # membership color
-    membership = fill(1,nNodes)
-    membership[1:nHyd] .= 2
-    nodefillc = nodecolor[membership]
+#     # membership color
+#     membership = fill(1,nNodes)
+#     membership[1:nHyd] .= 2
+#     nodefillc = nodecolor[membership]
 
-    # node label
-    if node_label
-        nodelabel = [fill("",nHyd);node2bus]
-    else
-        nodelabel = nothing
-    end
+#     # node label
+#     if node_label
+#         nodelabel = [fill("",nHyd);node2bus]
+#     else
+#         nodelabel = nothing
+#     end
 
-    if path != nothing
-        draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.005))    
-    else
-        gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.005)
-    end
-end
+#     if path != nothing
+#         draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.005))    
+#     else
+#         gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.005)
+#     end
+# end
 
 """ Plot Grid Stage Dispatched Power"""
-function plot_grid_dispatched_stage(results::Dict,t::Int;quant::Float64=0.5,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+# function plot_grid_dispatched_stage(results::Dict,t::Int;quant::Float64=0.5,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
 
-    data = results[:data][1]
+#     data = results[:data][1]
 
-    nbus = length(data["powersystem"]["bus"])
+#     nbus = length(data["powersystem"]["bus"])
 
-    nNodes = nbus
+#     nNodes = nbus
 
-    g = Graph(nbus)
+#     g = Graph(nbus)
 
-    for brc in values(data["powersystem"]["branch"])
-        add_edge!(g, brc["f_bus"], brc["t_bus"])
-    end
+#     for brc in values(data["powersystem"]["branch"])
+#         add_edge!(g, brc["f_bus"], brc["t_bus"])
+#     end
 
-    # nodes gen
-    thermal_nodes = fill(0.0,nbus)
-    hydro_nodes = fill(0.0,nbus)
+#     # nodes gen
+#     thermal_nodes = fill(0.0,nbus)
+#     hydro_nodes = fill(0.0,nbus)
 
-    idxhyd = idx_hydro(data)
+#     idxhyd = idx_hydro(data)
 
-    for i in 1:length(data["powersystem"]["gen"])
-        bus_i = data["powersystem"]["gen"]["$i"]["gen_bus"]
-        if i in idxhyd
-            hydro_nodes[bus_i] += Statistics.quantile([results[:simulations][s][t][:powersystem]["solution"]["gen"]["$i"]["pg"] for s in 1:length(results[:simulations])], quant)*data["powersystem"]["gen"]["$i"]["mbase"]
-        else
-            thermal_nodes[bus_i] += Statistics.quantile([results[:simulations][s][t][:powersystem]["solution"]["gen"]["$i"]["pg"] for s in 1:length(results[:simulations])], quant)*data["powersystem"]["gen"]["$i"]["mbase"]
-        end
-    end
+#     for i in 1:length(data["powersystem"]["gen"])
+#         bus_i = data["powersystem"]["gen"]["$i"]["gen_bus"]
+#         if i in idxhyd
+#             hydro_nodes[bus_i] += Statistics.quantile([results[:simulations][s][t][:powersystem]["solution"]["gen"]["$i"]["pg"] for s in 1:length(results[:simulations])], quant)*data["powersystem"]["gen"]["$i"]["mbase"]
+#         else
+#             thermal_nodes[bus_i] += Statistics.quantile([results[:simulations][s][t][:powersystem]["solution"]["gen"]["$i"]["pg"] for s in 1:length(results[:simulations])], quant)*data["powersystem"]["gen"]["$i"]["mbase"]
+#         end
+#     end
 
-    # nodes loads
-    load_nodes = fill(0.0,nbus)
+#     # nodes loads
+#     load_nodes = fill(0.0,nbus)
 
-    for i in 1:length(data["powersystem"]["load"])
-        bus_i = data["powersystem"]["load"]["$i"]["load_bus"]
-        load_nodes[bus_i] += data["powersystem"]["load"]["$i"]["pd"]*data["powersystem"]["baseMVA"]
-    end
+#     for i in 1:length(data["powersystem"]["load"])
+#         bus_i = data["powersystem"]["load"]["$i"]["load_bus"]
+#         load_nodes[bus_i] += data["powersystem"]["load"]["$i"]["pd"]*data["powersystem"]["baseMVA"]
+#     end
 
-    # number of nodes
-    num_nodes = nbus+ sum(load_nodes .> 0)+sum(hydro_nodes .> 0)+sum(thermal_nodes .> 0)
+#     # number of nodes
+#     num_nodes = nbus+ sum(load_nodes .> 0)+sum(hydro_nodes .> 0)+sum(thermal_nodes .> 0)
     
-    # node size
-    nodesize = fill(0.1,num_nodes)
+#     # node size
+#     nodesize = fill(0.1,num_nodes)
 
-    # nodes membership (3: Hydro, 2: Thermal)
-    membership = fill(1,num_nodes)
+#     # nodes membership (3: Hydro, 2: Thermal)
+#     membership = fill(1,num_nodes)
 
-    # node label
-    if node_label
-        nodelabel = [1:nbus;fill("",sum(hydro_nodes .> 0));fill("",sum(thermal_nodes .> 0));fill("",sum(load_nodes .> 0))]
-    else
-        nodelabel = nothing
-    end
-    # create nodes
-    for bus_i in 1:length(data["powersystem"]["bus"])
-        if hydro_nodes[bus_i] > 0
-            add_vertex!(g)
-            nNodes +=1
-            add_edge!(g, nNodes, bus_i)
-            membership[nNodes] = 3
-            nodesize[nNodes] = log(hydro_nodes[bus_i])
-        end
+#     # node label
+#     if node_label
+#         nodelabel = [1:nbus;fill("",sum(hydro_nodes .> 0));fill("",sum(thermal_nodes .> 0));fill("",sum(load_nodes .> 0))]
+#     else
+#         nodelabel = nothing
+#     end
+#     # create nodes
+#     for bus_i in 1:length(data["powersystem"]["bus"])
+#         if hydro_nodes[bus_i] > 0
+#             add_vertex!(g)
+#             nNodes +=1
+#             add_edge!(g, nNodes, bus_i)
+#             membership[nNodes] = 3
+#             nodesize[nNodes] = log(hydro_nodes[bus_i])
+#         end
 
-        if thermal_nodes[bus_i] > 0
-            add_vertex!(g)
-            nNodes +=1
-            add_edge!(g, nNodes, bus_i)
-            membership[nNodes] = 2
-            nodesize[nNodes] = log(thermal_nodes[bus_i])
-        end
+#         if thermal_nodes[bus_i] > 0
+#             add_vertex!(g)
+#             nNodes +=1
+#             add_edge!(g, nNodes, bus_i)
+#             membership[nNodes] = 2
+#             nodesize[nNodes] = log(thermal_nodes[bus_i])
+#         end
 
-        if load_nodes[bus_i] > 0
-            add_vertex!(g)
-            nNodes +=1
-            add_edge!(g, nNodes, bus_i)
-            membership[nNodes] = 4
-            nodesize[nNodes] = log(load_nodes[bus_i])
-        end
+#         if load_nodes[bus_i] > 0
+#             add_vertex!(g)
+#             nNodes +=1
+#             add_edge!(g, nNodes, bus_i)
+#             membership[nNodes] = 4
+#             nodesize[nNodes] = log(load_nodes[bus_i])
+#         end
 
-    end
+#     end
 
-    for n in 1:num_nodes
-        nodesize[n] = nodesize[n] == 0 ? unique(sort(nodesize))[2] : nodesize[n]
-    end
+#     for n in 1:num_nodes
+#         nodesize[n] = nodesize[n] == 0 ? unique(sort(nodesize))[2] : nodesize[n]
+#     end
     
-    nodecolor = ["black", "red", "blue", "orange"]
+#     nodecolor = ["black", "red", "blue", "orange"]
 
-    # membership color
-    nodefillc = nodecolor[Int64.(membership)]
+#     # membership color
+#     nodefillc = nodecolor[Int64.(membership)]
 
 
-    gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist)
-end
+#     gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist)
+# end
 
-""" Plot Grid Dispatched Power"""
-function plot_grid_dispatched(results::Dict;seed=1111,quant::Float64=0.5,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
-    duration=length(results[:simulations][1])
-    roll(fps=1, duration=duration) do t, dt
-        Random.seed!(seed)
-        plot_grid_dispatched_stage(results,Int64(t+1);quant=quant,size_fig = size_fig,node_label=node_label,nodelabeldist=nodelabeldist)
-    end
-end
+# """ Plot Grid Dispatched Power"""
+# function plot_grid_dispatched(results::Dict;seed=1111,quant::Float64=0.5,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+#     duration=length(results[:simulations][1])
+#     roll(fps=1, duration=duration) do t, dt
+#         Random.seed!(seed)
+#         plot_grid_dispatched_stage(results,Int64(t+1);quant=quant,size_fig = size_fig,node_label=node_label,nodelabeldist=nodelabeldist)
+#     end
+# end
 
 """
     HydroPowerModels.plot_aggregated_results(results::Dict;nc::Int=3)
