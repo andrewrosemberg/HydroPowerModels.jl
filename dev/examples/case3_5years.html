@@ -740,10 +740,6 @@ div.title {text-align: center;}
 </pre>
 
 
-<pre class="julia-error">
-ERROR: UndefVarError: post_opf not defined
-</pre>
-
 
 <h2>Build Model</h2>
 
@@ -779,8 +775,8 @@ ERROR: UndefVarError: post_opf not defined
 </pre>
 
 
-<pre class="julia-error">
-ERROR: UndefVarError: m not defined
+<pre class="output">
+&#40;:statistical, 2.6633079051971436&#41;
 </pre>
 
 
@@ -795,7 +791,10 @@ ERROR: UndefVarError: m not defined
 
 
 <pre class="julia-error">
-ERROR: UndefVarError: m not defined
+ERROR: MethodError: no method matching get_color_palette&#40;::Symbol, ::ColorTypes.RGBA&#123;Float64&#125;, ::Int64&#41;
+Closest candidates are:
+  get_color_palette&#40;::Any, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:328
+  get_color_palette&#40;&#33;Matched::PlotUtils.ColorGradient, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:329
 </pre>
 
 
@@ -805,23 +804,22 @@ ERROR: UndefVarError: m not defined
 <pre class='hljl'>
 <span class='hljl-k'>import</span><span class='hljl-t'> </span><span class='hljl-n'>Random</span><span class='hljl-t'>
 </span><span class='hljl-n'>Random</span><span class='hljl-oB'>.</span><span class='hljl-nf'>seed!</span><span class='hljl-p'>(</span><span class='hljl-n'>seed</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>results</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>simulate</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span><span class='hljl-p'>);</span>
+</span><span class='hljl-n'>results</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>HydroPowerModels</span><span class='hljl-oB'>.</span><span class='hljl-nf'>simulate</span><span class='hljl-p'>(</span><span class='hljl-n'>m</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span><span class='hljl-p'>);</span><span class='hljl-t'>
+</span><span class='hljl-n'>results</span>
 </pre>
 
 
-<pre class="julia-error">
-ERROR: UndefVarError: m not defined
-</pre>
-
-
-
-<pre class='hljl'>
-<span class='hljl-n'>results</span>
-</pre>
-
-
-<pre class="julia-error">
-ERROR: UndefVarError: results not defined
+<pre class="output">
+Dict&#123;Symbol,Any&#125; with 5 entries:
+  :solve_time  &#61;&gt; 3.67812
+  :params      &#61;&gt; Dict&#123;Any,Any&#125;&#40;&quot;optimizer&quot;&#61;&gt;OptimizerFactory&#40;Optimizer, &#40;&#41;
+, Ba…
+  :machine     &#61;&gt; Dict&#40;:cpu&#61;&gt;&quot;Intel&#40;R&#41; Xeon&#40;R&#41; CPU&quot;,:memory&#61;&gt;&quot;7.79003143310
+5469…
+  :data        &#61;&gt; Dict&#123;Any,Any&#125;&#91;Dict&#40;&quot;powersystem&quot;&#61;&gt;Dict&#123;String,Any&#125;&#40;&quot;cost_
+defi…
+  :simulations &#61;&gt; Array&#123;Dict&#123;Symbol,Any&#125;,1&#125;&#91;&#91;Dict&#40;:bellman_term&#61;&gt;58893.1,:n
+oise…
 </pre>
 
 
@@ -843,47 +841,10 @@ ERROR: UndefVarError: results not defined
 
 
 <pre class="output">
-Error During Test at none:1
-  Test threw exception
+Test Failed at none:1
   Expression: isapprox&#40;SDDP.calculate_bound&#40;m.policygraph&#41;, 59357.12, atol&#61;
 10&#41;
-  UndefVarError: m not defined
-  Stacktrace:
-   &#91;1&#93; top-level scope at none:0
-   &#91;2&#93; eval at ./boot.jl:319 &#91;inlined&#93;
-   &#91;3&#93; capture_output&#40;::Expr, ::Module, ::Bool, ::Bool, ::Bool, ::Bool&#41; at 
-/home/travis/.julia/packages/Weave/UOxmI/src/run.jl:230
-   &#91;4&#93; run_code&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/travi
-s/.julia/packages/Weave/UOxmI/src/run.jl:208
-   &#91;5&#93; eval_chunk&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/tra
-vis/.julia/packages/Weave/UOxmI/src/run.jl:289
-   &#91;6&#93; run_chunk&#40;::Weave.CodeChunk, ::Weave.WeaveDoc, ::Weave.Report, ::Mod
-ule&#41; at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:130
-   &#91;7&#93; #run#34&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Strin
-g, ::Nothing, ::String, ::Symbol, ::Bool, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; 
-at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:94
-   &#91;8&#93; &#40;::getfield&#40;Base, Symbol&#40;&quot;#kw##run&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:doctype, :mod,
- :out_path, :args, :fig_path, :fig_ext, :cache_path, :cache, :throw_errors&#41;
-,Tuple&#123;String,Symbol,String,Dict&#123;Symbol,String&#125;,String,Nothing,String,Symbo
-l,Bool&#125;&#125;, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; at ./none:0
-   &#91;9&#93; #weave#16&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Sym
-bol, ::String, ::Nothing, ::String, ::Symbol, ::Bool, ::Nothing, ::Nothing,
- ::Nothing, ::Array&#123;String,1&#125;, ::String, ::typeof&#40;weave&#41;, ::String&#41; at /hom
-e/travis/.julia/packages/Weave/UOxmI/src/Weave.jl:121
-   &#91;10&#93; &#40;::getfield&#40;Weave, Symbol&#40;&quot;#kw##weave&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:out_path, 
-:doctype, :args&#41;,Tuple&#123;String,String,Dict&#123;Symbol,String&#125;&#125;&#125;, ::typeof&#40;weave&#41;
-, ::String&#41; at ./none:0
-   &#91;11&#93; top-level scope at none:0
-   &#91;12&#93; include at ./boot.jl:317 &#91;inlined&#93;
-   &#91;13&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
-   &#91;14&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
-   &#91;15&#93; include&#40;::String&#41; at ./client.jl:392
-   &#91;16&#93; top-level scope at none:0
-   &#91;17&#93; include at ./boot.jl:317 &#91;inlined&#93;
-   &#91;18&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
-   &#91;19&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
-   &#91;20&#93; exec_options&#40;::Base.JLOptions&#41; at ./client.jl:266
-   &#91;21&#93; _start&#40;&#41; at ./client.jl:425
+   Evaluated: isapprox&#40;59325.648869422796, 59357.12; atol&#61;10&#41;
 </pre>
 
 <pre class="julia-error">
@@ -900,50 +861,7 @@ ERROR: Test.FallbackTestSetException&#40;&quot;There was an error during testing
 
 
 <pre class="output">
-Error During Test at none:1
-  Test threw exception
-  Expression: length&#40;results&#91;:simulations&#93;&#41; &#61;&#61; 100
-  UndefVarError: results not defined
-  Stacktrace:
-   &#91;1&#93; top-level scope at none:0
-   &#91;2&#93; eval at ./boot.jl:319 &#91;inlined&#93;
-   &#91;3&#93; capture_output&#40;::Expr, ::Module, ::Bool, ::Bool, ::Bool, ::Bool&#41; at 
-/home/travis/.julia/packages/Weave/UOxmI/src/run.jl:230
-   &#91;4&#93; run_code&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/travi
-s/.julia/packages/Weave/UOxmI/src/run.jl:208
-   &#91;5&#93; eval_chunk&#40;::Weave.CodeChunk, ::Weave.Report, ::Module&#41; at /home/tra
-vis/.julia/packages/Weave/UOxmI/src/run.jl:289
-   &#91;6&#93; run_chunk&#40;::Weave.CodeChunk, ::Weave.WeaveDoc, ::Weave.Report, ::Mod
-ule&#41; at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:130
-   &#91;7&#93; #run#34&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Strin
-g, ::Nothing, ::String, ::Symbol, ::Bool, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; 
-at /home/travis/.julia/packages/Weave/UOxmI/src/run.jl:94
-   &#91;8&#93; &#40;::getfield&#40;Base, Symbol&#40;&quot;#kw##run&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:doctype, :mod,
- :out_path, :args, :fig_path, :fig_ext, :cache_path, :cache, :throw_errors&#41;
-,Tuple&#123;String,Symbol,String,Dict&#123;Symbol,String&#125;,String,Nothing,String,Symbo
-l,Bool&#125;&#125;, ::typeof&#40;run&#41;, ::Weave.WeaveDoc&#41; at ./none:0
-   &#91;9&#93; #weave#16&#40;::String, ::Symbol, ::String, ::Dict&#123;Symbol,String&#125;, ::Sym
-bol, ::String, ::Nothing, ::String, ::Symbol, ::Bool, ::Nothing, ::Nothing,
- ::Nothing, ::Array&#123;String,1&#125;, ::String, ::typeof&#40;weave&#41;, ::String&#41; at /hom
-e/travis/.julia/packages/Weave/UOxmI/src/Weave.jl:121
-   &#91;10&#93; &#40;::getfield&#40;Weave, Symbol&#40;&quot;#kw##weave&quot;&#41;&#41;&#41;&#40;::NamedTuple&#123;&#40;:out_path, 
-:doctype, :args&#41;,Tuple&#123;String,String,Dict&#123;Symbol,String&#125;&#125;&#125;, ::typeof&#40;weave&#41;
-, ::String&#41; at ./none:0
-   &#91;11&#93; top-level scope at none:0
-   &#91;12&#93; include at ./boot.jl:317 &#91;inlined&#93;
-   &#91;13&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
-   &#91;14&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
-   &#91;15&#93; include&#40;::String&#41; at ./client.jl:392
-   &#91;16&#93; top-level scope at none:0
-   &#91;17&#93; include at ./boot.jl:317 &#91;inlined&#93;
-   &#91;18&#93; include_relative&#40;::Module, ::String&#41; at ./loading.jl:1044
-   &#91;19&#93; include&#40;::Module, ::String&#41; at ./sysimg.jl:29
-   &#91;20&#93; exec_options&#40;::Base.JLOptions&#41; at ./client.jl:266
-   &#91;21&#93; _start&#40;&#41; at ./client.jl:425
-</pre>
-
-<pre class="julia-error">
-ERROR: Test.FallbackTestSetException&#40;&quot;There was an error during testing&quot;&#41;
+Test Passed
 </pre>
 
 
@@ -958,7 +876,10 @@ ERROR: Test.FallbackTestSetException&#40;&quot;There was an error during testing
 
 
 <pre class="julia-error">
-ERROR: UndefVarError: results not defined
+ERROR: MethodError: no method matching get_color_palette&#40;::Symbol, ::ColorTypes.RGBA&#123;Float64&#125;, ::Int64&#41;
+Closest candidates are:
+  get_color_palette&#40;::Any, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:328
+  get_color_palette&#40;&#33;Matched::PlotUtils.ColorGradient, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:329
 </pre>
 
 
@@ -1078,7 +999,10 @@ Table: branch
 
 
 <pre class="julia-error">
-ERROR: UndefVarError: results not defined
+ERROR: MethodError: no method matching get_color_palette&#40;::Symbol, ::ColorTypes.RGBA&#123;Float64&#125;, ::Int64&#41;
+Closest candidates are:
+  get_color_palette&#40;::Any, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:328
+  get_color_palette&#40;&#33;Matched::PlotUtils.ColorGradient, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:329
 </pre>
 
 
@@ -1088,7 +1012,7 @@ ERROR: UndefVarError: results not defined
           <div class="footer"><p>
           Published from <a href="case3_5years.jl">case3_5years.jl</a> using
           <a href="http://github.com/mpastell/Weave.jl">Weave.jl</a>
-           on 2020-01-23.
+           on 2020-05-17.
           <p></div>
 
 
