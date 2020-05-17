@@ -26,6 +26,7 @@ Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 JuMP = "~0.20"
 julia = "~1.0"
 Plots = "= 0.26.0"
+PowerModels = "0.13.0"
 
 [extras]
 Cairo = "159f3aea-2a34-519c-b102-8c37f9878175"
