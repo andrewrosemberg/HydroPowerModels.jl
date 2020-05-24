@@ -3,7 +3,7 @@ A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Opti
 
 | **DOI** |**Documentation** | **Build Status** | **Coverage** | **Paper** |
 |:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|
-|[![DOI](https://zenodo.org/badge/166077703.svg)](https://zenodo.org/badge/latestdoi/166077703)|[![][docs-latest-img]][docs-latest-url] | [![Build Status][build-img]][build-url] | [![Codecov branch][codecov-img]][codecov-url] | [![status][paper-img]][paper-url] |
+|[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3842130.svg)](https://doi.org/10.5281/zenodo.3842130)|[![][docs-latest-img]][docs-latest-url] | [![Build Status][build-img]][build-url] | [![Codecov branch][codecov-img]][codecov-url] | [![status][paper-img]][paper-url] |
 
 [build-img]: https://travis-ci.com/andrewrosemberg/HydroPowerModels.jl.svg?branch=master
 [build-url]: https://travis-ci.com/andrewrosemberg/HydroPowerModels.jl
