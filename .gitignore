@@ -5,3 +5,4 @@ Debug/
 *.log
 *.lp
 *.mps
+.DS_Store
