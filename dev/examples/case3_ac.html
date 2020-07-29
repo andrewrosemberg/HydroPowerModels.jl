@@ -3,7 +3,7 @@
 <HEAD>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Example Case 3 AC - Year Planning</title>
+  
   
 
   <script type="text/x-mathjax-config">
@@ -631,7 +631,7 @@ kbd,
 pre,
 samp {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-  font-size: 13px;
+  font-size: 0.9em;
 }
 
 
@@ -646,22 +646,21 @@ img {max-width : 100%}
 div.title {text-align: center;}
 
   </style>
-
-
-
 </HEAD>
-  <BODY>
-    <div class ="container">
-      <div class = "row">
-        <div class = "col-md-12 twelve columns">
 
-          <div class="title">
-            <h1 class="title">Example Case 3 AC - Year Planning</h1>
-            <h5>Andrew Rosemberg</h5>
-            <h5>15th Feb 2019</h5>
-          </div>
-
+<BODY>
+  <div class ="container">
+    <div class = "row">
+      <div class = "col-md-12 twelve columns">
+        <div class="title">
           
+          
+          
+        </div>
+
+        <hr />
+<p>title : Example Case 3 AC - Year Planning author : Andrew Rosemberg date : 15th Feb 2019 –-</p>
+
 <h1>Introduction</h1>
 
 <p>This an example of the HydroPowerModels package for solving a simple stochastic case with the following specifications:</p>
@@ -717,6 +716,39 @@ div.title {text-align: center;}
 </pre>
 
 
+<pre class="output">
+1-element Array&#123;Dict&#123;Any,Any&#125;,1&#125;:
+ Dict&#40;&quot;powersystem&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;cost_deficit&quot; &#61;&gt; 1000,&quot;bus&quot; &#61;&gt; Dic
+t&#123;String,Any&#125;&#40;&quot;1&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;bus_type&quot; &#61;&gt; 3,&quot;zone&quot; &#61;&gt; 1,&quot;va&quot; &#61;&gt; 0
+,&quot;area&quot; &#61;&gt; 1,&quot;vm&quot; &#61;&gt; 1,&quot;vmin&quot; &#61;&gt; 0.9,&quot;vmax&quot; &#61;&gt; 1.1,&quot;base_kv&quot; &#61;&gt; 0,&quot;bus_i&quot; &#61;
+&gt; 1,&quot;index&quot; &#61;&gt; 1…&#41;,&quot;2&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;bus_type&quot; &#61;&gt; 2,&quot;zone&quot; &#61;&gt; 1,&quot;va&quot;
+ &#61;&gt; 0,&quot;area&quot; &#61;&gt; 1,&quot;vm&quot; &#61;&gt; 1,&quot;vmin&quot; &#61;&gt; 0.9,&quot;vmax&quot; &#61;&gt; 1.1,&quot;base_kv&quot; &#61;&gt; 0,&quot;bus
+_i&quot; &#61;&gt; 2,&quot;index&quot; &#61;&gt; 2…&#41;,&quot;3&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;bus_type&quot; &#61;&gt; 2,&quot;zone&quot; &#61;&gt; 1
+,&quot;va&quot; &#61;&gt; 0,&quot;area&quot; &#61;&gt; 1,&quot;vm&quot; &#61;&gt; 1,&quot;vmin&quot; &#61;&gt; 0.9,&quot;vmax&quot; &#61;&gt; 1.1,&quot;base_kv&quot; &#61;&gt; 0
+,&quot;bus_i&quot; &#61;&gt; 3,&quot;index&quot; &#61;&gt; 3…&#41;&#41;,&quot;source_type&quot; &#61;&gt; &quot;matpower&quot;,&quot;name&quot; &#61;&gt; &quot;case3&quot;
+,&quot;dcline&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&#41;,&quot;source_version&quot; &#61;&gt; &quot;2&quot;,&quot;gen&quot; &#61;&gt; Dict&#123;Strin
+g,Any&#125;&#40;&quot;1&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;ncost&quot; &#61;&gt; 2,&quot;qc1max&quot; &#61;&gt; 0,&quot;pg&quot; &#61;&gt; 0,&quot;model&quot;
+ &#61;&gt; 2,&quot;shutdown&quot; &#61;&gt; 0,&quot;startup&quot; &#61;&gt; 0,&quot;qc2max&quot; &#61;&gt; 0,&quot;ramp_agc&quot; &#61;&gt; 0,&quot;qg&quot; &#61;&gt; 
+0,&quot;gen_bus&quot; &#61;&gt; 2…&#41;,&quot;2&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;ncost&quot; &#61;&gt; 2,&quot;qc1max&quot; &#61;&gt; 0,&quot;pg&quot; 
+&#61;&gt; 0,&quot;model&quot; &#61;&gt; 2,&quot;shutdown&quot; &#61;&gt; 0,&quot;startup&quot; &#61;&gt; 0,&quot;qc2max&quot; &#61;&gt; 0,&quot;ramp_agc&quot; &#61;
+&gt; 0,&quot;qg&quot; &#61;&gt; 0,&quot;gen_bus&quot; &#61;&gt; 3…&#41;,&quot;3&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;ncost&quot; &#61;&gt; 0,&quot;qc1max
+&quot; &#61;&gt; 0,&quot;pg&quot; &#61;&gt; 0,&quot;model&quot; &#61;&gt; 2,&quot;shutdown&quot; &#61;&gt; 0,&quot;startup&quot; &#61;&gt; 0,&quot;qc2max&quot; &#61;&gt; 0,
+&quot;ramp_agc&quot; &#61;&gt; 0,&quot;qg&quot; &#61;&gt; 0,&quot;gen_bus&quot; &#61;&gt; 1…&#41;&#41;,&quot;branch&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;1
+&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;br_r&quot; &#61;&gt; 0.065,&quot;rate_a&quot; &#61;&gt; 1,&quot;shift&quot; &#61;&gt; 0,&quot;br_x&quot; &#61;&gt; 
+1,&quot;g_to&quot; &#61;&gt; 0,&quot;g_fr&quot; &#61;&gt; 0,&quot;b_fr&quot; &#61;&gt; 0.225,&quot;f_bus&quot; &#61;&gt; 1,&quot;br_status&quot; &#61;&gt; 1,&quot;t_
+bus&quot; &#61;&gt; 3…&#41;,&quot;2&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;br_r&quot; &#61;&gt; 0.025,&quot;rate_a&quot; &#61;&gt; 0.65,&quot;shift
+&quot; &#61;&gt; 0,&quot;br_x&quot; &#61;&gt; 0.5,&quot;g_to&quot; &#61;&gt; 0,&quot;g_fr&quot; &#61;&gt; 0,&quot;b_fr&quot; &#61;&gt; 0.35,&quot;f_bus&quot; &#61;&gt; 3,&quot;b
+r_status&quot; &#61;&gt; 1,&quot;t_bus&quot; &#61;&gt; 2…&#41;,&quot;3&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;br_r&quot; &#61;&gt; 0.042,&quot;rate
+_a&quot; &#61;&gt; 0.25,&quot;shift&quot; &#61;&gt; 0,&quot;br_x&quot; &#61;&gt; 1,&quot;g_to&quot; &#61;&gt; 0,&quot;g_fr&quot; &#61;&gt; 0,&quot;b_fr&quot; &#61;&gt; 0.15
+,&quot;f_bus&quot; &#61;&gt; 1,&quot;br_status&quot; &#61;&gt; 1,&quot;t_bus&quot; &#61;&gt; 2…&#41;&#41;,&quot;storage&quot; &#61;&gt; Dict&#123;String,Any
+&#125;&#40;&#41;,&quot;switch&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&#41;…&#41;,&quot;hydro&quot; &#61;&gt; Dict&#123;String,Any&#125;&#40;&quot;scenario_
+probabilities&quot; &#61;&gt; &#91;0.3 0.4 0.3; 0.3 0.4 0.3; … ; 0.3 0.4 0.3; 0.3 0.4 0.3&#93;,
+&quot;Hydrogenerators&quot; &#61;&gt; Any&#91;Dict&#123;String,Any&#125;&#40;&quot;spill_cost&quot; &#61;&gt; 0,&quot;max_turn&quot; &#61;&gt; 8
+0,&quot;index_grid&quot; &#61;&gt; 3,&quot;downstream_spill&quot; &#61;&gt; Any&#91;&#93;,&quot;min_volume&quot; &#61;&gt; 0,&quot;producti
+on_factor&quot; &#61;&gt; 1,&quot;index&quot; &#61;&gt; 1,&quot;min_turn&quot; &#61;&gt; 0,&quot;initial_volume&quot; &#61;&gt; 0.18,&quot;max_
+volume&quot; &#61;&gt; 0.54…&#41;&#93;&#41;&#41;
+</pre>
+
 
 <p>Plot power grid graph</p>
 
@@ -741,7 +773,7 @@ Dict&#123;Any,Any&#125; with 12 entries:
   &quot;discount_factor&quot;                 &#61;&gt; 1.0
   &quot;post_method&quot;                     &#61;&gt; post_opf
   &quot;setting&quot;                         &#61;&gt; Dict&#40;&quot;output&quot;&#61;&gt;Dict&#40;&quot;branch_flows&quot;&#61;&gt;
-true…
+1,&quot;d…
   &quot;stage_hours&quot;                     &#61;&gt; 1
   &quot;model_constructor_grid&quot;          &#61;&gt; ACPPowerModel
   &quot;stages&quot;                          &#61;&gt; 12
@@ -790,7 +822,7 @@ true…
 
 
 <pre class="output">
-&#40;:statistical, 33.91101694107056&#41;
+&#40;:statistical, 32.97073698043823&#41;
 </pre>
 
 
@@ -807,8 +839,8 @@ true…
 <pre class="julia-error">
 ERROR: MethodError: no method matching get_color_palette&#40;::Symbol, ::ColorTypes.RGBA&#123;Float64&#125;, ::Int64&#41;
 Closest candidates are:
-  get_color_palette&#40;::Any, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:328
-  get_color_palette&#40;&#33;Matched::PlotUtils.ColorGradient, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:329
+  get_color_palette&#40;::Any, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/nCtbM/src/colorschemes.jl:328
+  get_color_palette&#40;&#33;Matched::PlotUtils.ColorGradient, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/nCtbM/src/colorschemes.jl:329
 </pre>
 
 
@@ -850,8 +882,8 @@ Closest candidates are:
 <pre class="julia-error">
 ERROR: MethodError: no method matching get_color_palette&#40;::Symbol, ::ColorTypes.RGBA&#123;Float64&#125;, ::Int64&#41;
 Closest candidates are:
-  get_color_palette&#40;::Any, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:328
-  get_color_palette&#40;&#33;Matched::PlotUtils.ColorGradient, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:329
+  get_color_palette&#40;::Any, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/nCtbM/src/colorschemes.jl:328
+  get_color_palette&#40;&#33;Matched::PlotUtils.ColorGradient, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/nCtbM/src/colorschemes.jl:329
 </pre>
 
 
@@ -973,23 +1005,22 @@ Table: branch
 <pre class="julia-error">
 ERROR: MethodError: no method matching get_color_palette&#40;::Symbol, ::ColorTypes.RGBA&#123;Float64&#125;, ::Int64&#41;
 Closest candidates are:
-  get_color_palette&#40;::Any, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:328
-  get_color_palette&#40;&#33;Matched::PlotUtils.ColorGradient, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/S1cG3/src/colorschemes.jl:329
+  get_color_palette&#40;::Any, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/nCtbM/src/colorschemes.jl:328
+  get_color_palette&#40;&#33;Matched::PlotUtils.ColorGradient, ::Any&#41; at /home/travis/.julia/packages/PlotUtils/nCtbM/src/colorschemes.jl:329
 </pre>
 
 
 
-
-          <HR/>
-          <div class="footer"><p>
-          Published from <a href="case3_ac.jl">case3_ac.jl</a> using
-          <a href="http://github.com/mpastell/Weave.jl">Weave.jl</a>
-           on 2020-05-17.
-          <p></div>
-
-
+        <HR/>
+        <div class="footer">
+          <p>
+            Published from <a href="case3_ac.jl">case3_ac.jl</a>
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.2 on 2020-07-29.
+          </p>
         </div>
       </div>
     </div>
-  </BODY>
+  </div>
+</BODY>
+
 </HTML>
