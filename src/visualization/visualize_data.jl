@@ -1,7 +1,7 @@
 using Plots, Plots.PlotMeasures
-import Cairo, Fontconfig
-using LightGraphs, GraphPlot, Compose
-using Random, Reel
+# import Compose, Cairo, Fontconfig, Reel
+using LightGraphs, GraphPlot
+using Random
 
 """
     plotscenarios(scen::Array{Float64,2}; savepath::String ="",

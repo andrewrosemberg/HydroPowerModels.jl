@@ -5,9 +5,6 @@ version = "0.1.0"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
-Cairo = "159f3aea-2a34-519c-b102-8c37f9878175"
-Compose = "a81c6b42-2e10-5240-aca2-a61377ecd94b"
-Fontconfig = "186bb1d3-e1f7-5a2c-a377-96d770f13627"
 GraphPlot = "a2cc645c-3eea-5389-862e-a155d0052231"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
@@ -17,16 +14,15 @@ MathOptInterface = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PowerModels = "c36e90e8-916a-50a6-bd94-075b64ef4655"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
-Reel = "71555da5-176e-5e73-a222-aebc6c6e4f2f"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 SDDP = "f4570300-c277-11e8-125c-4912f86ce65d"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
 JuMP = "~0.20"
-julia = "~1.0"
 Plots = "= 0.26.0"
 PowerModels = "0.13.0"
+julia = "~1.0"
 
 [extras]
 Cairo = "159f3aea-2a34-519c-b102-8c37f9878175"

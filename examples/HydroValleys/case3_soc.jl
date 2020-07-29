@@ -19,7 +19,7 @@
 #' # Case
 
 #' ## Importing package and optimizer
-using ECOS
+using COSMO
 using HydroPowerModels
 
 #' ## Initialization
@@ -45,7 +45,7 @@ end
 params = create_param(  stages = 12, 
                         model_constructor_grid  = SOCWRConicPowerModel,
                         post_method             = PowerModels.post_opf,
-                        optimizer               = with_optimizer(ECOS.Optimizer, atol=1e-10, rtol=1e-10))
+                        optimizer               = with_optimizer(COSMO.Optimizer, atol=1e-10, rtol=1e-10))
 
 #' ## Build Model
 #+ results =  "hidden"
