@@ -1,6 +1,6 @@
 using Plots, Plots.PlotMeasures
-import Cairo, Fontconfig
-# import Compose, Reel
+import Fontconfig, Cairo
+# import Reel, Compose
 using LightGraphs, GraphPlot
 using Random
 

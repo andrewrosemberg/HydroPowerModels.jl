@@ -1,8 +1,8 @@
 [deps]
-COSMO = "1e616198-aa4e-51ec-90a2-23f7fbd31d8d"
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 Cairo = "159f3aea-2a34-519c-b102-8c37f9878175"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+ECOS = "e2685f51-7e38-5353-a97d-a921fd2c8199"
 Fontconfig = "186bb1d3-e1f7-5a2c-a377-96d770f13627"
 GLPK = "60bf3e95-4087-53dc-ae20-288a0d20c6a6"
 GraphPlot = "a2cc645c-3eea-5389-862e-a155d0052231"

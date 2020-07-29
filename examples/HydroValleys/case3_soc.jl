@@ -19,7 +19,7 @@
 #' # Case
 
 #' ## Importing package and optimizer
-using COSMO
+using ECOS
 using HydroPowerModels
 
 #' ## Initialization
@@ -45,7 +45,7 @@ end
 params = create_param(  stages = 12, 
                         model_constructor_grid  = SOCWRConicPowerModel,
                         post_method             = PowerModels.post_opf,
-                        optimizer               = with_optimizer(COSMO.Optimizer))
+                        optimizer               = with_optimizer(ECOS.Optimizer))
 
 #' ## Build Model
 #+ results =  "hidden"
@@ -54,7 +54,7 @@ m = hydrothermaloperation(alldata, params);
 #' ## Train
 #+ results =  "hidden"
 start_time = time()
-HydroPowerModels.train(m,iteration_limit = 100,stopping_rules= [SDDP.Statistical(num_replications = 20,iteration_period=20)]);
+HydroPowerModels.train(m,iteration_limit = 100,stopping_rules= [SDDP.Statistical(num_replications = 20,iteration_period=20)])
 end_time = time() - start_time
 
 #' Termination Status and solve time (s)

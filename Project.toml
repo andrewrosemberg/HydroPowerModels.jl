@@ -27,7 +27,6 @@ PowerModels = "0.13.0"
 julia = "~1.0"
 
 [extras]
-COSMO = "1e616198-aa4e-51ec-90a2-23f7fbd31d8d"
 Cairo = "159f3aea-2a34-519c-b102-8c37f9878175"
 Fontconfig = "186bb1d3-e1f7-5a2c-a377-96d770f13627"
 GLPK = "60bf3e95-4087-53dc-ae20-288a0d20c6a6"
@@ -38,4 +37,4 @@ Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test", "GLPK", "COSMO"]
+test = ["Test", "GLPK"]

@@ -100,10 +100,10 @@ uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
 version = "2.2.0"
 
 [[Compose]]
-deps = ["Base64", "Colors", "DataStructures", "Dates", "IterTools", "JSON", "LinearAlgebra", "Measures", "Printf", "Random", "Requires", "Test", "UUIDs"]
-git-tree-sha1 = "7d8fe0ad6f73c40ccc4e01f426a700c5a843a1d3"
+deps = ["Base64", "Colors", "DataStructures", "Dates", "IterTools", "JSON", "LinearAlgebra", "Measures", "Printf", "Random", "Requires", "Statistics", "UUIDs"]
+git-tree-sha1 = "157b75f64c26f36b55b5456dff08e524e591ec8d"
 uuid = "a81c6b42-2e10-5240-aca2-a61377ecd94b"
-version = "0.7.3"
+version = "0.9.0"
 
 [[Contour]]
 deps = ["LinearAlgebra", "StaticArrays", "Test"]
