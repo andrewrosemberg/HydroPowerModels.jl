@@ -1,11 +1,5 @@
 # This file is machine-generated - editing it directly is not advised
 
-[[AMD]]
-deps = ["Libdl", "LinearAlgebra", "SparseArrays", "Test"]
-git-tree-sha1 = "fc66ffc5cff568936649445f58a55b81eaf9592c"
-uuid = "14f7f29c-3bd6-536c-9a0b-7339e30b5a3e"
-version = "0.4.0"
-
 [[ASL_jll]]
 deps = ["Libdl", "Pkg"]
 git-tree-sha1 = "7fa8d4626ddb4a142e82a8ce07279c1315803433"
@@ -38,12 +32,6 @@ deps = ["Libdl", "Pkg"]
 git-tree-sha1 = "3663bfffede2ef41358b6fc2e1d8a6d50b3c3904"
 uuid = "6e34b625-4abd-537c-b88f-471c36dfa7a0"
 version = "1.0.6+2"
-
-[[COSMO]]
-deps = ["DataStructures", "LinearAlgebra", "MathOptInterface", "Pkg", "Printf", "QDLDL", "Random", "SparseArrays", "Statistics", "SuiteSparse", "Test", "UnsafeArrays"]
-git-tree-sha1 = "fc5aad86600e39916f1cdb1c2b78f0d2b9dbbdad"
-uuid = "1e616198-aa4e-51ec-90a2-23f7fbd31d8d"
-version = "0.7.1"
 
 [[CSV]]
 deps = ["CategoricalArrays", "DataFrames", "Dates", "Mmap", "Parsers", "PooledArrays", "SentinelArrays", "Tables", "Unicode"]
@@ -186,6 +174,18 @@ deps = ["Base64", "Dates", "DocStringExtensions", "InteractiveUtils", "JSON", "L
 git-tree-sha1 = "1c593d1efa27437ed9dd365d1143c594b563e138"
 uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 version = "0.25.1"
+
+[[ECOS]]
+deps = ["BinaryProvider", "ECOS_jll", "Libdl", "LinearAlgebra", "MathOptInterface", "MathProgBase", "SparseArrays"]
+git-tree-sha1 = "60b955ec92dd2989a532d0c7822db8f080e63582"
+uuid = "e2685f51-7e38-5353-a97d-a921fd2c8199"
+version = "0.12.1"
+
+[[ECOS_jll]]
+deps = ["Libdl", "Pkg"]
+git-tree-sha1 = "c1f94485ee25c9d61fca1d7b532e9ac3a8bdfcad"
+uuid = "c2c64177-6a8e-5dca-99a7-64895ad7445f"
+version = "2.0.5+0"
 
 [[Expat_jll]]
 deps = ["Libdl", "Pkg"]
@@ -334,7 +334,7 @@ uuid = "eafb193a-b7ab-5a9e-9068-77385905fa72"
 version = "0.4.5"
 
 [[HydroPowerModels]]
-deps = ["CSV", "GraphPlot", "JSON", "JuMP", "LightGraphs", "MathOptFormat", "MathOptInterface", "Plots", "PowerModels", "Random", "Reexport", "SDDP", "Statistics"]
+deps = ["CSV", "Cairo", "Compose", "Fontconfig", "GraphPlot", "JSON", "JuMP", "LightGraphs", "MathOptFormat", "MathOptInterface", "Plots", "PowerModels", "Random", "Reexport", "SDDP", "Statistics"]
 path = ".."
 uuid = "baadc3fc-4b32-11e9-110e-59741390feb0"
 version = "0.1.0"
@@ -402,11 +402,9 @@ version = "0.3.0"
 
 [[JuMP]]
 deps = ["Calculus", "DataStructures", "ForwardDiff", "LinearAlgebra", "MathOptInterface", "NaNMath", "Random", "SparseArrays", "Statistics"]
-git-tree-sha1 = "a970a86abc924f2c126cdb4978a5e8923d0e7b22"
-repo-rev = "5ba404ea1943f2f38a5fe85f70eb109b41ef57d7"
-repo-url = "https://github.com/JuliaOpt/JuMP.jl.git"
+git-tree-sha1 = "ba7f96010ed290d77d5c941c32e5df107ca688a4"
 uuid = "4076af6c-e467-56ae-b986-b466b2749572"
-version = "0.20.0"
+version = "0.20.1"
 
 [[LAME_jll]]
 deps = ["Libdl", "Pkg"]
@@ -682,12 +680,6 @@ version = "0.13.2"
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
-[[QDLDL]]
-deps = ["AMD", "LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "417caffa5e8d8de61af9a6bb0ae2a5dcbbdccac3"
-uuid = "bfc457fd-c171-5ab7-bd9e-d5dbfc242d63"
-version = "0.1.4"
-
 [[REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
@@ -782,10 +774,6 @@ git-tree-sha1 = "a6102b1f364befdb05746f386b67c6b7e3262c45"
 uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 version = "0.33.0"
 
-[[SuiteSparse]]
-deps = ["Libdl", "LinearAlgebra", "Serialization", "SparseArrays"]
-uuid = "4607b0f0-06f3-5cda-b6b1-a6196a1729e9"
-
 [[Syslogs]]
 deps = ["Printf", "Sockets"]
 git-tree-sha1 = "46badfcc7c6e74535cc7d833a91f4ac4f805f86d"
@@ -832,12 +820,6 @@ uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
 [[Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
-
-[[UnsafeArrays]]
-deps = ["Compat"]
-git-tree-sha1 = "460f4f7bab69dd47512ac8ec4b2c14b28c6cb4a0"
-uuid = "c4a57d5a-5b31-53a6-b365-19f8c011fbd6"
-version = "0.3.0"
 
 [[Weave]]
 deps = ["Base64", "Dates", "Highlights", "JSON", "Markdown", "Mustache", "Pkg", "Printf", "REPL", "Requires", "Serialization", "YAML"]
