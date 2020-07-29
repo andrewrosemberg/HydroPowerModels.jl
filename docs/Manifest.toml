@@ -662,9 +662,9 @@ version = "0.6.2"
 
 [[Weave]]
 deps = ["Base64", "Dates", "Highlights", "JSON", "Markdown", "Mustache", "Pkg", "Printf", "REPL", "Requires", "Serialization", "YAML"]
-git-tree-sha1 = "a1698569cb25ddefb4bf538f39e77afdc7aa720e"
+git-tree-sha1 = "62cd879ad070ff5f168d8b41756ef1275170e6ec"
 uuid = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"
-version = "0.9.1"
+version = "0.10.2"
 
 [[YAML]]
 deps = ["Base64", "Dates", "Printf"]
