@@ -14,8 +14,8 @@ A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Opti
 [docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg
 [docs-latest-url]: https://andrewrosemberg.github.io/HydroPowerModels.jl/latest/
 
-[paper-img]: https://submissions.juliacon.org/papers/ad43bcbd43a6f904e60db8838c177520/status.svg
-[paper-url]: https://submissions.juliacon.org/papers/ad43bcbd43a6f904e60db8838c177520
+[paper-img]: https://proceedings.juliacon.org/papers/10.21105/jcon.00035/status.svg
+[paper-url]: https://proceedings.juliacon.org/papers/10.21105/jcon.00035#
 
 **If you are struggling to figure out how to use something, raise a Github issue!**
 
