@@ -41,3 +41,20 @@ A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Opti
 * [Preprint Julia Proceedings](https://www.researchgate.net/publication/342068899_HydroPowerModelsjl_A_JuliaJuMP_Package_for_Hydrothermal_Economic_Dispatch_Optimization?_sg=-ns1NVJAEH4f6vC2lhCZjqMnPbu5huqHa4hzO5rvHR7xCiNYqldptqVgUfSzqvVcKV3Mboud9o2q9JPQTCMqI9Jz6HBS7P-M40JJ_0Tv.mH0MO_FCD6hy__nKGpOGByuZG6rHMHcdJkukrG_1m-hzggFXnx8rmQFSj8YlzCkKu1k5awQi8JafY0fpiGspIw)
 * [Master Thesis](https://www.researchgate.net/publication/342751537_A_Framework_for_Assessing_the_Impacts_of_Network_Formulations_in_the_Operation_of_Hydrothermal_Power_Systems)
 
+**Citing HydroPowerModels.jl**
+
+If you use HydroPowerModels.jl, we ask that you please cite the following:
+```
+@article{Rosemberg2020,
+  doi = {10.21105/jcon.00035},
+  url = {https://doi.org/10.21105/jcon.00035},
+  year = {2020},
+  publisher = {The Open Journal},
+  volume = {1},
+  number = {1},
+  pages = {35},
+  author = {Andrew W. Rosemberg and Alexandre Street and Joaquim D. Garcia and Thuener Silva and \\ Davi M. Valladão and Oscar Dowson},
+  title = {HydroPowerModels.jl: A Julia/JuMP Package for Hydrothermal Economic Dispatch Optimization},
+  journal = {Proceedings of the JuliaCon Conferences}
+}
+```
