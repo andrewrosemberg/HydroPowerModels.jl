@@ -35,3 +35,9 @@ A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Opti
 * JuMP-Dev 2019 (Santiago, Chile) [video](https://youtu.be/H6LmhGJ2kc8)
 * JuliaCon 2019 (Baltimore, United States) [video](https://www.youtube.com/watch?v=bnKX2uATrzA&t=41s)
 * Julia Meeting Rio (Rio de Janeiro, Brasil) (Portuguese) [video](https://www.youtube.com/watch?v=lSdYwE_7B8k&list=PLTMduyIx3GGvMw9mgIBqZGA6rtpIKNL7B&index=5&t=0s) [pdf](https://jugrio.github.io/pdfs/HydroPowerModels.pdf)
+* JuliaCon 2020 [video](https://www.youtube.com/watch?v=xUpX-k0oZmo) [abstract](https://live.juliacon.org/talk/ETWX8X)
+
+**Publications**
+* [Preprint Julia Proceedings](https://www.researchgate.net/publication/342068899_HydroPowerModelsjl_A_JuliaJuMP_Package_for_Hydrothermal_Economic_Dispatch_Optimization?_sg=-ns1NVJAEH4f6vC2lhCZjqMnPbu5huqHa4hzO5rvHR7xCiNYqldptqVgUfSzqvVcKV3Mboud9o2q9JPQTCMqI9Jz6HBS7P-M40JJ_0Tv.mH0MO_FCD6hy__nKGpOGByuZG6rHMHcdJkukrG_1m-hzggFXnx8rmQFSj8YlzCkKu1k5awQi8JafY0fpiGspIw)
+* [Master Thesis](https://www.researchgate.net/publication/342751537_A_Framework_for_Assessing_the_Impacts_of_Network_Formulations_in_the_Operation_of_Hydrothermal_Power_Systems)
+
