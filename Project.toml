@@ -25,7 +25,7 @@ JuMP = "~0.20"
 Plots = "~0.28"
 PowerModels = "0.13.0"
 SDDP = "0.2.4"
-julia = "~1.0"
+julia = "~1"
 
 [extras]
 Cairo = "159f3aea-2a34-519c-b102-8c37f9878175"
