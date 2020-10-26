@@ -1,8 +1,8 @@
 .vscode/
 docs/build/
 Debug/
-#Manifest.toml
 *.log
 *.lp
 *.mps
 .DS_Store
+Manifest.toml

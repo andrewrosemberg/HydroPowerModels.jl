@@ -22,8 +22,9 @@ Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
 JuMP = "~0.20"
-Plots = "= 0.26.0"
+Plots = "~0.28"
 PowerModels = "0.13.0"
+SDDP = "0.2.4"
 julia = "~1.0"
 
 [extras]
