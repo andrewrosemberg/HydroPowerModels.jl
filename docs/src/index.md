@@ -13,12 +13,6 @@ Solution method is handled by [SDDP.jl](https://github.com/odow/SDDP.jl).
 
 ## Installation
 
-HydroPowerModels.jl relies on an unregistered package called SDDP, so you will need to add it as follows:
-
-```julia
-julia> ] add https://github.com/odow/SDDP.jl/#master 
-```
-
 The current package is unregistered so you will need to add it as follows:
 
 ```julia
