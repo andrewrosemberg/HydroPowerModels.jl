@@ -15,7 +15,7 @@ include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
 include("train.jl")
-include("visualization/visualize_data.jl")
+# include("visualization/visualize_data.jl")
 include("objective.jl")
 include("build_model.jl")
 
