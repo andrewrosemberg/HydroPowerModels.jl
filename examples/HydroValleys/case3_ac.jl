@@ -43,8 +43,9 @@ end
 
 params = create_param(  stages = 12, 
                         model_constructor_grid  = ACPPowerModel,
-                        post_method             = PowerModels.post_opf,
-                        optimizer               = with_optimizer(Ipopt.Optimizer))
+                        post_method             = PowerModels.build_opf,
+                        optimizer               = Ipopt.Optimizer
+)
 
 #' ## Build Model
 #+ results =  "hidden"

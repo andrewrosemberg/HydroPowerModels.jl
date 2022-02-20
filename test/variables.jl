@@ -25,7 +25,7 @@ using GLPK
         m = SDDP.LinearPolicyGraph(
             sense   = :Min,
             stages  = 1,
-            optimizer  = with_optimizer(GLPK.Optimizer),
+            optimizer  = GLPK.Optimizer,
             lower_bound = 0.0,
                     direct_mode=false
                                             ) do sp,t

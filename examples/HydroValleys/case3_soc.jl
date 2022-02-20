@@ -44,8 +44,8 @@ end
 #' Parameters
 params = create_param(  stages = 12, 
                         model_constructor_grid  = SOCWRConicPowerModel,
-                        post_method             = PowerModels.post_opf,
-                        optimizer               = with_optimizer(ECOS.Optimizer))
+                        post_method             = PowerModels.build_opf,
+                        optimizer               = ECOS.Optimizer)
 
 #' ## Build Model
 #+ results =  "hidden"

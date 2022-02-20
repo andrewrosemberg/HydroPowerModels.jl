@@ -43,8 +43,9 @@ end
 #' Parameters
 params = create_param(  stages = 12*5, 
                         model_constructor_grid  = DCPPowerModel,
-                        post_method             = PowerModels.post_opf,
-                        optimizer               = with_optimizer(GLPK.Optimizer));
+                        post_method             = PowerModels.build_opf,
+                        optimizer               = GLPK.Optimizer
+);
 
 #' ## Build Model
 #+ results =  "hidden"

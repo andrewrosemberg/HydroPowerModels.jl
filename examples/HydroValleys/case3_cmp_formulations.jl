@@ -45,7 +45,7 @@ dcp_stats = Dict()
 
 params = create_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
-                    post_method             = PowerModels.post_opf,
+                    post_method             = PowerModels.build_opf,
                     optimizer                  = GLPK.Optimizer)
 
 #' ## Build Model
@@ -68,7 +68,7 @@ dcp_stats["DC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(resul
 
 params = create_param( stages = 12, 
                     model_constructor_grid  = SOCWRPowerModel,
-                    post_method             = PowerModels.post_opf,
+                    post_method             = PowerModels.build_opf,
                     optimizer                  = IpoptSolver(tol=1e-6))
 
 #' ## Build Model
@@ -91,7 +91,7 @@ dcp_stats["SOC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(resu
 
 params = create_param( stages = 12, 
                     model_constructor_grid  = ACPPowerModel,
-                    post_method             = PowerModels.post_opf,
+                    post_method             = PowerModels.build_opf,
                     optimizer                  = IpoptSolver(tol=1e-6))
 
 #' ## Build Model

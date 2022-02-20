@@ -363,7 +363,7 @@ params = create_param(
  stages      = 12, 
  stage_hours = 168.0,
  model_constructor_grid = DCPPowerModel,
- optimizer   = with_optimizer(GLPK.Optimizer))
+ optimizer   = GLPK.Optimizer)
 \end{lstlisting}
     
 Then, build the Model and execute the SDDP \texttt{train} method:

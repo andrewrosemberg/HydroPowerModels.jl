@@ -1,6 +1,9 @@
 module HydroPowerModels
 
 using JuMP, PowerModels, SDDP
+using JSON
+using CSV
+using DataFrames
 import Reexport
 
 mutable struct HydroPowerModel
@@ -15,7 +18,7 @@ include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
 include("train.jl")
-include("visualization/visualize_data.jl")
+# include("visualization/visualize_data.jl") # Issue: https://github.com/andrewrosemberg/HydroPowerModels.jl/issues/46
 include("objective.jl")
 include("build_model.jl")
 
@@ -34,7 +37,7 @@ Required parameters are:
 -   param is a dict containing solution parameters.
 """
 function hydrothermaloperation( alldata::Array{Dict{Any,Any}}, params::Dict; 
-                                build_model::Function=HydroPowerModels.build_opf_powermodels,
+                                build_opf_model::Function=HydroPowerModels.build_opf_powermodels,
                                 build_graph::Function=HydroPowerModels.build_graph)
     # verbose
     if !params["verbose"]
@@ -78,13 +81,13 @@ function hydrothermaloperation( alldata::Array{Dict{Any,Any}}, params::Dict;
         gatherusefulinfo!(data)
 
         # build eletric grid model using PowerModels
-        pm = build_opf_powermodels(sp,data,params)
+        pm = build_opf_model(sp,data,params)
         
         #if isforward # NOT YET IMPLEMENTED
-            #pm = PowerModels.build_model(data["powersystem"], params["model_constructor_grid_forward"], 
+            #pm = build_opf_model(data["powersystem"], params["model_constructor_grid_forward"], 
                 #params["post_method"], jump_model=sp, setting = params["setting"])
         #else
-            #pm = PowerModels.build_model(data["powersystem"], params["model_constructor_grid_backward"], 
+            #pm = build_opf_model(data["powersystem"], params["model_constructor_grid_backward"], 
             #    params["post_method"], jump_model=sp, setting = params["setting"])
         #end
         
