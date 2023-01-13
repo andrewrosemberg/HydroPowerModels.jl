@@ -38,7 +38,7 @@ end
 
 """create ref for anonimous variables on model"""
 function createvarrefs!(sp::JuMP.Model,pm::AbstractPowerModel)
-    for listvarref in values(PowerModels.var(pm,pm.cnw,pm.ccnd))
+    for listvarref in values(PowerModels.var(pm))
         for variableref in values(listvarref)
             if typeof(variableref) == JuMP.VariableRef
                 sp[Symbol(name(variableref))] = variableref

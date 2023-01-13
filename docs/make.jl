@@ -10,7 +10,12 @@ makedocs(
     modules = [HydroPowerModels],
     doctest  = false,
     clean    = true,
-    format   = Documenter.HTML(),
+    repo="https://github.com/andrewrosemberg/HydroPowerModels.jl/blob/{commit}{path}#{line}",
+    format=Documenter.HTML(;
+        prettyurls=get(ENV, "CI", "false") == "true",
+        canonical="https://andrewrosemberg.github.io/HydroPowerModels.jl",
+        assets=String[],
+    ),
     sitename = "HydroPowerModels.jl",
     authors = "Andrew Rosemberg",
     pages = [

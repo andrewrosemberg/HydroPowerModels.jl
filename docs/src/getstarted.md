@@ -21,8 +21,9 @@ Set Parameters to run, for example, an DC Economic Hydrothermal Dispatch:
 ```julia
 params = create_param( stages = 12, 
                     model_constructor_grid  = DCPPowerModel,
-                    post_method             = PowerModels.post_opf,
-                    optimizer               = with_optimizer(GLPK.Optimizer));
+                    post_method             = PowerModels.build_opf,
+                    optimizer               = GLPK.Optimizer
+);
 ```
 
 Build the Model and execute the SDDP method:

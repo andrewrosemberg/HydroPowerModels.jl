@@ -1,6 +1,3 @@
-using JSON
-using CSV
-
 """
 Read hydro description json file.
 """
@@ -10,7 +7,7 @@ end
 
 """Read Hydrogenerators inflow csv file"""
 function read_inflow(file::String, nHyd::Int)
-    allinflows = CSV.read(file,header=false)
+    allinflows = CSV.read(file, Tables.matrix; header=false)
     nlin, ncol = size(allinflows)
     nCen = Int(floor(ncol/nHyd))
     vector_inflows = Array{Array{Float64,2}}(undef,nHyd)
@@ -77,8 +74,8 @@ end
         model_constructor_grid = DCPPowerModel,
         model_constructor_grid_backward = model_constructor_grid,
         model_constructor_grid_forward = model_constructor_grid_backward,
-        post_method = PowerModels.post_opf,
-        optimizer = with_optimizer(GLPK.Optimizer),
+        post_method = PowerModels.build_opf,
+        optimizer = GLPK.Optimizer,
         optimizer_backward = optimizer,
         optimizer_forward = optimizer_backward,
         setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)),
@@ -99,8 +96,8 @@ function create_param(;stages::Int = 1,
                     model_constructor_grid = DCPPowerModel,
                     model_constructor_grid_backward = model_constructor_grid,
                     model_constructor_grid_forward = model_constructor_grid_backward,
-                    post_method = PowerModels.post_opf,
-                    optimizer = with_optimizer(GLPK.Optimizer),
+                    post_method = PowerModels.build_opf,
+                    optimizer = GLPK.Optimizer,
                     optimizer_backward = optimizer,
                     optimizer_forward = optimizer_backward,
                     setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)),

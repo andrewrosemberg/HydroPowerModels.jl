@@ -9,7 +9,7 @@ Required parameters are:
 -   param is a dict containing solution parameters.
 """
 function build_opf_powermodels(sp::JuMP.Model, data::Dict, params::Dict)
-    return PowerModels.build_model(data["powersystem"], params["model_constructor_grid"], 
+    return PowerModels.instantiate_model(data["powersystem"], params["model_constructor_grid"], 
             params["post_method"], jump_model=sp, setting = params["setting"])
 end
 

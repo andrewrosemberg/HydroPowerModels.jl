@@ -14,8 +14,8 @@ alldata = HydroPowerModels.parse_folder(joinpath(testcases_dir,"case3determinist
 # optimizer may be for example: IpoptSolver(tol=1e-6) or GLPK.Optimizer
 params = create_param(  stages = 12, 
                         model_constructor_grid  = DCPPowerModel,
-                        post_method             = PowerModels.post_opf,
-                        optimizer               = with_optimizer(GLPK.Optimizer));
+                        post_method             = PowerModels.build_opf,
+                        optimizer               = GLPK.Optimizer);
 
 ########################################
 #       Build Model

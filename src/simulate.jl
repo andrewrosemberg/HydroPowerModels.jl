@@ -43,13 +43,14 @@ end
 function build_sol_powermodels(sp::JuMP.Model)
     solve_time = 0.0
     try 
-        solve_time = MOI.get(sp, MOI.SolveTime())
+        solve_time = MOI.get(sp, MOI.SolveTimeSec())
     catch
         solve_time = 0.0
     end
     status = JuMP.termination_status(sp)
-    built_sol = PowerModels.build_solution(sp.ext[:pm],solve_time,
-        solution_builder = get_solution)
+    built_sol = PowerModels._IM.build_result(sp.ext[:pm],solve_time,
+        solution_processors = [get_solution]
+    )
 end
 
 """Reservoir solution build"""
@@ -64,8 +65,8 @@ end
 
 ""
 function get_solution(pm::AbstractPowerModel, sol::Dict{String,<:Any})
-    PowerModels.solution_opf!(pm, sol)
-    add_kcl_deficit(sol, pm)
+    # PowerModels.solution_opf!(pm, sol)
+    # add_kcl_deficit(sol, pm)
 end
 
 ""
