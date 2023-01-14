@@ -29,12 +29,12 @@ Variable types in this example:\n
 
 #' ## Importing package and optimizer
 
-using Ipopt,GLPK
+using Ipopt, GLPK
 using HydroPowerModels
 
 #' ## Load Case Specifications
 testcases_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "testcases")
-data = HydroPowerModels.parse_folder(joinpath(testcases_dir,"case3"))
+data = HydroPowerModels.parse_folder(joinpath(testcases_dir, "case3"))
 
 #' ## Results Dict
 dcp_stats = Dict()
@@ -43,19 +43,21 @@ dcp_stats = Dict()
 
 #' ## Parameters
 
-params = create_param( stages = 12, 
-                    model_constructor_grid  = DCPPowerModel,
-                    post_method             = PowerModels.build_opf,
-                    optimizer                  = GLPK.Optimizer)
+params = create_param(;
+    stages=12,
+    model_constructor_grid=DCPPowerModel,
+    post_method=PowerModels.build_opf,
+    optimizer=GLPK.Optimizer,
+)
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-HydroPowerModels.train(m;iteration_limit = 60);
+HydroPowerModels.train(m; iteration_limit=60);
 
 #' ## Simulation
-import Random
+using Random: Random
 Random.seed!(1111)
 results = HydroPowerModels.simulate(m, 100);
 
@@ -66,19 +68,21 @@ dcp_stats["DC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(resul
 
 #' ## Parameters
 
-params = create_param( stages = 12, 
-                    model_constructor_grid  = SOCWRPowerModel,
-                    post_method             = PowerModels.build_opf,
-                    optimizer                  = IpoptSolver(tol=1e-6))
+params = create_param(;
+    stages=12,
+    model_constructor_grid=SOCWRPowerModel,
+    post_method=PowerModels.build_opf,
+    optimizer=IpoptSolver(; tol=1e-6),
+)
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-HydroPowerModels.train(m;iteration_limit = 60);
+HydroPowerModels.train(m; iteration_limit=60);
 
 #' ## Simulation
-import Random
+using Random: Random
 Random.seed!(1111)
 results = HydroPowerModels.simulate(m, 100);
 
@@ -89,19 +93,21 @@ dcp_stats["SOC"] = flat_dict(HydroPowerModels.descriptivestatistics_results(resu
 
 #' ## Parameters
 
-params = create_param( stages = 12, 
-                    model_constructor_grid  = ACPPowerModel,
-                    post_method             = PowerModels.build_opf,
-                    optimizer                  = IpoptSolver(tol=1e-6))
+params = create_param(;
+    stages=12,
+    model_constructor_grid=ACPPowerModel,
+    post_method=PowerModels.build_opf,
+    optimizer=IpoptSolver(; tol=1e-6),
+)
 
 #' ## Build Model
 m = hydrothermaloperation(data, params);
 
 #' ## Solve
-HydroPowerModels.train(m;iteration_limit = 60);
+HydroPowerModels.train(m; iteration_limit=60);
 
 #' ## Simulation
-import Random
+using Random: Random
 Random.seed!(1111)
 results = HydroPowerModels.simulate(m, 100);
 
@@ -113,18 +119,33 @@ using Latexify
 using DataFrames
 using Base.Markdown
 
-str_ac = html(latexify(DataFrame(signif_dict(dcp_stats["AC"],2)),env=:mdtable,latex=false));
-str_soc = html(latexify(DataFrame(signif_dict(dcp_stats["SOC"],2)),env=:mdtable,latex=false));
-str_dc = html(latexify(DataFrame(signif_dict(dcp_stats["DC"],2)),env=:mdtable,latex=false));
+str_ac = html(
+    latexify(DataFrame(signif_dict(dcp_stats["AC"], 2)); env=:mdtable, latex=false)
+);
+str_soc = html(
+    latexify(DataFrame(signif_dict(dcp_stats["SOC"], 2)); env=:mdtable, latex=false)
+);
+str_dc = html(
+    latexify(DataFrame(signif_dict(dcp_stats["DC"], 2)); env=:mdtable, latex=false)
+);
 
-results_str="""
+results_str = """
 
-## Results 
+  ## Results 
 
-"""
+  """
 
-final_str = intro_str*results_str*"### Table AC \n\n```@raw html\n\n"*str_ac*" \n\n```\n\n### Table DC \n\n```@raw html\n\n"*str_dc*" \n\n```\n\n### Table SOC \n\n```@raw html\n\n"*str_soc*" \n\n```";
+final_str =
+    intro_str *
+    results_str *
+    "### Table AC \n\n```@raw html\n\n" *
+    str_ac *
+    " \n\n```\n\n### Table DC \n\n```@raw html\n\n" *
+    str_dc *
+    " \n\n```\n\n### Table SOC \n\n```@raw html\n\n" *
+    str_soc *
+    " \n\n```";
 
 # write to file
 docs_scr_dir = joinpath(dirname(dirname(dirname(@__FILE__))), "docs/src/examples")
-write(joinpath(docs_scr_dir,"case3_cmp_formulations.md"), final_str)
+write(joinpath(docs_scr_dir, "case3_cmp_formulations.md"), final_str)
