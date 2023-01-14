@@ -19,6 +19,7 @@ JSON = "0.21"
 CSV = "0.10"
 JuMP = "1.6"
 PowerModels = "0.19"
+Reexport = "1"
 SDDP = "1.1"
 julia = "~1"
 
