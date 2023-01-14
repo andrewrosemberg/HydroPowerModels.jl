@@ -9,10 +9,10 @@ end
 function read_inflow(file::String, nHyd::Int)
     allinflows = CSV.read(file, Tables.matrix; header=false)
     nlin, ncol = size(allinflows)
-    nCen = Int(floor(ncol/nHyd))
-    vector_inflows = Array{Array{Float64,2}}(undef,nHyd)
-    for i = 1:nHyd
-        vector_inflows[i] = allinflows[1:nlin,(i-1)*nCen+1:i*nCen]
+    nCen = Int(floor(ncol / nHyd))
+    vector_inflows = Array{Array{Float64,2}}(undef, nHyd)
+    for i in 1:nHyd
+        vector_inflows[i] = allinflows[1:nlin, ((i - 1) * nCen + 1):(i * nCen)]
     end
     return vector_inflows, nCen
 end
@@ -27,43 +27,53 @@ Parameters:
 -   stages  : Number of stages.
 -   digts   : Number of digits to take into acoint from case description files.
 """
-function parse_folder(folder::String; stages::Int = 1,digts::Int=7)        
+function parse_folder(folder::String; stages::Int=1, digts::Int=7)
     data = Dict()
     try
-        data["powersystem"] = parse_file_json(joinpath(folder,"PowerModels.json"))
+        data["powersystem"] = parse_file_json(joinpath(folder, "PowerModels.json"))
         if typeof(data["powersystem"]["source_version"]) <: AbstractDict
-            data["powersystem"]["source_version"] = VersionNumber(data["powersystem"]["source_version"]["major"],
-                                                                data["powersystem"]["source_version"]["minor"],
-                                                                data["powersystem"]["source_version"]["patch"],
-                                                                Tuple{}(data["powersystem"]["source_version"]["prerelease"]),
-                                                                Tuple{}(data["powersystem"]["source_version"]["build"]))
+            data["powersystem"]["source_version"] = VersionNumber(
+                data["powersystem"]["source_version"]["major"],
+                data["powersystem"]["source_version"]["minor"],
+                data["powersystem"]["source_version"]["patch"],
+                Tuple{}(data["powersystem"]["source_version"]["prerelease"]),
+                Tuple{}(data["powersystem"]["source_version"]["build"]),
+            )
         end
     catch
-        data["powersystem"] = PowerModels.parse_file(joinpath(folder,"PowerModels.m"))
+        data["powersystem"] = PowerModels.parse_file(joinpath(folder, "PowerModels.m"))
     end
-    data["hydro"] = parse_file_json(joinpath(folder,"hydro.json"))
-    for i = 1:length(data["hydro"]["Hydrogenerators"])
-        data["hydro"]["Hydrogenerators"][i] = signif_dict(data["hydro"]["Hydrogenerators"][i],digts)
+    data["hydro"] = parse_file_json(joinpath(folder, "hydro.json"))
+    for i in 1:length(data["hydro"]["Hydrogenerators"])
+        data["hydro"]["Hydrogenerators"][i] = signif_dict(
+            data["hydro"]["Hydrogenerators"][i], digts
+        )
     end
-    vector_inflows, nCen = read_inflow(joinpath(folder,"inflows.csv"),length(data["hydro"]["Hydrogenerators"]))
-    for i = 1:length(data["hydro"]["Hydrogenerators"])
-        data["hydro"]["Hydrogenerators"][i]["inflow"]= vector_inflows[i]
+    vector_inflows, nCen = read_inflow(
+        joinpath(folder, "inflows.csv"), length(data["hydro"]["Hydrogenerators"])
+    )
+    for i in 1:length(data["hydro"]["Hydrogenerators"])
+        data["hydro"]["Hydrogenerators"][i]["inflow"] = vector_inflows[i]
     end
     try
-        data["hydro"]["scenario_probabilities"] = convert(Matrix{Float64},CSV.read(joinpath(folder,"scenarioprobability.csv"),header=false))
+        data["hydro"]["scenario_probabilities"] = convert(
+            Matrix{Float64},
+            CSV.read(joinpath(folder, "scenarioprobability.csv"); header=false),
+        )
     catch
-        data["hydro"]["scenario_probabilities"] = ones(size(vector_inflows[1],1),nCen)./nCen
+        data["hydro"]["scenario_probabilities"] =
+            ones(size(vector_inflows[1], 1), nCen) ./ nCen
     end
-    return [deepcopy(data) for i=1:stages]
+    return [deepcopy(data) for i in 1:stages]
 end
 
 """set active demand"""
 function set_active_demand!(alldata::Array{Dict{Any,Any}}, demand::Array{Float64,2})
-    for t = 1:size(alldata,1)
+    for t in 1:size(alldata, 1)
         data = alldata[t]
-        for load = 1:length(data["powersystem"]["load"])
+        for load in 1:length(data["powersystem"]["load"])
             bus = data["powersystem"]["load"]["$load"]["load_bus"]
-            data["powersystem"]["load"]["$load"]["pd"] = demand[t,bus]
+            data["powersystem"]["load"]["$load"]["pd"] = demand[t, bus]
         end
     end
     return nothing
@@ -92,18 +102,20 @@ Keywords are:
 -   verbose                 : Boolean to indicate information prints.
 -   stage_hours             : Number of hours in each stage.
 """
-function create_param(;stages::Int = 1,
-                    model_constructor_grid = DCPPowerModel,
-                    model_constructor_grid_backward = model_constructor_grid,
-                    model_constructor_grid_forward = model_constructor_grid_backward,
-                    post_method = PowerModels.build_opf,
-                    optimizer = GLPK.Optimizer,
-                    optimizer_backward = optimizer,
-                    optimizer_forward = optimizer_backward,
-                    setting = Dict("output" => Dict("branch_flows" => true,"duals" => true)),
-                    verbose = false,
-                    stage_hours = 1,
-                    discount_factor::Float64=1.0)
+function create_param(;
+    stages::Int=1,
+    model_constructor_grid=DCPPowerModel,
+    model_constructor_grid_backward=model_constructor_grid,
+    model_constructor_grid_forward=model_constructor_grid_backward,
+    post_method=PowerModels.build_opf,
+    optimizer=GLPK.Optimizer,
+    optimizer_backward=optimizer,
+    optimizer_forward=optimizer_backward,
+    setting=Dict("output" => Dict("branch_flows" => true, "duals" => true)),
+    verbose=false,
+    stage_hours=1,
+    discount_factor::Float64=1.0,
+)
     params = Dict()
     params["stages"] = stages
     params["stage_hours"] = stage_hours

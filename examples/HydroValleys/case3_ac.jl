@@ -33,18 +33,19 @@ seed = 1221
 #' ## Load Case Specifications
 
 #' Data
-alldata = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir],"case3"));
+alldata = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir], "case3"));
 
 #' Plot power grid graph
 if plot_bool == true
     Random.seed!(seed)
-    HydroPowerModels.plot_grid(alldata[1],node_label=false)
+    HydroPowerModels.plot_grid(alldata[1]; node_label=false)
 end
 
-params = create_param(  stages = 12, 
-                        model_constructor_grid  = ACPPowerModel,
-                        post_method             = PowerModels.build_opf,
-                        optimizer               = Ipopt.Optimizer
+params = create_param(;
+    stages=12,
+    model_constructor_grid=ACPPowerModel,
+    post_method=PowerModels.build_opf,
+    optimizer=Ipopt.Optimizer,
 )
 
 #' ## Build Model
@@ -54,7 +55,11 @@ m = hydrothermaloperation(alldata, params);
 #' ## Train
 #+ results =  "hidden"
 start_time = time()
-HydroPowerModels.train(m,iteration_limit = 100,stopping_rules= [SDDP.Statistical(num_replications = 20,iteration_period=20)]);
+HydroPowerModels.train(
+    m;
+    iteration_limit=100,
+    stopping_rules=[SDDP.Statistical(; num_replications=20, iteration_period=20)],
+);
 end_time = time() - start_time
 
 #' Termination Status and solve time (s)
@@ -67,7 +72,7 @@ end
 
 #' ## Simulation
 #+ results =  "hidden"
-import Random
+using Random: Random
 Random.seed!(seed)
 results = HydroPowerModels.simulate(m, 100);
 
