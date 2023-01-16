@@ -18,7 +18,7 @@ include("utilities.jl")
 include("IO.jl")
 include("simulate.jl")
 include("train.jl")
-# include("visualization/visualize_data.jl") # Issue: https://github.com/andrewrosemberg/HydroPowerModels.jl/issues/46
+include("visualization/visualize_data.jl")
 include("objective.jl")
 include("build_model.jl")
 

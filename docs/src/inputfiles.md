@@ -134,4 +134,4 @@ This is an example of a Hydro Description file:
 
 ## Inflows: "inflows.csv" 
 
-Inflows are expected in (m3/s) in a csv file representing a matrix, where rows are the stages and columns are the scenarious.
+Inflows are expected in (m3/s) in a csv file representing a matrix, where rows are the stages and columns are the scenarios.
