@@ -777,8 +777,8 @@ ERROR: UndefVarError: plot_grid not defined
 </pre>
 
 
-<pre class="output">
-&#40;:statistical, 1.7897770404815674&#41;
+<pre class="julia-error">
+ERROR: UndefVarError: m not defined
 </pre>
 
 
@@ -808,17 +808,8 @@ ERROR: UndefVarError: plot_bound not defined
 </pre>
 
 
-<pre class="output">
-Dict&#123;Symbol, Any&#125; with 5 entries:
-  :solve_time  &#61;&gt; 0.855467
-  :params      &#61;&gt; Dict&#123;Any, Any&#125;&#40;&quot;optimizer&quot;&#61;&gt;Optimizer, &quot;discount_factor&quot;&#61;
-&gt;1.0…
-  :machine     &#61;&gt; Dict&#40;:cpu&#61;&gt;&quot;Intel&#40;R&#41; Xeon&#40;R&#41; Platinum 8272CL CPU @ 2.60GH
-z&quot;, …
-  :data        &#61;&gt; Dict&#123;Any, Any&#125;&#91;Dict&#40;&quot;powersystem&quot;&#61;&gt;Dict&#123;String, Any&#125;&#40;&quot;cos
-t_de…
-  :simulations &#61;&gt; Vector&#123;Dict&#123;Symbol, Any&#125;&#125;&#91;&#91;Dict&#40;:bellman_term&#61;&gt;58123.0, :
-nois…
+<pre class="julia-error">
+ERROR: UndefVarError: m not defined
 </pre>
 
 
@@ -840,11 +831,91 @@ nois…
 
 
 <pre class="output">
-Test Failed at /home/runner/work/HydroPowerModels.jl/HydroPowerModels.jl/ex
-amples/HydroValleys/case3_5years.jl:2
+Error During Test at /home/runner/work/HydroPowerModels.jl/HydroPowerModels
+.jl/examples/HydroValleys/case3_5years.jl:2
+  Test threw exception
   Expression: isapprox&#40;SDDP.calculate_bound&#40;m.policygraph&#41;, 59357.12, atol 
 &#61; 10&#41;
-   Evaluated: isapprox&#40;59381.005142123664, 59357.12; atol &#61; 10&#41;
+  UndefVarError: m not defined
+  Stacktrace:
+    &#91;1&#93; top-level scope
+      @ /opt/hostedtoolcache/julia/1.8.5/x64/share/julia/stdlib/v1.8/Test/s
+rc/Test.jl:464
+    &#91;2&#93; eval
+      @ ./boot.jl:368 &#91;inlined&#93;
+    &#91;3&#93; include_string&#40;mapexpr::typeof&#40;identity&#41;, mod::Module, code::String
+, filename::String&#41;
+      @ Base ./loading.jl:1428
+    &#91;4&#93; include_string
+      @ ./loading.jl:1438 &#91;inlined&#93;
+    &#91;5&#93; &#40;::Weave.var&quot;#32#34&quot;&#123;String, Module, String, Bool, Task, Base.PipeE
+ndpoint, Base.PipeEndpoint, Base.PipeEndpoint&#125;&#41;&#40;&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:218
+    &#91;6&#93; task_local_storage&#40;body::Weave.var&quot;#32#34&quot;&#123;String, Module, String, 
+Bool, Task, Base.PipeEndpoint, Base.PipeEndpoint, Base.PipeEndpoint&#125;, key::
+Symbol, val::String&#41;
+      @ Base ./task.jl:292
+    &#91;7&#93; capture_output&#40;code::String, mod::Module, path::String, error::Bool
+, report::Weave.Report&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:216
+    &#91;8&#93; #29
+      @ ~/.julia/packages/Weave/f7Ly3/src/run.jl:191 &#91;inlined&#93;
+    &#91;9&#93; _broadcast_getindex_evalf
+      @ ./broadcast.jl:670 &#91;inlined&#93;
+   &#91;10&#93; _broadcast_getindex
+      @ ./broadcast.jl:643 &#91;inlined&#93;
+   &#91;11&#93; getindex
+      @ ./broadcast.jl:597 &#91;inlined&#93;
+   &#91;12&#93; macro expansion
+      @ ./broadcast.jl:961 &#91;inlined&#93;
+   &#91;13&#93; macro expansion
+      @ ./simdloop.jl:77 &#91;inlined&#93;
+   &#91;14&#93; copyto&#33;
+      @ ./broadcast.jl:960 &#91;inlined&#93;
+   &#91;15&#93; copyto&#33;
+      @ ./broadcast.jl:913 &#91;inlined&#93;
+   &#91;16&#93; copy
+      @ ./broadcast.jl:885 &#91;inlined&#93;
+   &#91;17&#93; materialize&#40;bc::Base.Broadcast.Broadcasted&#123;Base.Broadcast.DefaultAr
+rayStyle&#123;1&#125;, Nothing, Weave.var&quot;#29#30&quot;&#123;Weave.Report, Module, Bool, String&#125;
+, Tuple&#123;Vector&#123;String&#125;&#125;&#125;&#41;
+      @ Base.Broadcast ./broadcast.jl:860
+   &#91;18&#93; run_code&#40;doc::Weave.WeaveDoc, chunk::Weave.CodeChunk, report::Weave
+.Report, mod::Module&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:192
+   &#91;19&#93; eval_chunk&#40;doc::Weave.WeaveDoc, chunk::Weave.CodeChunk, report::Wea
+ve.Report, mod::Module&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:263
+   &#91;20&#93; run_chunk&#40;chunk::Weave.CodeChunk, doc::Weave.WeaveDoc, report::Weav
+e.Report, mod::Module&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:133
+   &#91;21&#93; run_doc&#40;doc::Weave.WeaveDoc; doctype::String, out_path::String, arg
+s::Dict&#123;Symbol, String&#125;, mod::Nothing, fig_path::Nothing, fig_ext::Nothing,
+ cache_path::String, cache::Symbol&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:74
+   &#91;22&#93; weave&#40;source::String; doctype::String, informat::Nothing, out_path:
+:String, args::Dict&#123;Symbol, String&#125;, mod::Nothing, fig_path::Nothing, fig_e
+xt::Nothing, cache_path::String, cache::Symbol, template::Nothing, css::Not
+hing, highlight_theme::Nothing, pandoc_options::Vector&#123;String&#125;, latex_cmd::
+Vector&#123;String&#125;, keep_unicode::Bool&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/Weave.jl:176
+   &#91;23&#93; top-level scope
+      @ ~/work/HydroPowerModels.jl/HydroPowerModels.jl/docs/make_examples.j
+l:15
+   &#91;24&#93; include&#40;fname::String&#41;
+      @ Base.MainInclude ./client.jl:476
+   &#91;25&#93; top-level scope
+      @ ~/work/HydroPowerModels.jl/HydroPowerModels.jl/docs/make.jl:30
+   &#91;26&#93; include&#40;fname::String&#41;
+      @ Base.MainInclude ./client.jl:476
+   &#91;27&#93; top-level scope
+      @ none:5
+   &#91;28&#93; eval
+      @ ./boot.jl:368 &#91;inlined&#93;
+   &#91;29&#93; exec_options&#40;opts::Base.JLOptions&#41;
+      @ Base ./client.jl:276
+   &#91;30&#93; _start&#40;&#41;
+      @ Base ./client.jl:522
 </pre>
 
 <pre class="julia-error">
@@ -861,7 +932,94 @@ ERROR: Test.FallbackTestSetException&#40;&quot;There was an error during testing
 
 
 <pre class="output">
-Test Passed
+Error During Test at /home/runner/work/HydroPowerModels.jl/HydroPowerModels
+.jl/examples/HydroValleys/case3_5years.jl:2
+  Test threw exception
+  Expression: length&#40;results&#91;:simulations&#93;&#41; &#61;&#61; 100
+  UndefVarError: results not defined
+  Stacktrace:
+    &#91;1&#93; top-level scope
+      @ /opt/hostedtoolcache/julia/1.8.5/x64/share/julia/stdlib/v1.8/Test/s
+rc/Test.jl:464
+    &#91;2&#93; eval
+      @ ./boot.jl:368 &#91;inlined&#93;
+    &#91;3&#93; include_string&#40;mapexpr::typeof&#40;identity&#41;, mod::Module, code::String
+, filename::String&#41;
+      @ Base ./loading.jl:1428
+    &#91;4&#93; include_string
+      @ ./loading.jl:1438 &#91;inlined&#93;
+    &#91;5&#93; &#40;::Weave.var&quot;#32#34&quot;&#123;String, Module, String, Bool, Task, Base.PipeE
+ndpoint, Base.PipeEndpoint, Base.PipeEndpoint&#125;&#41;&#40;&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:218
+    &#91;6&#93; task_local_storage&#40;body::Weave.var&quot;#32#34&quot;&#123;String, Module, String, 
+Bool, Task, Base.PipeEndpoint, Base.PipeEndpoint, Base.PipeEndpoint&#125;, key::
+Symbol, val::String&#41;
+      @ Base ./task.jl:292
+    &#91;7&#93; capture_output&#40;code::String, mod::Module, path::String, error::Bool
+, report::Weave.Report&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:216
+    &#91;8&#93; #29
+      @ ~/.julia/packages/Weave/f7Ly3/src/run.jl:191 &#91;inlined&#93;
+    &#91;9&#93; _broadcast_getindex_evalf
+      @ ./broadcast.jl:670 &#91;inlined&#93;
+   &#91;10&#93; _broadcast_getindex
+      @ ./broadcast.jl:643 &#91;inlined&#93;
+   &#91;11&#93; getindex
+      @ ./broadcast.jl:597 &#91;inlined&#93;
+   &#91;12&#93; macro expansion
+      @ ./broadcast.jl:961 &#91;inlined&#93;
+   &#91;13&#93; macro expansion
+      @ ./simdloop.jl:77 &#91;inlined&#93;
+   &#91;14&#93; copyto&#33;
+      @ ./broadcast.jl:960 &#91;inlined&#93;
+   &#91;15&#93; copyto&#33;
+      @ ./broadcast.jl:913 &#91;inlined&#93;
+   &#91;16&#93; copy
+      @ ./broadcast.jl:885 &#91;inlined&#93;
+   &#91;17&#93; materialize&#40;bc::Base.Broadcast.Broadcasted&#123;Base.Broadcast.DefaultAr
+rayStyle&#123;1&#125;, Nothing, Weave.var&quot;#29#30&quot;&#123;Weave.Report, Module, Bool, String&#125;
+, Tuple&#123;Vector&#123;String&#125;&#125;&#125;&#41;
+      @ Base.Broadcast ./broadcast.jl:860
+   &#91;18&#93; run_code&#40;doc::Weave.WeaveDoc, chunk::Weave.CodeChunk, report::Weave
+.Report, mod::Module&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:192
+   &#91;19&#93; eval_chunk&#40;doc::Weave.WeaveDoc, chunk::Weave.CodeChunk, report::Wea
+ve.Report, mod::Module&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:263
+   &#91;20&#93; run_chunk&#40;chunk::Weave.CodeChunk, doc::Weave.WeaveDoc, report::Weav
+e.Report, mod::Module&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:133
+   &#91;21&#93; run_doc&#40;doc::Weave.WeaveDoc; doctype::String, out_path::String, arg
+s::Dict&#123;Symbol, String&#125;, mod::Nothing, fig_path::Nothing, fig_ext::Nothing,
+ cache_path::String, cache::Symbol&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/run.jl:74
+   &#91;22&#93; weave&#40;source::String; doctype::String, informat::Nothing, out_path:
+:String, args::Dict&#123;Symbol, String&#125;, mod::Nothing, fig_path::Nothing, fig_e
+xt::Nothing, cache_path::String, cache::Symbol, template::Nothing, css::Not
+hing, highlight_theme::Nothing, pandoc_options::Vector&#123;String&#125;, latex_cmd::
+Vector&#123;String&#125;, keep_unicode::Bool&#41;
+      @ Weave ~/.julia/packages/Weave/f7Ly3/src/Weave.jl:176
+   &#91;23&#93; top-level scope
+      @ ~/work/HydroPowerModels.jl/HydroPowerModels.jl/docs/make_examples.j
+l:15
+   &#91;24&#93; include&#40;fname::String&#41;
+      @ Base.MainInclude ./client.jl:476
+   &#91;25&#93; top-level scope
+      @ ~/work/HydroPowerModels.jl/HydroPowerModels.jl/docs/make.jl:30
+   &#91;26&#93; include&#40;fname::String&#41;
+      @ Base.MainInclude ./client.jl:476
+   &#91;27&#93; top-level scope
+      @ none:5
+   &#91;28&#93; eval
+      @ ./boot.jl:368 &#91;inlined&#93;
+   &#91;29&#93; exec_options&#40;opts::Base.JLOptions&#41;
+      @ Base ./client.jl:276
+   &#91;30&#93; _start&#40;&#41;
+      @ Base ./client.jl:522
+</pre>
+
+<pre class="julia-error">
+ERROR: Test.FallbackTestSetException&#40;&quot;There was an error during testing&quot;&#41;
 </pre>
 
 
@@ -1005,7 +1163,7 @@ ERROR: UndefVarError: plotresults not defined
         <div class="footer">
           <p>
             Published from <a href="case3_5years.jl">case3_5years.jl</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2023-02-22.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2023-02-23.
           </p>
         </div>
       </div>
