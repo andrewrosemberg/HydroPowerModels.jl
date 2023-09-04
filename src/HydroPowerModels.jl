@@ -106,10 +106,14 @@ function hydrothermaloperation(
 
         # resevoir variables
         variable_volume(sp, data)
+        variable_min_volume_violation(sp, data)
+        constraint_min_volume_violation(sp, data)
 
         # outflow and spillage variables
         variable_outflow(sp, data)
         variable_spillage(sp, data)
+        variable_min_outflow_violation(sp, data)
+        constraint_min_outflow_violation(sp, data)
 
         # hydro balance
         variable_inflow(sp, data)
@@ -128,32 +132,34 @@ function hydrothermaloperation(
         add_gen_cost(sp, data)
         add_spill_cost(sp, data)
         add_deficit_cost(sp, data)
+        add_min_outflow_violation_cost(sp, data)
+        add_min_volume_violation_cost(sp, data)
 
         # Stage objective
         set_objective(sp, data)
 
         # # variable primal start
-        # JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
-        JuMP.MathOptInterface.set.(
-            sp, JuMP.MathOptInterface.VariablePrimalStart(), sp[:deficit], 0.0
+        # JuMP.MOI.set.(sp,JuMP.MOI.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
+        JuMP.MOI.set.(
+            sp, JuMP.MOI.VariablePrimalStart(), sp[:deficit], 0.0
         )
-        JuMP.MathOptInterface.set.(
-            sp, JuMP.MathOptInterface.VariablePrimalStart(), sp[:inflow], 0.0
+        JuMP.MOI.set.(
+            sp, JuMP.MOI.VariablePrimalStart(), sp[:inflow], 0.0
         )
-        JuMP.MathOptInterface.set.(
-            sp, JuMP.MathOptInterface.VariablePrimalStart(), sp[:outflow], 0.0
+        JuMP.MOI.set.(
+            sp, JuMP.MOI.VariablePrimalStart(), sp[:outflow], 0.0
         )
-        JuMP.MathOptInterface.set.(
-            sp, JuMP.MathOptInterface.VariablePrimalStart(), sp[:spill], 0.0
+        JuMP.MOI.set.(
+            sp, JuMP.MOI.VariablePrimalStart(), sp[:spill], 0.0
         )
         for r in sp[:reservoir]
-            JuMP.MathOptInterface.set.(
-                sp, JuMP.MathOptInterface.VariablePrimalStart(), r.in, 0.0
+            JuMP.MOI.set.(
+                sp, JuMP.MOI.VariablePrimalStart(), r.in, 0.0
             )
         end
         for r in sp[:reservoir]
-            JuMP.MathOptInterface.set.(
-                sp, JuMP.MathOptInterface.VariablePrimalStart(), r.out, 0.0
+            JuMP.MOI.set.(
+                sp, JuMP.MOI.VariablePrimalStart(), r.out, 0.0
             )
         end
     end

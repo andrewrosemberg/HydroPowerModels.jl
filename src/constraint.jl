@@ -1,23 +1,23 @@
 """rainfall noises"""
-function rainfall_noises(sp, data::Dict, params::Dict, t::Int)
+function rainfall_noises(sp, data::Dict, _::Dict, t::Int)
     SDDP.parameterize(
         sp,
         collect(1:size(data["hydro"]["scenario_probabilities"], 2)),
         data["hydro"]["scenario_probabilities"][cidx(t, data["hydro"]["size_inflow"][1]),:],
     ) do ω
-        # if JuMP.MathOptInterface.get(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp)[end]) == nothing
-        #     JuMP.MathOptInterface.set.(sp,JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
+        # if isnothing(JuMP.MOI.get(sp,JuMP.MOI.VariablePrimalStart(), JuMP.all_variables(sp)[end]))
+        #     JuMP.MOI.set.(sp,JuMP.MOI.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
         # end
         nostart = findall(
-            x -> x == nothing,
-            JuMP.MathOptInterface.get.(
-                sp, JuMP.MathOptInterface.VariablePrimalStart(), JuMP.all_variables(sp)
+            x -> isnothing(x),
+            JuMP.MOI.get.(
+                sp, JuMP.MOI.VariablePrimalStart(), JuMP.all_variables(sp)
             ),
         )
         for theta in nostart
-            JuMP.MathOptInterface.set(
+            JuMP.MOI.set(
                 sp,
-                JuMP.MathOptInterface.VariablePrimalStart(),
+                JuMP.MOI.VariablePrimalStart(),
                 JuMP.all_variables(sp)[theta],
                 sp.ext[:lower_bound],
             )
@@ -70,11 +70,35 @@ function constraint_hydro_generation(sp, data::Dict, pm::AbstractPowerModel)
 end
 
 """add deficit variables"""
-function constraint_mod_deficit(sp, data::Dict, pm::AbstractPowerModel)
+function constraint_mod_deficit(sp, _::Dict, pm::AbstractPowerModel)
     for i in 1:length(PowerModels.sol(pm, 0, :bus))
         set_normalized_coefficient(
             PowerModels.sol(pm, 0, :bus)[i][:lam_kcl_r], sp[:deficit][i], -1
         )
     end
+    return nothing
+end
+
+"""creates the constraint that imposes the violation for unilateral violation for outflow"""
+function constraint_min_outflow_violation(sp, data::Dict)
+    @constraint(
+        sp,
+        min_outflow_violation_bound[
+            r=1:data["hydro"]["nHyd"]
+        ],
+        sp[:min_outflow_violation][r] >= (data["hydro"]["Hydrogenerators"][r]["min_turn"] - sp[:outflow][r])
+    )
+    return nothing
+end
+
+"""creates the constraint that imposes the violation for unilateral violation for volume"""
+function constraint_min_volume_violation(sp, data::Dict)
+    @constraint(
+        sp,
+        min_volume_violation_bound[
+            r=1:data["hydro"]["nHyd"]
+        ],
+        sp[:min_volume_violation][r] >= (data["hydro"]["Hydrogenerators"][r]["min_turn"] - sp[:reservoir][r].out)
+    )
     return nothing
 end

@@ -376,7 +376,7 @@ function descriptivestatistics_results(results::Dict;nitem::Int = 3,quants::Arra
 end
 
 """
-    HydroPowerModels.plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+    HydroPowerModels.plot_grid(data::Dict; path=nothing, size_fig = [15cm, 15cm], has_nodelabel=false, nodelabeldist=4.5)
 
 Plot Grid installed Power.
 
@@ -384,10 +384,10 @@ Paremeters:
 -   data         : HydroPowerModel single stage data.
 -   path         : Path to save grid plot.
 -   size_fig     : Size figure.
--   node_label   : Plot nodel label on grid.
+-   has_nodelabel   : Plot nodel label on grid.
 -   nodelabeldist: Nodel label distance from node.
 """
-function plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+function plot_grid(data::Dict; path=nothing, size_fig = [15cm, 15cm], has_nodelabel=false, nodelabeldist=4.5)
 
     gatherusefulinfo!(data)
 
@@ -434,11 +434,8 @@ function plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=fa
     membership = fill(1,num_nodes)
 
     # node label
-    if node_label
-        nodelabel = [1:nbus;fill("",sum(hydro_nodes .> 0));fill("",sum(thermal_nodes .> 0));fill("",sum(load_nodes .> 0))]
-    else
-        nodelabel = nothing
-    end
+    nodelabel = has_nodelabel ? [1:nbus;fill("",sum(hydro_nodes .> 0));fill("",sum(thermal_nodes .> 0));fill("",sum(load_nodes .> 0))] : nothing
+
     # create nodes
     for bus_i in 1:length(data["powersystem"]["bus"])
         if hydro_nodes[bus_i] > 0
@@ -476,7 +473,7 @@ function plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=fa
     # membership color
     nodefillc = nodecolor[Int64.(membership)]
 
-    if path != nothing
+    if !isnothing(path)
         draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist))
     else
         gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist)
@@ -484,7 +481,7 @@ function plot_grid(data::Dict;path=nothing,size_fig = [15cm, 15cm],node_label=fa
 end
 
 """ Plot Hydro Grid installed volume"""
-function plot_hydro_grid(data::Dict;path=nothing,size_fig = [12cm, 12cm],node_label=false,nodelabeldist=8.5)
+function plot_hydro_grid(data::Dict; path=nothing, size_fig = [12cm, 12cm], has_nodelabel=false, nodelabeldist=8.5)
 
     gatherusefulinfo!(data)
 
@@ -517,7 +514,7 @@ function plot_hydro_grid(data::Dict;path=nothing,size_fig = [12cm, 12cm],node_la
             end
         end
         
-        if hydro["index_grid"] != nothing 
+        if !isnothing(hydro["index_grid"])
             bus_i = data["powersystem"]["gen"]["$(hydro["i_grid"])"]["gen_bus"]
             node = findall(x->x==bus_i,node2bus)
             if isempty(node)
@@ -542,13 +539,9 @@ function plot_hydro_grid(data::Dict;path=nothing,size_fig = [12cm, 12cm],node_la
     nodefillc = nodecolor[membership]
 
     # node label
-    if node_label
-        nodelabel = [fill("",nHyd);node2bus]
-    else
-        nodelabel = nothing
-    end
+    nodelabel = has_nodelabel ? [fill("",nHyd);node2bus] : nothing
 
-    if path != nothing
+    if !isnothing(path)
         draw(PDF(path, size_fig...), gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.005))    
     else
         gplot(g, nodefillc=nodefillc, nodesize=nodesize, nodelabel=nodelabel,nodelabeldist=nodelabeldist, arrowlengthfrac=0.005)
@@ -556,7 +549,7 @@ function plot_hydro_grid(data::Dict;path=nothing,size_fig = [12cm, 12cm],node_la
 end
 
 # """ Plot Grid Stage Dispatched Power"""
-# function plot_grid_dispatched_stage(results::Dict,t::Int;quant::Float64=0.5,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+# function plot_grid_dispatched_stage(results::Dict, t::Int; quant::Float64=0.5,size_fig = [15cm, 15cm], has_nodelabel=false, nodelabeldist=4.5)
 
 #     data = results[:data][1]
 
@@ -603,7 +596,7 @@ end
 #     membership = fill(1,num_nodes)
 
 #     # node label
-#     if node_label
+#     if has_nodelabel
 #         nodelabel = [1:nbus;fill("",sum(hydro_nodes .> 0));fill("",sum(thermal_nodes .> 0));fill("",sum(load_nodes .> 0))]
 #     else
 #         nodelabel = nothing
@@ -650,11 +643,11 @@ end
 # end
 
 # """ Plot Grid Dispatched Power"""
-# function plot_grid_dispatched(results::Dict;seed=1111,quant::Float64=0.5,size_fig = [15cm, 15cm],node_label=false,nodelabeldist=4.5)
+# function plot_grid_dispatched(results::Dict;seed=1111,quant::Float64=0.5,size_fig = [15cm, 15cm],has_nodelabel=false,nodelabeldist=4.5)
 #     duration=length(results[:simulations][1])
 #     roll(fps=1, duration=duration) do t, dt
 #         Random.seed!(seed)
-#         plot_grid_dispatched_stage(results,Int64(t+1);quant=quant,size_fig = size_fig,node_label=node_label,nodelabeldist=nodelabeldist)
+#         plot_grid_dispatched_stage(results,Int64(t+1);quant=quant,size_fig = size_fig,has_nodelabel=has_nodelabel,nodelabeldist=nodelabeldist)
 #     end
 # end
 

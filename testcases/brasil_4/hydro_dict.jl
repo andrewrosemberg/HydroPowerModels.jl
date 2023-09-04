@@ -9,6 +9,8 @@ function hydrogenerator_dict(;
     initial_volume=0.0,
     production_factor=1.0,
     spill_cost=0.0,
+    minimal_outflow_violation_cost=0.0,
+    minimal_volume_violation_cost=0.0,
     downstream_turn=[],
     downstream_spill=[],
 )
@@ -22,10 +24,12 @@ function hydrogenerator_dict(;
         "initial_volume" => initial_volume,
         "production_factor" => production_factor,
         "spill_cost" => spill_cost,
+        "minimal_outflow_violation_cost" => minimal_outflow_violation_cost,
+        "minimal_volume_violation_cost" => minimal_volume_violation_cost,
         "downstream_turn" => downstream_turn,
         "downstream_spill" => downstream_spill,
     )
-    if name != nothing
+    if !isnothing(name)
         hydrogen["name"] = name
     end
     return hydrogen

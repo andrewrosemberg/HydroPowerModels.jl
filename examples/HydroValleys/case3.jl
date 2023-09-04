@@ -36,7 +36,7 @@ alldata = HydroPowerModels.parse_folder(joinpath(WEAVE_ARGS[:testcases_dir], "ca
 #' Plot power grid graph
 if plot_bool == true
     Random.seed!(seed)
-    HydroPowerModels.plot_grid(alldata[1]; node_label=false)
+    HydroPowerModels.plot_grid(alldata[1]; has_nodelabel=false)
 end
 
 #' Parameters

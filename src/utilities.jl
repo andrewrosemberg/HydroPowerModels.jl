@@ -67,14 +67,14 @@ end
 function idx_hydro(data::Dict)
     return [
         hydro["i_grid"] for
-        hydro in data["hydro"]["Hydrogenerators"] if hydro["index_grid"] != nothing
+        hydro in data["hydro"]["Hydrogenerators"] if !isnothing(hydro["index_grid"])
     ]
 end
 
 """find vector index of hydrogenerators on grid"""
 function index2i!(data::Dict)
     for i in 1:data["hydro"]["nHyd"]
-        if data["hydro"]["Hydrogenerators"][i]["index_grid"] != nothing
+        if !isnothing(data["hydro"]["Hydrogenerators"][i]["index_grid"])
             i_grid = findall(
                 x -> x["index"] == data["hydro"]["Hydrogenerators"][i]["index_grid"],
                 data["powersystem"]["gen"],

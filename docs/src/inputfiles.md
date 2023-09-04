@@ -124,6 +124,8 @@ This is an example of a Hydro Description file:
             "initial_volume":0, # (Hm3) Initial Volume of Reservoir.
             "production_factor":1, # (MW/ (m3/s)) Production Factor.
             "spill_cost":0, # (dol/Hm3) Cost of Spillage.
+            "minimal_outflow_violation_cost":0, # (dol/(m3/s)) Cost of minimal outflow violation.
+            "minimal_volume_violation_cost":0, # (dol/(Hm3)) Cost of minimal volume violation.
             "downstream_turn": [], # Hydro Generators downstream of turn.
             "downstream_spill": [] # Hydro Generators downstream of spillage.
         }
