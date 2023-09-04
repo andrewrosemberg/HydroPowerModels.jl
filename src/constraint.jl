@@ -5,11 +5,11 @@ function rainfall_noises(sp, data::Dict, _::Dict, t::Int)
         collect(1:size(data["hydro"]["scenario_probabilities"], 2)),
         data["hydro"]["scenario_probabilities"][cidx(t, data["hydro"]["size_inflow"][1]),:],
     ) do ω
-        # if JuMP.MOI.get(sp,JuMP.MOI.VariablePrimalStart(), JuMP.all_variables(sp)[end]) == nothing
+        # if isnothing(JuMP.MOI.get(sp,JuMP.MOI.VariablePrimalStart(), JuMP.all_variables(sp)[end]))
         #     JuMP.MOI.set.(sp,JuMP.MOI.VariablePrimalStart(), JuMP.all_variables(sp), NaN)
         # end
         nostart = findall(
-            x -> x === nothing,
+            x -> isnothing(x),
             JuMP.MOI.get.(
                 sp, JuMP.MOI.VariablePrimalStart(), JuMP.all_variables(sp)
             ),

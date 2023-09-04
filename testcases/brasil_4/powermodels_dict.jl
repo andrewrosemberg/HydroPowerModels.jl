@@ -66,7 +66,7 @@ function gen_dict(;
         "apf" => apf,
     )
 
-    if name != nothing
+    if !isnothing(name)
         gen["name"] = name
     end
     return gen
@@ -110,7 +110,7 @@ function branch_dict(;
         "tap" => tap,
     )
 
-    if name != nothing
+    if !isnothing(name)
         branch["name"] = name
     end
     return branch
@@ -141,7 +141,7 @@ function bus_dict(;
         "vm" => vm,
         "base_kv" => base_kv,
     )
-    if name != nothing
+    if !isnothing(name)
         bus["name"] = name
     end
     return bus

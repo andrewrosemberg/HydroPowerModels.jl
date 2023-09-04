@@ -29,7 +29,7 @@ function hydrogenerator_dict(;
         "downstream_turn" => downstream_turn,
         "downstream_spill" => downstream_spill,
     )
-    if name !== nothing
+    if !isnothing(name)
         hydrogen["name"] = name
     end
     return hydrogen
