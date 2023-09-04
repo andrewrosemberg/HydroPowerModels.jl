@@ -30,7 +30,7 @@ function simulate(
             :objective => objective_value,
         ),
     )
-    solution[:solve_time] = end_time = time() - start_time
+    solution[:solve_time] = time() - start_time
 
     solution[:params] = hydromodel.params
     solution[:machine] = Dict(
@@ -51,8 +51,7 @@ function build_sol_powermodels(sp::JuMP.Model)
     catch
         solve_time = 0.0
     end
-    status = JuMP.termination_status(sp)
-    return built_sol = PowerModels._IM.build_result(
+    return PowerModels._IM.build_result(
         sp.ext[:pm], solve_time; solution_processors=[get_solution]
     )
 end

@@ -75,6 +75,8 @@ hydroarray = [
         initial_volume=hydro_pre[:Init_store][idx] * 0.0036,
         production_factor=1,
         spill_cost=0,
+        minimal_outflow_violation_cost=0,
+        minimal_volume_violation_cost=0,
         downstream_turn=Int64[],
         downstream_spill=Int64[],
     ) for idx in 1:size(hydro_pre, 1)

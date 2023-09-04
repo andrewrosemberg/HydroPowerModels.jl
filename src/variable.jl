@@ -21,6 +21,16 @@ function variable_outflow(sp, data::Dict)
     )
 end
 
+"""creates the minimal outflow violation variables specified in data"""
+function variable_min_outflow_violation(sp, data::Dict)
+    @variables(
+        sp,
+        begin
+            min_outflow_violation[r=1:data["hydro"]["nHyd"]] >= 0 
+        end
+    )
+end
+
 """creates spillage variables specified in data"""
 function variable_spillage(sp, data::Dict)
     @variables(
@@ -44,8 +54,19 @@ function variable_volume(sp, data::Dict)
     )
 end
 
+# TODO: add data["hydro"]["Hydrogenerators"][r]["min_volume"] as penalized constraint
+"""creates the minimal volume violation variables specified in data"""
+function variable_min_volume_violation(sp, data::Dict)
+    @variables(
+        sp,
+        begin
+            min_volume_violation[r=1:data["hydro"]["nHyd"]] >= 0
+        end
+    )
+end
+
 """creates deficit variables"""
-function variable_deficit(sp, data::Dict, pm::AbstractPowerModel)
+function variable_deficit(sp, _::Dict, pm::AbstractPowerModel)
     PowerModels.var(pm)[:deficit] = @variable(
         sp, deficit[i in collect(1:length(PowerModels.sol(pm, 0, :bus)))] >= 0
     )
@@ -55,7 +76,7 @@ function variable_deficit(sp, data::Dict, pm::AbstractPowerModel)
 end
 
 """creates dict of cost variables"""
-function variable_cost(sp, data::Dict)
+function variable_cost(sp, _::Dict)
     cost = Dict()
     return sp.ext[:cost] = cost
 end

@@ -64,7 +64,7 @@ function parse_folder(folder::String; stages::Int=1, digts::Int=7)
         data["hydro"]["scenario_probabilities"] =
             ones(size(vector_inflows[1], 1), nCen) ./ nCen
     end
-    return [deepcopy(data) for i in 1:stages]
+    return [deepcopy(data) for _ in 1:stages]
 end
 
 """set active demand"""
