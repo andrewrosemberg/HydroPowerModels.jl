@@ -8,7 +8,6 @@ function variable_inflow(sp, data::Dict)
     )
 end
 
-# TODO: add data["hydro"]["Hydrogenerators"][r]["min_turn"] as penalized constraint
 """creates outflow variables specified in data"""
 function variable_outflow(sp, data::Dict)
     @variables(
@@ -41,7 +40,6 @@ function variable_spillage(sp, data::Dict)
     )
 end
 
-# TODO: add data["hydro"]["Hydrogenerators"][r]["min_volume"] as penalized constraint
 """creates volume variables specified in data"""
 function variable_volume(sp, data::Dict)
     @variable(
@@ -54,7 +52,6 @@ function variable_volume(sp, data::Dict)
     )
 end
 
-# TODO: add data["hydro"]["Hydrogenerators"][r]["min_volume"] as penalized constraint
 """creates the minimal volume violation variables specified in data"""
 function variable_min_volume_violation(sp, data::Dict)
     @variables(
