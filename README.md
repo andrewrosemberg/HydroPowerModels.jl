@@ -58,3 +58,5 @@ If you use HydroPowerModels.jl, we ask that you please cite the following:
   journal = {Proceedings of the JuliaCon Conferences}
 }
 ```
+
+The code will soon move to a new home: [LAMPSPUC](https://github.com/LAMPSPUC/HydroPowerModels.jl).
