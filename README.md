@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **This repository has moved.** HydroPowerModels.jl is now developed at **[LAMPSPUC/HydroPowerModels.jl](https://github.com/LAMPSPUC/HydroPowerModels.jl)**. This copy is archived and read-only; please open issues and pull requests there.
+
 # HydroPowerModels.jl
 A Julia/JuMP package for Hydrothermal Multistage Steady-State Power Network Optimization solved by Stochastic Dual Dynamic Programming (SDDP).
 
